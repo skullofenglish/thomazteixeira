@@ -103,17 +103,6 @@
     </div>
   </main>
 
-  <!-- TEACHER CONTROL PANEL (Only visible if ?role=teacher) -->
-  <footer id="teacher-controls" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl bg-slate-950/95 border border-indigo-500/50 glow-purple flex items-center gap-4 z-50 backdrop-blur-lg">
-    <span class="text-xs font-gaming text-indigo-400 font-bold">🎮 TEACHER CONTROLS:</span>
-    <button onclick="prevQuestion()" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold transition-all btn-arcade">
-      ◀ Prev
-    </button>
-    <button onclick="nextQuestion()" class="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold transition-all btn-arcade shadow-lg">
-      Next ▶
-    </button>
-  </footer>
-
   <!-- FIREBASE SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -133,13 +122,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const gameRef = db.ref("thomaz_quest/current_state");
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const isTeacher = urlParams.get('role') === 'teacher';
-
-    if (isTeacher) {
-      document.getElementById('teacher-controls').classList.remove('hidden');
-    }
 
     // AUDIO SYNTHESIZER
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -262,36 +244,23 @@
     let currentIndex = 0;
     let score = 0;
     let selectedSentence = [];
+    let isTransitioning = false;
 
+    // Synchronize current state across clients if needed
     gameRef.on("value", (snapshot) => {
       const data = snapshot.val();
-      if (data && typeof data.currentIndex === 'number') {
+      if (data && typeof data.currentIndex === 'number' && data.currentIndex !== currentIndex) {
         currentIndex = data.currentIndex;
         renderQuestion(currentIndex);
       }
     });
 
     function updateFirebaseIndex(newIndex) {
-      if (isTeacher) {
-        gameRef.set({ currentIndex: newIndex });
-      }
-    }
-
-    function nextQuestion() {
-      if (currentIndex < questions.length - 1) {
-        currentIndex++;
-        updateFirebaseIndex(currentIndex);
-      }
-    }
-
-    function prevQuestion() {
-      if (currentIndex > 0) {
-        currentIndex--;
-        updateFirebaseIndex(currentIndex);
-      }
+      gameRef.set({ currentIndex: newIndex });
     }
 
     function renderQuestion(index) {
+      isTransitioning = false;
       const q = questions[index];
       document.getElementById('question-badge').innerText = q.badge;
       document.getElementById('question-text').innerText = q.text;
@@ -339,6 +308,7 @@
           wordBtn.className = "px-4 py-2 rounded-xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-200 font-bold hover:bg-indigo-600/40 btn-arcade transition-all";
           wordBtn.innerText = word;
           wordBtn.onclick = () => {
+            if (isTransitioning) return;
             playSound('click');
             if (!selectedSentence.includes(word)) {
               selectedSentence.push(word);
@@ -356,20 +326,36 @@
     }
 
     function checkAnswer(chosen, correct, buttonEl) {
+      if (isTransitioning) return;
+
       const feedback = document.getElementById('feedback-area');
+
       if (chosen === correct) {
+        isTransitioning = true;
         playSound('correct');
         score += 100;
         document.getElementById('xp-counter').innerText = `${score} XP`;
         feedback.innerHTML = `<span class="text-emerald-400 font-bold">✨ EXCELLENT! +100 XP</span>`;
         if (buttonEl) buttonEl.classList.add('border-emerald-400', 'glow-green');
+
         if (currentIndex === questions.length - 1) {
-          confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+          confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+          feedback.innerHTML = `<span class="text-yellow-400 font-bold text-base">🏆 CONGRATULATIONS! QUEST COMPLETED! 🎉</span>`;
+        } else {
+          // Advance automatically after 1.5 seconds
+          setTimeout(() => {
+            currentIndex++;
+            updateFirebaseIndex(currentIndex);
+            renderQuestion(currentIndex);
+          }, 1500);
         }
       } else {
+        // WRONG ANSWER: Disable selected button and keep others available
         playSound('wrong');
-        feedback.innerHTML = `<span class="text-rose-400 font-bold">❌ Try again! You can do it!</span>`;
-        if (buttonEl) buttonEl.classList.add('border-rose-500');
+        feedback.innerHTML = `<span class="text-rose-400 font-bold">❌ Try again! Pick from remaining options.</span>`;
+        if (buttonEl) {
+          buttonEl.classList.add('opacity-30', 'pointer-events-none', 'border-rose-500/50');
+        }
       }
     }
 
@@ -381,10 +367,21 @@
 
       if (selectedSentence.length === correctOrder.length) {
         if (JSON.stringify(selectedSentence) === JSON.stringify(correctOrder)) {
+          isTransitioning = true;
           playSound('correct');
           score += 150;
           document.getElementById('xp-counter').innerText = `${score} XP`;
           document.getElementById('feedback-area').innerHTML = `<span class="text-emerald-400 font-bold">🎉 PERFECT SENTENCE! +150 XP</span>`;
+
+          if (currentIndex === questions.length - 1) {
+            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+          } else {
+            setTimeout(() => {
+              currentIndex++;
+              updateFirebaseIndex(currentIndex);
+              renderQuestion(currentIndex);
+            }, 1500);
+          }
         } else {
           playSound('wrong');
           document.getElementById('feedback-area').innerHTML = `<span class="text-amber-400 font-bold">Almost! Resetting blocks...</span>`;
