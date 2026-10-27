@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thomaz's English Quest | Lesson 1</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #f8fafc;
+      touch-action: manipulation;
+    }
+    .font-gaming {
+      font-family: 'Orbitron', sans-serif;
+    }
+    .glow-blue {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
+    }
+    .glow-purple {
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.35);
+    }
+    .glow-green {
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
+    }
+    .canvas-board {
+      background-color: #020617;
+      border: 2px dashed #334155;
+      border-radius: 1rem;
+      cursor: crosshair;
+      touch-action: none; /* Essencial para Apple Pencil no iPad */
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-6">
+
+  <!-- HEADER -->
+  <header class="max-w-4xl mx-auto w-full flex items-center justify-between py-3 px-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md mb-6">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-gaming text-lg font-black text-white shadow-md">
+        T
+      </div>
+      <div>
+        <h1 class="font-gaming text-sm md:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">
+          THOMAZ TEIXEIRA
+        </h1>
+        <p class="text-xs text-slate-400">Lesson 1 • Interactive Workshop</p>
+      </div>
+    </div>
+    <div id="activity-indicator" class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-gaming">
+      ACTIVITY 1 OF 4
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-4xl mx-auto w-full my-auto">
+    
+    <!-- ACTIVITY 2 - PART 1: VERB SELECTION -->
+    <section id="act2-part1" class="w-full">
+      <div class="text-center mb-6">
+        <h2 class="font-gaming text-2xl font-black text-white mb-2">ACTIONS & ABILITIES</h2>
+        <p class="text-sm text-slate-400">Tap the verbs you can or cannot do to send them to your list!</p>
+      </div>
+
+      <!-- 15 VERBS GRID -->
+      <div id="verbs-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-8">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- USED SECTION -->
+      <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 min-h-[100px] mb-6">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 font-gaming">Selected Verbs (Used):</h3>
+        <div id="used-verbs-container" class="flex flex-wrap gap-2">
+          <span class="text-xs text-slate-600 italic">No verbs selected yet...</span>
+        </div>
+      </div>
+
+      <!-- NEXT ARROW -->
+      <div class="flex justify-end">
+        <button id="btn-to-act2-part2" onclick="startWritingPhase()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold font-gaming flex items-center gap-2 opacity-50 pointer-events-none transition-all">
+          Next Phase ➔
+        </button>
+      </div>
+    </section>
+
+    <!-- ACTIVITY 2 - PART 2: CANVASES FOR SELECTED VERBS -->
+    <section id="act2-part2" class="w-full hidden">
+      <div class="text-center mb-6">
+        <h2 class="font-gaming text-2xl font-black text-white mb-2">WRITE YOUR SENTENCES</h2>
+        <p class="text-sm text-slate-400">Use your Apple Pencil to write a sentence for each verb! (e.g., "I can play drums")</p>
+      </div>
+
+      <div id="canvas-list-container" class="space-y-6 mb-8 max-h-[60vh] overflow-y-auto p-2">
+        <!-- Dynamic Canvases Injected Here -->
+      </div>
+
+      <div class="flex justify-end">
+        <button onclick="goToActivity3()" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold font-gaming flex items-center gap-2">
+          Continue to Activity 3 ➔
+        </button>
+      </div>
+    </section>
+
+    <!-- ACTIVITY 3: 5 IMAGE PAIRS & CANVASES -->
+    <section id="act3" class="w-full hidden">
+      <div class="text-center mb-6">
+        <h2 class="font-gaming text-2xl font-black text-white mb-2">THIS OR THAT?</h2>
+        <p id="pair-number-indicator" class="text-sm text-indigo-400 font-bold font-gaming">PAIR 1 OF 5</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <!-- Image Card A -->
+        <div onclick="selectImagePairChoice('A')" id="card-img-a" class="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center">
+          <img id="img-slot-a" src="imagem1.png" alt="Option A" class="w-full h-44 object-cover rounded-xl mb-3 bg-slate-800" onerror="this.src='https://via.placeholder.com/400x250/1e293b/94a3b8?text=imagem1.png'">
+          <span class="font-gaming text-xs font-bold text-slate-300">OPTION A</span>
+        </div>
+
+        <!-- Image Card B -->
+        <div onclick="selectImagePairChoice('B')" id="card-img-b" class="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center">
+          <img id="img-slot-b" src="imagem2.png" alt="Option B" class="w-full h-44 object-cover rounded-xl mb-3 bg-slate-800" onerror="this.src='https://via.placeholder.com/400x250/1e293b/94a3b8?text=imagem2.png'">
+          <span class="font-gaming text-xs font-bold text-slate-300">OPTION B</span>
+        </div>
+      </div>
+
+      <!-- Writing Canvas for Pair -->
+      <div id="pair-canvas-wrapper" class="hidden mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-xs font-bold text-slate-400">Write your preference sentence with Apple Pencil:</span>
+          <button onclick="clearCanvas('canvas-pair')" class="text-xs text-rose-400 hover:underline">Clear Canvas</button>
+        </div>
+        <canvas id="canvas-pair" class="canvas-board w-full h-32"></canvas>
+      </div>
+
+      <div class="flex justify-end">
+        <button id="btn-next-pair" onclick="nextImagePair()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold font-gaming flex items-center gap-2 opacity-50 pointer-events-none transition-all">
+          Next Pair ➔
+        </button>
+      </div>
+    </section>
+
+    <!-- ACTIVITY 4: FUNCTIONAL CLASSROOM ENGLISH CARDS -->
+    <section id="act4" class="w-full hidden text-center">
+      <div class="mb-6">
+        <h2 class="font-gaming text-2xl font-black text-white mb-2">CLASSROOM MAGIC PHRASES</h2>
+        <p class="text-sm text-slate-400">Listen to your teacher and tap the card when you use the phrase!</p>
+      </div>
+
+      <div id="phrases-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+        <!-- Phrases injected via JS -->
+      </div>
+
+      <div class="flex justify-end">
+        <button id="btn-to-act5" onclick="goToActivity5()" class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold font-gaming flex items-center gap-2">
+          Final Wrap-Up ➔
+        </button>
+      </div>
+    </section>
+
+    <!-- ACTIVITY 5: WRAP-UP & HOMEWORK -->
+    <section id="act5" class="w-full hidden text-center">
+      <div class="mb-6">
+        <h2 class="font-gaming text-2xl font-black text-white mb-2">LESSON WRAP-UP</h2>
+        <p class="text-sm text-slate-300">Write 2 sentences you learned or practiced today using your Apple Pencil!</p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 mb-6 text-left">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-xs font-bold text-slate-400">Summary Writing Canvas:</span>
+          <button onclick="clearCanvas('canvas-final')" class="text-xs text-rose-400 hover:underline">Clear</button>
+        </div>
+        <canvas id="canvas-final" class="canvas-board w-full h-48"></canvas>
+      </div>
+
+      <button onclick="finishLesson()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black font-gaming text-lg shadow-lg hover:scale-105 transition-all">
+        FINISH LESSON 🎉
+      </button>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="max-w-4xl mx-auto w-full text-center py-3 border-t border-slate-800 text-xs text-slate-500">
+    Instructor: skullofenglish • Thomaz Teixeira Learning Suite
+  </footer>
+
+  <script>
+    // 15 ACTION VERBS
+    const verbsList = [
+      "play drums", "swim", "cook", "draw", "speak English",
+      "play Roblox", "sing", "run fast", "ride a bike", "dance",
+      "read books", "play football", "write stories", "skate", "fly a kite"
+    ];
+
+    let selectedVerbs = [];
+    let currentPairIndex = 0;
+
+    // 5 IMAGE PAIRS DATA
+    const imagePairs = [
+      { img1: "imagem1.png", img2: "imagem2.png" },
+      { img1: "imagem3.png", img2: "imagem4.png" },
+      { img1: "imagem5.png", img2: "imagem6.png" },
+      { img1: "imagem7.png", img2: "imagem8.png" },
+      { img1: "imagem9.png", img2: "imagem10.png" }
+    ];
+
+    // CLASSROOM TARGET PHRASES (With remaining usage counts)
+    const classroomPhrases = [
+      { id: 1, text: "I don't understand.", uses: 2 },
+      { id: 2, text: "Can you repeat, please?", uses: 2 },
+      { id: 3, text: "How do you say ... in English?", uses: 1 },
+      { id: 4, text: "What does ... mean?", uses: 1 },
+      { id: 5, text: "Can you help me?", uses: 1 }
+    ];
+
+    // INITIALIZATION
+    window.onload = () => {
+      renderVerbsGrid();
+      renderPhrasesGrid();
+    };
+
+    // --- ACTIVITY 2 LOGIC ---
+    function renderVerbsGrid() {
+      const grid = document.getElementById('verbs-grid');
+      grid.innerHTML = '';
+      verbsList.forEach(verb => {
+        const card = document.createElement('div');
+        card.className = "p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer text-center text-xs font-bold transition-all btn-arcade flex items-center justify-center min-h-[50px]";
+        card.innerText = verb;
+        card.onclick = () => selectVerb(verb, card);
+        grid.appendChild(card);
+      });
+    }
+
+    function selectVerb(verb, cardEl) {
+      if (!selectedVerbs.includes(verb)) {
+        selectedVerbs.push(verb);
+        cardEl.classList.add('opacity-20', 'pointer-events-none');
+        updateUsedVerbsUI();
+      }
+    }
+
+    function updateUsedVerbsUI() {
+      const container = document.getElementById('used-verbs-container');
+      container.innerHTML = selectedVerbs.map(v => `<span class="px-3 py-1 rounded-lg bg-blue-600/20 border border-blue-500/30 text-blue-300 text-xs font-bold">${v}</span>`).join('');
+      
+      const btn = document.getElementById('btn-to-act2-part2');
+      if (selectedVerbs.length > 0) {
+        btn.classList.remove('opacity-50', 'pointer-events-none');
+      }
+    }
+
+    function startWritingPhase() {
+      document.getElementById('act2-part1').classList.add('hidden');
+      document.getElementById('act2-part2').classList.remove('hidden');
+
+      const container = document.getElementById('canvas-list-container');
+      container.innerHTML = '';
+
+      selectedVerbs.forEach((verb, idx) => {
+        const item = document.createElement('div');
+        item.className = "p-4 rounded-2xl bg-slate-900 border border-slate-800";
+        item.innerHTML = `
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-gaming text-sm font-bold text-blue-400">${idx + 1}. Verb: "${verb}"</span>
+            <button onclick="clearCanvas('canvas-verb-${idx}')" class="text-xs text-rose-400 hover:underline">Clear</button>
+          </div>
+          <canvas id="canvas-verb-${idx}" class="canvas-board w-full h-28"></canvas>
+        `;
+        container.appendChild(item);
+        setTimeout(() => initCanvas(`canvas-verb-${idx}`), 50);
+      });
+    }
+
+    function goToActivity3() {
+      document.getElementById('act2-part2').classList.add('hidden');
+      document.getElementById('act3').classList.remove('hidden');
+      document.getElementById('activity-indicator').innerText = "ACTIVITY 2 OF 4";
+      loadPair(0);
+    }
+
+    // --- ACTIVITY 3 LOGIC ---
+    function loadPair(index) {
+      currentPairIndex = index;
+      document.getElementById('pair-number-indicator').innerText = `PAIR ${index + 1} OF 5`;
+      document.getElementById('img-slot-a').src = imagePairs[index].img1;
+      document.getElementById('img-slot-b').src = imagePairs[index].img2;
+      
+      document.getElementById('card-img-a').classList.remove('border-emerald-500', 'glow-green');
+      document.getElementById('card-img-b').classList.remove('border-emerald-500', 'glow-green');
+      document.getElementById('pair-canvas-wrapper').classList.add('hidden');
+      document.getElementById('btn-next-pair').classList.add('opacity-50', 'pointer-events-none');
+    }
+
+    function selectImagePairChoice(choice) {
+      document.getElementById('card-img-a').classList.remove('border-emerald-500', 'glow-green');
+      document.getElementById('card-img-b').classList.remove('border-emerald-500', 'glow-green');
+
+      if (choice === 'A') document.getElementById('card-img-a').classList.add('border-emerald-500', 'glow-green');
+      if (choice === 'B') document.getElementById('card-img-b').classList.add('border-emerald-500', 'glow-green');
+
+      const wrapper = document.getElementById('pair-canvas-wrapper');
+      wrapper.classList.remove('hidden');
+      initCanvas('canvas-pair');
+
+      document.getElementById('btn-next-pair').classList.remove('opacity-50', 'pointer-events-none');
+    }
+
+    function nextImagePair() {
+      if (currentPairIndex < imagePairs.length - 1) {
+        loadPair(currentPairIndex + 1);
+      } else {
+        goToActivity4();
+      }
+    }
+
+    // --- ACTIVITY 4 LOGIC ---
+    function goToActivity4() {
+      document.getElementById('act3').classList.add('hidden');
+      document.getElementById('act4').classList.remove('hidden');
+      document.getElementById('activity-indicator').innerText = "ACTIVITY 3 OF 4";
+    }
+
+    function renderPhrasesGrid() {
+      const grid = document.getElementById('phrases-grid');
+      grid.innerHTML = '';
+      classroomPhrases.forEach(p => {
+        const card = document.createElement('div');
+        card.id = `phrase-card-${p.id}`;
+        card.className = "p-6 rounded-2xl bg-gradient-to-b from-purple-900/30 to-slate-900 border border-purple-500/30 hover:border-purple-400 cursor-pointer text-center font-bold text-sm transition-all shadow-lg flex flex-col justify-center items-center min-h-[100px]";
+        card.innerHTML = `<span class="text-purple-200">"${p.text}"</span>`;
+        card.onclick = () => usePhrase(p.id, card);
+        grid.appendChild(card);
+      });
+    }
+
+    function usePhrase(id, cardEl) {
+      const phrase = classroomPhrases.find(p => p.id === id);
+      if (phrase && phrase.uses > 0) {
+        phrase.uses--;
+        if (phrase.uses === 0) {
+          cardEl.classList.add('scale-0', 'opacity-0');
+          setTimeout(() => cardEl.classList.add('hidden'), 300);
+        } else {
+          cardEl.classList.add('glow-purple');
+          setTimeout(() => cardEl.classList.remove('glow-purple'), 500);
+        }
+      }
+    }
+
+    // --- ACTIVITY 5 LOGIC ---
+    function goToActivity5() {
+      document.getElementById('act4').classList.add('hidden');
+      document.getElementById('act5').classList.remove('hidden');
+      document.getElementById('activity-indicator').innerText = "ACTIVITY 4 OF 4";
+      initCanvas('canvas-final');
+    }
+
+    function finishLesson() {
+      confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+      alert("Lesson 1 Completed! Excellent work, Thomaz!");
+    }
+
+    // --- APPLE PENCIL / TOUCH DRAWING CANVAS ENGINE ---
+    const activeCanvases = {};
+
+    function initCanvas(id) {
+      const canvas = document.getElementById(id);
+      if (!canvas || activeCanvases[id]) return;
+
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      let drawing = false;
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+      }
+
+      function startDraw(e) {
+        drawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      }
+
+      function draw(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.strokeStyle = '#38bdf8'; // Sky blue ink
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      }
+
+      function stopDraw() {
+        drawing = false;
+      }
+
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDraw);
+
+      canvas.addEventListener('touchstart', startDraw, { passive: false });
+      canvas.addEventListener('touchmove', draw, { passive: false });
+      canvas.addEventListener('touchend', stopDraw);
+
+      activeCanvases[id] = { canvas, ctx };
+    }
+
+    function clearCanvas(id) {
+      const canvas = document.getElementById(id);
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+  </script>
+</body>
+</html>
