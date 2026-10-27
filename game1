@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thomaz's English Quest | Level 1</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #f8fafc;
+      overflow-x: hidden;
+    }
+    .font-gaming {
+      font-family: 'Orbitron', sans-serif;
+    }
+    .glow-blue {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
+    }
+    .glow-purple {
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.35);
+    }
+    .glow-green {
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
+    }
+    .btn-arcade {
+      transition: all 0.15s ease;
+    }
+    .btn-arcade:active {
+      transform: scale(0.96);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 md:p-6">
+
+  <!-- TOP BAR / HEADER -->
+  <header class="max-w-4xl mx-auto w-full flex items-center justify-between py-3 px-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md mb-6">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-gaming text-lg font-black text-white shadow-md">
+        T
+      </div>
+      <div>
+        <h1 class="font-gaming text-sm md:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">
+          THOMAZ TEIXEIRA
+        </h1>
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-gaming">
+            LEVEL 1 (Weeks 1 & 2)
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- XP / SCORE COUNTER -->
+    <div class="flex items-center gap-4">
+      <div class="text-right">
+        <p class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">XP Score</p>
+        <p id="xp-counter" class="font-gaming text-lg font-black text-yellow-400">0 XP</p>
+      </div>
+      <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-xl">
+        ⚡
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN GAME CARD -->
+  <main class="max-w-3xl mx-auto w-full my-auto">
+    
+    <!-- PROGRESS BAR -->
+    <div class="w-full bg-slate-900 rounded-full h-2.5 mb-6 border border-slate-800 overflow-hidden">
+      <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 12.5%"></div>
+    </div>
+
+    <!-- QUESTION CARD CONTAINER -->
+    <div class="relative p-6 md:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 glow-blue text-center shadow-2xl">
+      
+      <!-- BADGE / TOPIC -->
+      <div id="question-badge" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-4 font-gaming">
+        QUESTION 1 / 8
+      </div>
+
+      <!-- QUESTION TITLE -->
+      <h2 id="question-text" class="font-gaming text-xl md:text-2xl font-black mb-6 leading-relaxed text-slate-100">
+        Loading Question...
+      </h2>
+
+      <!-- INTERACTIVE CONTENT AREA (MULTIPLE CHOICE / SENTENCE BUILDER / TRUE FALSE) -->
+      <div id="interactive-area" class="w-full my-6 min-h-[160px] flex flex-col justify-center items-center gap-4">
+        <!-- Content will be injected dynamically -->
+      </div>
+
+      <!-- FEEDBACK MESSAGE AREA -->
+      <div id="feedback-area" class="h-10 text-sm font-bold flex items-center justify-center gap-2">
+        <!-- Dynamic correct/incorrect message -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- TEACHER CONTROL PANEL (Only visible if ?role=teacher) -->
+  <footer id="teacher-controls" class="hidden fixed bottom-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-2xl bg-slate-950/95 border border-indigo-500/50 glow-purple flex items-center gap-4 z-50 backdrop-blur-lg">
+    <span class="text-xs font-gaming text-indigo-400 font-bold">🎮 TEACHER CONTROLS:</span>
+    <button onclick="prevQuestion()" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold transition-all btn-arcade">
+      ◀ Prev
+    </button>
+    <button onclick="nextQuestion()" class="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold transition-all btn-arcade shadow-lg">
+      Next ▶
+    </button>
+  </footer>
+
+  <!-- FIREBASE SDKs (Compat version for simple setup) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+  <script>
+    // 1. FIREBASE CONFIGURATION (Configurações reais do seu projeto)
+    const firebaseConfig = {
+      apiKey: "AIzaSyC2pSWdBIR-aPmpOvaiNzZWGUuCEupxp1c",
+      authDomain: "studendtrackerpanel.firebaseapp.com",
+      databaseURL: "https://studendtrackerpanel-default-rtdb.firebaseio.com",
+      projectId: "studendtrackerpanel",
+      storageBucket: "studendtrackerpanel.firebasestorage.app",
+      messagingSenderId: "1004678184015",
+      appId: "1:1004678184015:web:be965625c08d8ee73ffe3a"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const gameRef = db.ref("thomaz_quest/current_state");
+
+    // Check if URL has ?role=teacher
+    const urlParams = new URLSearchParams(window.location.search);
+    const isTeacher = urlParams.get('role') === 'teacher';
+
+    if (isTeacher) {
+      document.getElementById('teacher-controls').classList.remove('hidden');
+    }
+
+    // 2. SOUND EFFECTS SYNTHESIZER (Web Audio API - No external files needed!)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'correct') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } else if (type === 'click') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      }
+    }
+
+    // 3. QUESTIONS DATASET (8 Customized Questions for Thomaz)
+    const questions = [
+      {
+        badge: "QUESTION 1 / 8 • GREETINGS",
+        text: 'Teacher: "Good afternoon, Thomaz! How are you today?"',
+        type: "mc",
+        options: [
+          "I am 11 years old.",
+          "I am awesome, thank you!",
+          "My name is Roblox.",
+          "Good night!"
+        ],
+        correct: 1
+      },
+      {
+        badge: "QUESTION 2 / 8 • CLASSROOM ENGLISH",
+        text: 'True or False: If you don\'t understand a word in English, you say: "I don\'t understand."',
+        type: "tf",
+        options: ["TRUE", "FALSE"],
+        correct: 0
+      },
+      {
+        badge: "QUESTION 3 / 8 • DRUMMER STATUS",
+        text: 'Complete the sentence with Thomaz\'s talent:',
+        type: "mc",
+        options: [
+          "Thomaz plays the drums.",
+          "Thomaz plays the guitar.",
+          "Thomaz plays the piano.",
+          "Thomaz plays the violin."
+        ],
+        correct: 0
+      },
+      {
+        badge: "QUESTION 4 / 8 • ROBLOX PUZZLE",
+        text: 'Build your gaming status (Click the words in order):',
+        type: "builder",
+        words: ["I", "like", "playing", "Roblox."],
+        correctOrder: ["I", "like", "playing", "Roblox."]
+      },
+      {
+        badge: "QUESTION 5 / 8 • ONE PIECE BOUNTY RUSH",
+        text: 'Look at Luffy in One Piece Bounty Rush. Choose the correct sentence:',
+        type: "mc",
+        options: [
+          "He play pirate.",
+          "Luffy is fast and strong.",
+          "I plays a game.",
+          "You is a character."
+        ],
+        correct: 1
+      },
+      {
+        badge: "QUESTION 6 / 8 • BRAWL STARS",
+        text: 'Which sentence describes a Brawler correctly in English?',
+        type: "mc",
+        options: [
+          "Crow is fast and cool.",
+          "Crow am fast and cool.",
+          "Crow play fast.",
+          "Crow have fast."
+        ],
+        correct: 0
+      },
+      {
+        badge: "QUESTION 7 / 8 • SENTENCE BUILDER",
+        text: 'Put the words in order to show your musical ability:',
+        type: "builder",
+        words: ["drums!", "play", "can", "I", "the"],
+        correctOrder: ["I", "can", "play", "the", "drums!"]
+      },
+      {
+        badge: "QUESTION 8 / 8 • VICTORY QUEST",
+        text: 'Bonus Quest: Tell your teacher one cool thing you can do in English!',
+        type: "mc",
+        options: [
+          'I can say: "I can play drums!"',
+          'I can say: "I like Roblox!"',
+          'I can say: "Can you help me?"',
+          'ALL OF THE ABOVE! 🎉'
+        ],
+        correct: 3
+      }
+    ];
+
+    // Game state
+    let currentIndex = 0;
+    let score = 0;
+    let selectedSentence = [];
+
+    // 4. FIREBASE REALTIME SYNC
+    gameRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (data && typeof data.currentIndex === 'number') {
+        currentIndex = data.currentIndex;
+        renderQuestion(currentIndex);
+      }
+    });
+
+    function updateFirebaseIndex(newIndex) {
+      if (isTeacher) {
+        gameRef.set({ currentIndex: newIndex });
+      }
+    }
+
+    function nextQuestion() {
+      if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        updateFirebaseIndex(currentIndex);
+      }
+    }
+
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateFirebaseIndex(currentIndex);
+      }
+    }
+
+    // 5. RENDER QUESTION UI
+    function renderQuestion(index) {
+      const q = questions[index];
+      
+      // Update badge, text, and progress bar
+      document.getElementById('question-badge').innerText = q.badge;
+      document.getElementById('question-text').innerText = q.text;
+      document.getElementById('progress-bar').style.width = `${((index + 1) / questions.length) * 100}%`;
+      document.getElementById('feedback-area').innerHTML = '';
+      selectedSentence = [];
+
+      const area = document.getElementById('interactive-area');
+      area.innerHTML = '';
+
+      if (q.type === 'mc' || q.type === 'tf') {
+        const grid = document.createElement('div');
+        grid.className = "grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-xl";
+
+        const colors = [
+          'from-red-600/30 to-red-900/40 border-red-500/40 hover:border-red-400',
+          'from-blue-600/30 to-blue-900/40 border-blue-500/40 hover:border-blue-400',
+          'from-amber-600/30 to-amber-900/40 border-amber-500/40 hover:border-amber-400',
+          'from-emerald-600/30 to-emerald-900/40 border-emerald-500/40 hover:border-emerald-400'
+        ];
+
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.className = `p-4 rounded-2xl bg-gradient-to-r ${colors[idx % 4]} border text-left font-semibold text-sm transition-all btn-arcade flex items-center gap-3`;
+          btn.innerHTML = `<span class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-xs font-bold font-gaming">${String.fromCharCode(65 + idx)}</span> <span>${opt}</span>`;
+          btn.onclick = () => checkAnswer(idx, q.correct, btn);
+          grid.appendChild(btn);
+        });
+
+        area.appendChild(grid);
+      } else if (q.type === 'builder') {
+        // Sentence builder UI
+        const container = document.createElement('div');
+        container.className = "flex flex-col items-center gap-6 w-full max-w-xl";
+
+        // Display area for clicked words
+        const dropZone = document.createElement('div');
+        dropZone.id = "sentence-display";
+        dropZone.className = "w-full min-h-[60px] p-3 rounded-2xl bg-slate-950 border border-slate-800 flex flex-wrap gap-2 items-center justify-center text-lg font-bold text-indigo-300";
+        dropZone.innerHTML = `<span class="text-xs text-slate-600 font-normal">Click blocks below to build the sentence...</span>`;
+
+        // Scrambled word pool
+        const wordPool = document.createElement('div');
+        wordPool.className = "flex flex-wrap gap-2 justify-center";
+
+        // Shuffle words for the pool
+        const shuffled = [...q.words].sort(() => Math.random() - 0.5);
+
+        shuffled.forEach((word) => {
+          const wordBtn = document.createElement('button');
+          wordBtn.className = "px-4 py-2 rounded-xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-200 font-bold hover:bg-indigo-600/40 btn-arcade transition-all";
+          wordBtn.innerText = word;
+          wordBtn.onclick = () => {
+            playSound('click');
+            if (!selectedSentence.includes(word)) {
+              selectedSentence.push(word);
+              wordBtn.classList.add('opacity-30', 'pointer-events-none');
+              updateSentenceDisplay(dropZone, q.correctOrder);
+            }
+          };
+          wordPool.appendChild(wordBtn);
+        });
+
+        container.appendChild(dropZone);
+        container.appendChild(wordPool);
+        area.appendChild(container);
+      }
+    }
+
+    // 6. ANSWER CHECKING & XP
+    function checkAnswer(chosen, correct, buttonEl) {
+      const feedback = document.getElementById('feedback-area');
+
+      if (chosen === correct) {
+        playSound('correct');
+        score += 100;
+        document.getElementById('xp-counter').innerText = `${score} XP`;
+        feedback.innerHTML = `<span class="text-emerald-400 font-bold">✨ EXCELLENT! +100 XP</span>`;
+        if (buttonEl) buttonEl.classList.add('border-emerald-400', 'glow-green');
+
+        if (currentIndex === questions.length - 1) {
+          confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+        }
+      } else {
+        playSound('wrong');
+        feedback.innerHTML = `<span class="text-rose-400 font-bold">❌ Try again! You can do it!</span>`;
+        if (buttonEl) buttonEl.classList.add('border-rose-500');
+      }
+    }
+
+    function updateSentenceDisplay(displayEl, correctOrder) {
+      if (selectedSentence.length === 1) {
+        displayEl.innerHTML = '';
+      }
+
+      displayEl.innerHTML = selectedSentence.map(w => `<span class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-bold">${w}</span>`).join(' ');
+
+      if (selectedSentence.length === correctOrder.length) {
+        if (JSON.stringify(selectedSentence) === JSON.stringify(correctOrder)) {
+          playSound('correct');
+          score += 150;
+          document.getElementById('xp-counter').innerText = `${score} XP`;
+          document.getElementById('feedback-area').innerHTML = `<span class="text-emerald-400 font-bold">🎉 PERFECT SENTENCE! +150 XP</span>`;
+        } else {
+          playSound('wrong');
+          document.getElementById('feedback-area').innerHTML = `<span class="text-amber-400 font-bold">Almost! Resetting blocks...</span>`;
+          setTimeout(() => {
+            renderQuestion(currentIndex);
+          }, 1200);
+        }
+      }
+    }
+
+    // Initial load
+    renderQuestion(0);
+  </script>
+</body>
+</html>
