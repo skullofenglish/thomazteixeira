@@ -129,7 +129,6 @@
           <span id="canvas-label-text" class="text-xs font-bold text-slate-400">Write your preference sentence for Pair 1:</span>
           <button onclick="clearCurrentPairCanvas()" class="text-xs text-rose-400 hover:underline">Clear Canvas</button>
         </div>
-        <!-- 5 Independent Canvases generated dynamically per pair -->
         <div id="pair-canvases-container"></div>
       </div>
 
@@ -181,8 +180,51 @@
         <button onclick="goBackTo('act4')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold font-gaming text-sm flex items-center gap-2">
           ⬅ Back
         </button>
+        <button onclick="goToSummary()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-black font-gaming text-lg shadow-lg hover:scale-105 transition-all">
+          VIEW LESSON SUMMARY 📊
+        </button>
+      </div>
+    </section>
+
+    <!-- ACTIVITY 6: FINAL LESSON REVIEW & SUMMARY DASHBOARD -->
+    <section id="act-summary" class="w-full hidden">
+      <div class="text-center mb-6">
+        <h2 class="font-gaming text-2xl font-black text-emerald-400 mb-2">🏆 LESSON 1 REVIEW & SUMMARY</h2>
+        <p class="text-sm text-slate-300">Great job, Thomaz! Here is everything you practiced and studied today:</p>
+      </div>
+
+      <div class="space-y-4 mb-8 max-h-[60vh] overflow-y-auto p-2">
+        <!-- Verbs Summary Card -->
+        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+          <h3 class="font-gaming text-xs font-bold text-blue-400 uppercase tracking-wider mb-2">1. Selected Action Verbs:</h3>
+          <div id="summary-verbs-list" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Image Pairs Summary Card -->
+        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+          <h3 class="font-gaming text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">2. This or That Preferences (Pairs 1 to 5):</h3>
+          <div id="summary-pairs-list" class="space-y-2 text-xs text-slate-300"></div>
+        </div>
+
+        <!-- Magic Phrases Summary Card -->
+        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800">
+          <h3 class="font-gaming text-xs font-bold text-purple-400 uppercase tracking-wider mb-2">3. Classroom Magic Phrases Mastered:</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 rounded-lg bg-purple-600/20 border border-purple-500/30 text-purple-300 text-xs font-bold">"I don't understand."</span>
+            <span class="px-3 py-1 rounded-lg bg-purple-600/20 border border-purple-500/30 text-purple-300 text-xs font-bold">"Can you repeat, please?"</span>
+            <span class="px-3 py-1 rounded-lg bg-purple-600/20 border border-purple-500/30 text-purple-300 text-xs font-bold">"How do you say ... in English?"</span>
+            <span class="px-3 py-1 rounded-lg bg-purple-600/20 border border-purple-500/30 text-purple-300 text-xs font-bold">"What does ... mean?"</span>
+            <span class="px-3 py-1 rounded-lg bg-purple-600/20 border border-purple-500/30 text-purple-300 text-xs font-bold">"Can you help me?"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <button onclick="goBackTo('act5')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold font-gaming text-sm flex items-center gap-2">
+          ⬅ Back to Wrap-Up
+        </button>
         <button onclick="finishLesson()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black font-gaming text-lg shadow-lg hover:scale-105 transition-all">
-          FINISH LESSON 🎉
+          FINISH & CELEBRATE 🎉
         </button>
         <button onclick="resetCloudData()" class="text-xs text-rose-500 hover:underline font-bold">
           🔄 Reset All Data
@@ -224,12 +266,13 @@
 
     let selectedVerbs = [];
     let currentPairIndex = 0;
+    let pairChoices = {}; // Store choices A or B for summary
     const imagePairs = [
-      { img1: "imagem1.png", img2: "imagem2.png" },
-      { img1: "imagem3.png", img2: "imagem4.png" },
-      { img1: "imagem5.png", img2: "imagem6.png" },
-      { img1: "imagem7.png", img2: "imagem8.png" },
-      { img1: "imagem9.png", img2: "imagem10.png" }
+      { img1: "imagem1.png", img2: "imagem2.png", name: "Pair 1 (Dogs vs Cats / Pets)" },
+      { img1: "imagem3.png", img2: "imagem4.png", name: "Pair 2 (Pizza vs Burger / Food)" },
+      { img1: "imagem5.png", img2: "imagem6.png", name: "Pair 3 (Football vs Cycling / Sports)" },
+      { img1: "imagem7.png", img2: "imagem8.png", name: "Pair 4 (Sunny vs Cold / Weather)" },
+      { img1: "imagem9.png", img2: "imagem10.png", name: "Pair 5 (Music vs Gaming / Hobby)" }
     ];
 
     const classroomPhrases = [
@@ -258,6 +301,9 @@
         if (typeof data.currentPairIndex === 'number') {
           currentPairIndex = data.currentPairIndex;
           loadPair(currentPairIndex, false);
+        }
+        if (data.pairChoices) {
+          pairChoices = data.pairChoices;
         }
         if (data.canvases) {
           for (let id in data.canvases) {
@@ -346,10 +392,10 @@
       loadPair(currentPairIndex, true);
     }
 
-    // --- ACTIVITY 3 LOGIC (INDEPENDENT PAIR CANVASES) ---
+    // --- ACTIVITY 3 LOGIC ---
     function setupPairCanvases() {
       const container = document.getElementById('pair-canvases-container');
-      if (container.children.length > 0) return; // already set up
+      if (container.children.length > 0) return;
 
       imagePairs.forEach((_, idx) => {
         const canvasEl = document.createElement('canvas');
@@ -373,7 +419,11 @@
       document.getElementById('pair-canvas-wrapper').classList.add('hidden');
       document.getElementById('btn-next-pair').classList.add('opacity-50', 'pointer-events-none');
 
-      // Toggle visibility of the correct canvas for this pair
+      // Highlight if previously selected choice exists
+      if (pairChoices[index]) {
+        selectImagePairChoice(pairChoices[index], false);
+      }
+
       imagePairs.forEach((_, idx) => {
         const c = document.getElementById(`canvas-pair-${idx}`);
         if (c) {
@@ -383,12 +433,15 @@
       });
     }
 
-    function selectImagePairChoice(choice) {
+    function selectImagePairChoice(choice, save = true) {
       document.getElementById('card-img-a').classList.remove('border-emerald-500', 'glow-green');
       document.getElementById('card-img-b').classList.remove('border-emerald-500', 'glow-green');
 
       if (choice === 'A') document.getElementById('card-img-a').classList.add('border-emerald-500', 'glow-green');
       if (choice === 'B') document.getElementById('card-img-b').classList.add('border-emerald-500', 'glow-green');
+
+      pairChoices[currentPairIndex] = choice;
+      if (save) saveToCloud({ pairChoices });
 
       const wrapper = document.getElementById('pair-canvas-wrapper');
       wrapper.classList.remove('hidden');
@@ -458,12 +511,32 @@
       }
     }
 
-    // --- ACTIVITY 5 LOGIC ---
+    // --- ACTIVITY 5 & SUMMARY LOGIC ---
     function goToActivity5() {
       document.getElementById('act4').classList.add('hidden');
       document.getElementById('act5').classList.remove('hidden');
       document.getElementById('activity-indicator').innerText = "ACTIVITY 4 OF 4";
       initCanvas('canvas-final');
+    }
+
+    function goToSummary() {
+      document.getElementById('act5').classList.add('hidden');
+      document.getElementById('act-summary').classList.remove('hidden');
+      document.getElementById('activity-indicator').innerText = "LESSON SUMMARY";
+      
+      // Populate Summary Lists
+      const verbsContainer = document.getElementById('summary-verbs-list');
+      if (selectedVerbs.length > 0) {
+        verbsContainer.innerHTML = selectedVerbs.map(v => `<span class="px-3 py-1 rounded-lg bg-blue-600/20 border border-blue-500/30 text-blue-300 text-xs font-bold">${v}</span>`).join('');
+      } else {
+        verbsContainer.innerHTML = `<span class="text-xs text-slate-500 italic">No verbs selected.</span>`;
+      }
+
+      const pairsContainer = document.getElementById('summary-pairs-list');
+      pairsContainer.innerHTML = imagePairs.map((pair, idx) => {
+        const choice = pairChoices[idx] ? `Option ${pairChoices[idx]}` : 'Not answered';
+        return `<div class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span class="font-bold text-indigo-300">${pair.name}</span><span class="px-2 py-1 rounded bg-indigo-500/20 text-indigo-200 font-bold">${choice}</span></div>`;
+      }).join('');
     }
 
     function goBackTo(sectionId) {
@@ -473,12 +546,14 @@
         document.getElementById('activity-indicator').innerText = "ACTIVITY 1 OF 4";
       } else if (sectionId === 'act4') {
         document.getElementById('activity-indicator').innerText = "ACTIVITY 3 OF 4";
+      } else if (sectionId === 'act5') {
+        document.getElementById('activity-indicator').innerText = "ACTIVITY 4 OF 4";
       }
     }
 
     function finishLesson() {
       confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
-      alert("Lesson 1 Completed & Saved to Cloud! Excellent work, Thomaz!");
+      alert("Lesson 1 Completed Successfully! Great job, Thomaz!");
     }
 
     function resetCloudData() {
