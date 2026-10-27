@@ -36,7 +36,7 @@
       border: 2px dashed #334155;
       border-radius: 1rem;
       cursor: crosshair;
-      touch-action: none; /* Essencial para Apple Pencil no iPad */
+      touch-action: none;
     }
   </style>
 </head>
@@ -52,7 +52,7 @@
         <h1 class="font-gaming text-sm md:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">
           THOMAZ TEIXEIRA
         </h1>
-        <p class="text-xs text-slate-400">Lesson 1 • Interactive Workshop</p>
+        <p class="text-xs text-slate-400">Lesson 1 • Cloud Synced Workshop</p>
       </div>
     </div>
     <div id="activity-indicator" class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-gaming">
@@ -70,12 +70,8 @@
         <p class="text-sm text-slate-400">Tap the verbs you can or cannot do to send them to your list!</p>
       </div>
 
-      <!-- 15 VERBS GRID -->
-      <div id="verbs-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-8">
-        <!-- Injected via JS -->
-      </div>
+      <div id="verbs-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-8"></div>
 
-      <!-- USED SECTION -->
       <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 min-h-[100px] mb-6">
         <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 font-gaming">Selected Verbs (Used):</h3>
         <div id="used-verbs-container" class="flex flex-wrap gap-2">
@@ -83,7 +79,6 @@
         </div>
       </div>
 
-      <!-- NEXT ARROW -->
       <div class="flex justify-end">
         <button id="btn-to-act2-part2" onclick="startWritingPhase()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold font-gaming flex items-center gap-2 opacity-50 pointer-events-none transition-all">
           Next Phase ➔
@@ -95,14 +90,15 @@
     <section id="act2-part2" class="w-full hidden">
       <div class="text-center mb-6">
         <h2 class="font-gaming text-2xl font-black text-white mb-2">WRITE YOUR SENTENCES</h2>
-        <p class="text-sm text-slate-400">Use your Apple Pencil to write a sentence for each verb! (e.g., "I can play drums")</p>
+        <p class="text-sm text-slate-400">Use your Apple Pencil to write a sentence for each verb!</p>
       </div>
 
-      <div id="canvas-list-container" class="space-y-6 mb-8 max-h-[60vh] overflow-y-auto p-2">
-        <!-- Dynamic Canvases Injected Here -->
-      </div>
+      <div id="canvas-list-container" class="space-y-6 mb-8 max-h-[60vh] overflow-y-auto p-2"></div>
 
-      <div class="flex justify-end">
+      <div class="flex justify-between items-center">
+        <button onclick="goBackTo('act2-part1')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold font-gaming text-sm flex items-center gap-2">
+          ⬅ Back
+        </button>
         <button onclick="goToActivity3()" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold font-gaming flex items-center gap-2">
           Continue to Activity 3 ➔
         </button>
@@ -117,20 +113,17 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <!-- Image Card A -->
         <div onclick="selectImagePairChoice('A')" id="card-img-a" class="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center">
-          <img id="img-slot-a" src="imagem1.png" alt="Option A" class="w-full h-44 object-cover rounded-xl mb-3 bg-slate-800" onerror="this.src='https://via.placeholder.com/400x250/1e293b/94a3b8?text=imagem1.png'">
+          <img id="img-slot-a" src="imagem1.png" alt="Option A" class="w-full h-44 object-cover rounded-xl mb-3 bg-slate-800" onerror="this.src='https://via.placeholder.com/400x250/1e293b/94a3b8?text=Image+1'">
           <span class="font-gaming text-xs font-bold text-slate-300">OPTION A</span>
         </div>
 
-        <!-- Image Card B -->
         <div onclick="selectImagePairChoice('B')" id="card-img-b" class="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center">
-          <img id="img-slot-b" src="imagem2.png" alt="Option B" class="w-full h-44 object-cover rounded-xl mb-3 bg-slate-800" onerror="this.src='https://via.placeholder.com/400x250/1e293b/94a3b8?text=imagem2.png'">
+          <img id="img-slot-b" src="imagem2.png" alt="Option B" class="w-full h-44 object-cover rounded-xl mb-3 bg-slate-800" onerror="this.src='https://via.placeholder.com/400x250/1e293b/94a3b8?text=Image+2'">
           <span class="font-gaming text-xs font-bold text-slate-300">OPTION B</span>
         </div>
       </div>
 
-      <!-- Writing Canvas for Pair -->
       <div id="pair-canvas-wrapper" class="hidden mb-6">
         <div class="flex justify-between items-center mb-2">
           <span class="text-xs font-bold text-slate-400">Write your preference sentence with Apple Pencil:</span>
@@ -139,25 +132,29 @@
         <canvas id="canvas-pair" class="canvas-board w-full h-32"></canvas>
       </div>
 
-      <div class="flex justify-end">
+      <div class="flex justify-between items-center">
+        <button onclick="prevImagePair()" id="btn-prev-pair" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold font-gaming text-sm flex items-center gap-2">
+          ⬅ Back
+        </button>
         <button id="btn-next-pair" onclick="nextImagePair()" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold font-gaming flex items-center gap-2 opacity-50 pointer-events-none transition-all">
           Next Pair ➔
         </button>
       </div>
     </section>
 
-    <!-- ACTIVITY 4: FUNCTIONAL CLASSROOM ENGLISH CARDS -->
+    <!-- ACTIVITY 4: FUNCTIONAL CLASSROOM ENGLISH -->
     <section id="act4" class="w-full hidden text-center">
       <div class="mb-6">
         <h2 class="font-gaming text-2xl font-black text-white mb-2">CLASSROOM MAGIC PHRASES</h2>
         <p class="text-sm text-slate-400">Listen to your teacher and tap the card when you use the phrase!</p>
       </div>
 
-      <div id="phrases-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        <!-- Phrases injected via JS -->
-      </div>
+      <div id="phrases-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8"></div>
 
-      <div class="flex justify-end">
+      <div class="flex justify-between items-center">
+        <button onclick="goToActivity3From4()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold font-gaming text-sm flex items-center gap-2">
+          ⬅ Back
+        </button>
         <button id="btn-to-act5" onclick="goToActivity5()" class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold font-gaming flex items-center gap-2">
           Final Wrap-Up ➔
         </button>
@@ -179,9 +176,17 @@
         <canvas id="canvas-final" class="canvas-board w-full h-48"></canvas>
       </div>
 
-      <button onclick="finishLesson()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black font-gaming text-lg shadow-lg hover:scale-105 transition-all">
-        FINISH LESSON 🎉
-      </button>
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <button onclick="goBackTo('act4')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold font-gaming text-sm flex items-center gap-2">
+          ⬅ Back
+        </button>
+        <button onclick="finishLesson()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black font-gaming text-lg shadow-lg hover:scale-105 transition-all">
+          FINISH LESSON 🎉
+        </button>
+        <button onclick="resetCloudData()" class="text-xs text-rose-500 hover:underline font-bold">
+          🔄 Reset All Data
+        </button>
+      </div>
     </section>
 
   </main>
@@ -191,8 +196,26 @@
     Instructor: skullofenglish • Thomaz Teixeira Learning Suite
   </footer>
 
+  <!-- FIREBASE SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
   <script>
-    // 15 ACTION VERBS
+    // FIREBASE CONFIGURATION
+    const firebaseConfig = {
+      apiKey: "AIzaSyC2pSWdBIR-aPmpOvaiNzZWGUuCEupxp1c",
+      authDomain: "studendtrackerpanel.firebaseapp.com",
+      databaseURL: "https://studendtrackerpanel-default-rtdb.firebaseio.com",
+      projectId: "studendtrackerpanel",
+      storageBucket: "studendtrackerpanel.firebasestorage.app",
+      messagingSenderId: "1004678184015",
+      appId: "1:1004678184015:web:be965625c08d8ee73ffe3a"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const lessonRef = db.ref("thomaz_quest/lesson1_state");
+
     const verbsList = [
       "play drums", "swim", "cook", "draw", "speak English",
       "play Roblox", "sing", "run fast", "ride a bike", "dance",
@@ -201,8 +224,6 @@
 
     let selectedVerbs = [];
     let currentPairIndex = 0;
-
-    // 5 IMAGE PAIRS DATA
     const imagePairs = [
       { img1: "imagem1.png", img2: "imagem2.png" },
       { img1: "imagem3.png", img2: "imagem4.png" },
@@ -211,7 +232,6 @@
       { img1: "imagem9.png", img2: "imagem10.png" }
     ];
 
-    // CLASSROOM TARGET PHRASES (With remaining usage counts)
     const classroomPhrases = [
       { id: 1, text: "I don't understand.", uses: 2 },
       { id: 2, text: "Can you repeat, please?", uses: 2 },
@@ -220,11 +240,38 @@
       { id: 5, text: "Can you help me?", uses: 1 }
     ];
 
-    // INITIALIZATION
     window.onload = () => {
       renderVerbsGrid();
       renderPhrasesGrid();
+      loadCloudState();
     };
+
+    // SYNC STATE FROM FIREBASE
+    function loadCloudState() {
+      lessonRef.on("value", (snapshot) => {
+        const data = snapshot.val();
+        if (!data) return;
+
+        if (data.selectedVerbs) {
+          selectedVerbs = data.selectedVerbs;
+          updateUsedVerbsUI();
+        }
+        if (typeof data.currentPairIndex === 'number') {
+          currentPairIndex = data.currentPairIndex;
+          loadPair(currentPairIndex, false);
+        }
+        // Restore canvases if data exists
+        if (data.canvases) {
+          for (let id in data.canvases) {
+            restoreCanvasData(id, data.canvases[id]);
+          }
+        }
+      });
+    }
+
+    function saveToCloud(updateObj) {
+      lessonRef.update(updateObj);
+    }
 
     // --- ACTIVITY 2 LOGIC ---
     function renderVerbsGrid() {
@@ -232,34 +279,48 @@
       grid.innerHTML = '';
       verbsList.forEach(verb => {
         const card = document.createElement('div');
-        card.className = "p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer text-center text-xs font-bold transition-all btn-arcade flex items-center justify-center min-h-[50px]";
+        card.id = `verb-card-${verb.replace(/\s+/g, '-')}`;
+        card.className = "p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer text-center text-xs font-bold transition-all flex items-center justify-center min-h-[50px]";
         card.innerText = verb;
-        card.onclick = () => selectVerb(verb, card);
+        card.onclick = () => selectVerb(verb);
         grid.appendChild(card);
       });
     }
 
-    function selectVerb(verb, cardEl) {
+    function selectVerb(verb) {
       if (!selectedVerbs.includes(verb)) {
         selectedVerbs.push(verb);
-        cardEl.classList.add('opacity-20', 'pointer-events-none');
+        saveToCloud({ selectedVerbs });
         updateUsedVerbsUI();
       }
     }
 
     function updateUsedVerbsUI() {
+      verbsList.forEach(verb => {
+        const card = document.getElementById(`verb-card-${verb.replace(/\s+/g, '-')}`);
+        if (card) {
+          if (selectedVerbs.includes(verb)) {
+            card.classList.add('opacity-20', 'pointer-events-none');
+          } else {
+            card.classList.remove('opacity-20', 'pointer-events-none');
+          }
+        }
+      });
+
       const container = document.getElementById('used-verbs-container');
-      container.innerHTML = selectedVerbs.map(v => `<span class="px-3 py-1 rounded-lg bg-blue-600/20 border border-blue-500/30 text-blue-300 text-xs font-bold">${v}</span>`).join('');
-      
-      const btn = document.getElementById('btn-to-act2-part2');
       if (selectedVerbs.length > 0) {
-        btn.classList.remove('opacity-50', 'pointer-events-none');
+        container.innerHTML = selectedVerbs.map(v => `<span class="px-3 py-1 rounded-lg bg-blue-600/20 border border-blue-500/30 text-blue-300 text-xs font-bold">${v}</span>`).join('');
+        document.getElementById('btn-to-act2-part2').classList.remove('opacity-50', 'pointer-events-none');
+      } else {
+        container.innerHTML = `<span class="text-xs text-slate-600 italic">No verbs selected yet...</span>`;
+        document.getElementById('btn-to-act2-part2').classList.add('opacity-50', 'pointer-events-none');
       }
     }
 
     function startWritingPhase() {
       document.getElementById('act2-part1').classList.add('hidden');
       document.getElementById('act2-part2').classList.remove('hidden');
+      document.getElementById('activity-indicator').innerText = "ACTIVITY 1 OF 4";
 
       const container = document.getElementById('canvas-list-container');
       container.innerHTML = '';
@@ -283,12 +344,14 @@
       document.getElementById('act2-part2').classList.add('hidden');
       document.getElementById('act3').classList.remove('hidden');
       document.getElementById('activity-indicator').innerText = "ACTIVITY 2 OF 4";
-      loadPair(0);
+      loadPair(currentPairIndex, true);
     }
 
     // --- ACTIVITY 3 LOGIC ---
-    function loadPair(index) {
+    function loadPair(index, save = false) {
       currentPairIndex = index;
+      if (save) saveToCloud({ currentPairIndex });
+
       document.getElementById('pair-number-indicator').innerText = `PAIR ${index + 1} OF 5`;
       document.getElementById('img-slot-a').src = imagePairs[index].img1;
       document.getElementById('img-slot-b').src = imagePairs[index].img2;
@@ -297,6 +360,7 @@
       document.getElementById('card-img-b').classList.remove('border-emerald-500', 'glow-green');
       document.getElementById('pair-canvas-wrapper').classList.add('hidden');
       document.getElementById('btn-next-pair').classList.add('opacity-50', 'pointer-events-none');
+      document.getElementById('btn-prev-pair').style.display = index === 0 ? 'inline-flex' : 'inline-flex';
     }
 
     function selectImagePairChoice(choice) {
@@ -315,9 +379,18 @@
 
     function nextImagePair() {
       if (currentPairIndex < imagePairs.length - 1) {
-        loadPair(currentPairIndex + 1);
+        loadPair(currentPairIndex + 1, true);
       } else {
         goToActivity4();
+      }
+    }
+
+    function prevImagePair() {
+      if (currentPairIndex > 0) {
+        loadPair(currentPairIndex - 1, true);
+      } else {
+        document.getElementById('act3').classList.add('hidden');
+        document.getElementById('act2-part2').classList.remove('hidden');
       }
     }
 
@@ -326,6 +399,12 @@
       document.getElementById('act3').classList.add('hidden');
       document.getElementById('act4').classList.remove('hidden');
       document.getElementById('activity-indicator').innerText = "ACTIVITY 3 OF 4";
+    }
+
+    function goToActivity3From4() {
+      document.getElementById('act4').classList.add('hidden');
+      document.getElementById('act3').classList.remove('hidden');
+      loadPair(imagePairs.length - 1, true);
     }
 
     function renderPhrasesGrid() {
@@ -363,12 +442,30 @@
       initCanvas('canvas-final');
     }
 
-    function finishLesson() {
-      confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
-      alert("Lesson 1 Completed! Excellent work, Thomaz!");
+    function goBackTo(sectionId) {
+      document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById(sectionId).classList.remove('hidden');
+      if (sectionId === 'act2-part1') {
+        document.getElementById('activity-indicator').innerText = "ACTIVITY 1 OF 4";
+      } else if (sectionId === 'act4') {
+        document.getElementById('activity-indicator').innerText = "ACTIVITY 3 OF 4";
+      }
     }
 
-    // --- APPLE PENCIL / TOUCH DRAWING CANVAS ENGINE ---
+    function finishLesson() {
+      confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+      alert("Lesson 1 Completed & Saved to Cloud! Excellent work, Thomaz!");
+    }
+
+    function resetCloudData() {
+      if (confirm("Reset all lesson progress and clear canvases?")) {
+        lessonRef.remove().then(() => {
+          location.reload();
+        });
+      }
+    }
+
+    // --- APPLE PENCIL / CANVAS CLOUD SYNC ENGINE ---
     const activeCanvases = {};
 
     function initCanvas(id) {
@@ -400,14 +497,19 @@
         e.preventDefault();
         const pos = getPos(e);
         ctx.lineTo(pos.x, pos.y);
-        ctx.strokeStyle = '#38bdf8'; // Sky blue ink
+        ctx.strokeStyle = '#38bdf8';
         ctx.lineWidth = 3;
         ctx.lineCap = 'round';
         ctx.stroke();
       }
 
       function stopDraw() {
-        drawing = false;
+        if (drawing) {
+          drawing = false;
+          // Save canvas image data to Firebase cloud automatically
+          const dataURL = canvas.toDataURL();
+          saveToCloud({ [`canvases/${id}`]: dataURL });
+        }
       }
 
       canvas.addEventListener('mousedown', startDraw);
@@ -421,11 +523,24 @@
       activeCanvases[id] = { canvas, ctx };
     }
 
+    function restoreCanvasData(id, dataURL) {
+      const canvas = document.getElementById(id);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+      };
+      img.src = dataURL;
+    }
+
     function clearCanvas(id) {
       const canvas = document.getElementById(id);
       if (canvas) {
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        saveToCloud({ [`canvases/${id}`]: null });
       }
     }
   </script>
