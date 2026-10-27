@@ -105,7 +105,7 @@
       </div>
     </section>
 
-    <!-- ACTIVITY 3: 5 IMAGE PAIRS & CANVASES -->
+    <!-- ACTIVITY 3: 5 IMAGE PAIRS & INDEPENDENT CANVASES -->
     <section id="act3" class="w-full hidden">
       <div class="text-center mb-6">
         <h2 class="font-gaming text-2xl font-black text-white mb-2">THIS OR THAT?</h2>
@@ -126,10 +126,11 @@
 
       <div id="pair-canvas-wrapper" class="hidden mb-6">
         <div class="flex justify-between items-center mb-2">
-          <span class="text-xs font-bold text-slate-400">Write your preference sentence with Apple Pencil:</span>
-          <button onclick="clearCanvas('canvas-pair')" class="text-xs text-rose-400 hover:underline">Clear Canvas</button>
+          <span id="canvas-label-text" class="text-xs font-bold text-slate-400">Write your preference sentence for Pair 1:</span>
+          <button onclick="clearCurrentPairCanvas()" class="text-xs text-rose-400 hover:underline">Clear Canvas</button>
         </div>
-        <canvas id="canvas-pair" class="canvas-board w-full h-32"></canvas>
+        <!-- 5 Independent Canvases generated dynamically per pair -->
+        <div id="pair-canvases-container"></div>
       </div>
 
       <div class="flex justify-between items-center">
@@ -201,7 +202,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
   <script>
-    // FIREBASE CONFIGURATION
     const firebaseConfig = {
       apiKey: "AIzaSyC2pSWdBIR-aPmpOvaiNzZWGUuCEupxp1c",
       authDomain: "studendtrackerpanel.firebaseapp.com",
@@ -246,7 +246,6 @@
       loadCloudState();
     };
 
-    // SYNC STATE FROM FIREBASE
     function loadCloudState() {
       lessonRef.on("value", (snapshot) => {
         const data = snapshot.val();
@@ -260,7 +259,6 @@
           currentPairIndex = data.currentPairIndex;
           loadPair(currentPairIndex, false);
         }
-        // Restore canvases if data exists
         if (data.canvases) {
           for (let id in data.canvases) {
             restoreCanvasData(id, data.canvases[id]);
@@ -344,10 +342,24 @@
       document.getElementById('act2-part2').classList.add('hidden');
       document.getElementById('act3').classList.remove('hidden');
       document.getElementById('activity-indicator').innerText = "ACTIVITY 2 OF 4";
+      setupPairCanvases();
       loadPair(currentPairIndex, true);
     }
 
-    // --- ACTIVITY 3 LOGIC ---
+    // --- ACTIVITY 3 LOGIC (INDEPENDENT PAIR CANVASES) ---
+    function setupPairCanvases() {
+      const container = document.getElementById('pair-canvases-container');
+      if (container.children.length > 0) return; // already set up
+
+      imagePairs.forEach((_, idx) => {
+        const canvasEl = document.createElement('canvas');
+        canvasEl.id = `canvas-pair-${idx}`;
+        canvasEl.className = `canvas-board w-full h-32 ${idx === 0 ? '' : 'hidden'}`;
+        container.appendChild(canvasEl);
+        setTimeout(() => initCanvas(`canvas-pair-${idx}`), 50);
+      });
+    }
+
     function loadPair(index, save = false) {
       currentPairIndex = index;
       if (save) saveToCloud({ currentPairIndex });
@@ -360,7 +372,15 @@
       document.getElementById('card-img-b').classList.remove('border-emerald-500', 'glow-green');
       document.getElementById('pair-canvas-wrapper').classList.add('hidden');
       document.getElementById('btn-next-pair').classList.add('opacity-50', 'pointer-events-none');
-      document.getElementById('btn-prev-pair').style.display = index === 0 ? 'inline-flex' : 'inline-flex';
+
+      // Toggle visibility of the correct canvas for this pair
+      imagePairs.forEach((_, idx) => {
+        const c = document.getElementById(`canvas-pair-${idx}`);
+        if (c) {
+          if (idx === index) c.classList.remove('hidden');
+          else c.classList.add('hidden');
+        }
+      });
     }
 
     function selectImagePairChoice(choice) {
@@ -372,7 +392,6 @@
 
       const wrapper = document.getElementById('pair-canvas-wrapper');
       wrapper.classList.remove('hidden');
-      initCanvas('canvas-pair');
 
       document.getElementById('btn-next-pair').classList.remove('opacity-50', 'pointer-events-none');
     }
@@ -394,6 +413,10 @@
       }
     }
 
+    function clearCurrentPairCanvas() {
+      clearCanvas(`canvas-pair-${currentPairIndex}`);
+    }
+
     // --- ACTIVITY 4 LOGIC ---
     function goToActivity4() {
       document.getElementById('act3').classList.add('hidden');
@@ -404,6 +427,7 @@
     function goToActivity3From4() {
       document.getElementById('act4').classList.add('hidden');
       document.getElementById('act3').classList.remove('hidden');
+      setupPairCanvases();
       loadPair(imagePairs.length - 1, true);
     }
 
@@ -506,7 +530,6 @@
       function stopDraw() {
         if (drawing) {
           drawing = false;
-          // Save canvas image data to Firebase cloud automatically
           const dataURL = canvas.toDataURL();
           saveToCloud({ [`canvases/${id}`]: dataURL });
         }
