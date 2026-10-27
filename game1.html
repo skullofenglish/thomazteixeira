@@ -92,15 +92,13 @@
         Loading Question...
       </h2>
 
-      <!-- INTERACTIVE CONTENT AREA (MULTIPLE CHOICE / SENTENCE BUILDER / TRUE FALSE) -->
+      <!-- INTERACTIVE CONTENT AREA -->
       <div id="interactive-area" class="w-full my-6 min-h-[160px] flex flex-col justify-center items-center gap-4">
-        <!-- Content will be injected dynamically -->
+        <!-- Content injected dynamically -->
       </div>
 
       <!-- FEEDBACK MESSAGE AREA -->
-      <div id="feedback-area" class="h-10 text-sm font-bold flex items-center justify-center gap-2">
-        <!-- Dynamic correct/incorrect message -->
-      </div>
+      <div id="feedback-area" class="h-10 text-sm font-bold flex items-center justify-center gap-2"></div>
 
     </div>
   </main>
@@ -116,12 +114,12 @@
     </button>
   </footer>
 
-  <!-- FIREBASE SDKs (Compat version for simple setup) -->
+  <!-- FIREBASE SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
   <script>
-    // 1. FIREBASE CONFIGURATION (Configurações reais do seu projeto)
+    // FIREBASE CONFIGURATION
     const firebaseConfig = {
       apiKey: "AIzaSyC2pSWdBIR-aPmpOvaiNzZWGUuCEupxp1c",
       authDomain: "studendtrackerpanel.firebaseapp.com",
@@ -132,12 +130,10 @@
       appId: "1:1004678184015:web:be965625c08d8ee73ffe3a"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const gameRef = db.ref("thomaz_quest/current_state");
 
-    // Check if URL has ?role=teacher
     const urlParams = new URLSearchParams(window.location.search);
     const isTeacher = urlParams.get('role') === 'teacher';
 
@@ -145,13 +141,10 @@
       document.getElementById('teacher-controls').classList.remove('hidden');
     }
 
-    // 2. SOUND EFFECTS SYNTHESIZER (Web Audio API - No external files needed!)
+    // AUDIO SYNTHESIZER
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
     function playSound(type) {
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (audioCtx.state === 'suspended') { audioCtx.resume(); }
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.connect(gain);
@@ -159,32 +152,29 @@
 
       if (type === 'correct') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
-        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
         gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.4);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.4);
       } else if (type === 'wrong') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(220, audioCtx.currentTime);
         osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.15);
         gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.35);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.35);
       } else if (type === 'click') {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(440, audioCtx.currentTime);
         gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.05);
       }
     }
 
-    // 3. QUESTIONS DATASET (8 Customized Questions for Thomaz)
+    // 8 QUESTIONS DATASET
     const questions = [
       {
         badge: "QUESTION 1 / 8 • GREETINGS",
@@ -269,12 +259,10 @@
       }
     ];
 
-    // Game state
     let currentIndex = 0;
     let score = 0;
     let selectedSentence = [];
 
-    // 4. FIREBASE REALTIME SYNC
     gameRef.on("value", (snapshot) => {
       const data = snapshot.val();
       if (data && typeof data.currentIndex === 'number') {
@@ -303,11 +291,8 @@
       }
     }
 
-    // 5. RENDER QUESTION UI
     function renderQuestion(index) {
       const q = questions[index];
-      
-      // Update badge, text, and progress bar
       document.getElementById('question-badge').innerText = q.badge;
       document.getElementById('question-text').innerText = q.text;
       document.getElementById('progress-bar').style.width = `${((index + 1) / questions.length) * 100}%`;
@@ -335,26 +320,20 @@
           btn.onclick = () => checkAnswer(idx, q.correct, btn);
           grid.appendChild(btn);
         });
-
         area.appendChild(grid);
       } else if (q.type === 'builder') {
-        // Sentence builder UI
         const container = document.createElement('div');
         container.className = "flex flex-col items-center gap-6 w-full max-w-xl";
 
-        // Display area for clicked words
         const dropZone = document.createElement('div');
         dropZone.id = "sentence-display";
         dropZone.className = "w-full min-h-[60px] p-3 rounded-2xl bg-slate-950 border border-slate-800 flex flex-wrap gap-2 items-center justify-center text-lg font-bold text-indigo-300";
         dropZone.innerHTML = `<span class="text-xs text-slate-600 font-normal">Click blocks below to build the sentence...</span>`;
 
-        // Scrambled word pool
         const wordPool = document.createElement('div');
         wordPool.className = "flex flex-wrap gap-2 justify-center";
 
-        // Shuffle words for the pool
         const shuffled = [...q.words].sort(() => Math.random() - 0.5);
-
         shuffled.forEach((word) => {
           const wordBtn = document.createElement('button');
           wordBtn.className = "px-4 py-2 rounded-xl bg-indigo-600/20 border border-indigo-500/40 text-indigo-200 font-bold hover:bg-indigo-600/40 btn-arcade transition-all";
@@ -376,17 +355,14 @@
       }
     }
 
-    // 6. ANSWER CHECKING & XP
     function checkAnswer(chosen, correct, buttonEl) {
       const feedback = document.getElementById('feedback-area');
-
       if (chosen === correct) {
         playSound('correct');
         score += 100;
         document.getElementById('xp-counter').innerText = `${score} XP`;
         feedback.innerHTML = `<span class="text-emerald-400 font-bold">✨ EXCELLENT! +100 XP</span>`;
         if (buttonEl) buttonEl.classList.add('border-emerald-400', 'glow-green');
-
         if (currentIndex === questions.length - 1) {
           confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
         }
@@ -401,7 +377,6 @@
       if (selectedSentence.length === 1) {
         displayEl.innerHTML = '';
       }
-
       displayEl.innerHTML = selectedSentence.map(w => `<span class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-bold">${w}</span>`).join(' ');
 
       if (selectedSentence.length === correctOrder.length) {
@@ -413,14 +388,11 @@
         } else {
           playSound('wrong');
           document.getElementById('feedback-area').innerHTML = `<span class="text-amber-400 font-bold">Almost! Resetting blocks...</span>`;
-          setTimeout(() => {
-            renderQuestion(currentIndex);
-          }, 1200);
+          setTimeout(() => { renderQuestion(currentIndex); }, 1200);
         }
       }
     }
 
-    // Initial load
     renderQuestion(0);
   </script>
 </body>
