@@ -105,28 +105,37 @@
       </div>
     </section>
 
-    <!-- ACTIVITY 3: 5 IMAGE PAIRS & INDEPENDENT CANVASES -->
+    <!-- ACTIVITY 3: 5 IMAGE PAIRS & INDEPENDENT CANVASES (QUADRADOS / ASPECT-SQUARE) -->
     <section id="act3" class="w-full hidden">
       <div class="text-center mb-6">
         <h2 class="font-gaming text-2xl font-black text-white mb-2">THIS OR THAT?</h2>
         <p id="pair-number-indicator" class="text-sm text-indigo-400 font-bold font-gaming">PAIR 1 OF 5</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div onclick="selectImagePairChoice('A')" id="card-img-a" class="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center">
-          <img id="img-slot-a" src="imagem1.png" alt="Option A" class="w-full h-44 object-cover rounded-xl mb-3 bg-slate-800" onerror="this.src='https://via.placeholder.com/400x250/1e293b/94a3b8?text=Image+1'">
+      <!-- CARDS QUADRADOS DE IMAGENS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 max-w-2xl mx-auto">
+        
+        <!-- Card A -->
+        <div onclick="selectImagePairChoice('A')" id="card-img-a" class="p-4 rounded-3xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center">
+          <div class="w-full aspect-square rounded-2xl bg-slate-950 p-2 mb-3 border border-slate-800/80 overflow-hidden flex items-center justify-center">
+            <img id="img-slot-a" src="imagem1.png" alt="Option A" class="w-full h-full object-contain rounded-xl" onerror="this.src='https://via.placeholder.com/300x300/1e293b/94a3b8?text=Imagem+1'">
+          </div>
           <span class="font-gaming text-xs font-bold text-slate-300">OPTION A</span>
         </div>
 
-        <div onclick="selectImagePairChoice('B')" id="card-img-b" class="p-4 rounded-2xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center">
-          <img id="img-slot-b" src="imagem2.png" alt="Option B" class="w-full h-44 object-cover rounded-xl mb-3 bg-slate-800" onerror="this.src='https://via.placeholder.com/400x250/1e293b/94a3b8?text=Image+2'">
+        <!-- Card B -->
+        <div onclick="selectImagePairChoice('B')" id="card-img-b" class="p-4 rounded-3xl bg-slate-900 border border-slate-800 hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center">
+          <div class="w-full aspect-square rounded-2xl bg-slate-950 p-2 mb-3 border border-slate-800/80 overflow-hidden flex items-center justify-center">
+            <img id="img-slot-b" src="imagem2.png" alt="Option B" class="w-full h-full object-contain rounded-xl" onerror="this.src='https://via.placeholder.com/300x300/1e293b/94a3b8?text=Imagem+2'">
+          </div>
           <span class="font-gaming text-xs font-bold text-slate-300">OPTION B</span>
         </div>
+
       </div>
 
       <div id="pair-canvas-wrapper" class="hidden mb-6">
         <div class="flex justify-between items-center mb-2">
-          <span id="canvas-label-text" class="text-xs font-bold text-slate-400">Write your preference sentence for Pair 1:</span>
+          <span id="canvas-label-text" class="text-xs font-bold text-slate-400">Write your preference sentence for this pair:</span>
           <button onclick="clearCurrentPairCanvas()" class="text-xs text-rose-400 hover:underline">Clear Canvas</button>
         </div>
         <div id="pair-canvases-container"></div>
@@ -266,7 +275,8 @@
 
     let selectedVerbs = [];
     let currentPairIndex = 0;
-    let pairChoices = {}; // Store choices A or B for summary
+    let pairChoices = {};
+
     const imagePairs = [
       { img1: "imagem1.png", img2: "imagem2.png", name: "Pair 1 (Dogs vs Cats / Pets)" },
       { img1: "imagem3.png", img2: "imagem4.png", name: "Pair 2 (Pizza vs Burger / Food)" },
@@ -392,7 +402,7 @@
       loadPair(currentPairIndex, true);
     }
 
-    // --- ACTIVITY 3 LOGIC ---
+    // --- ACTIVITY 3 LOGIC (SQUARE CARDS) ---
     function setupPairCanvases() {
       const container = document.getElementById('pair-canvases-container');
       if (container.children.length > 0) return;
@@ -419,7 +429,6 @@
       document.getElementById('pair-canvas-wrapper').classList.add('hidden');
       document.getElementById('btn-next-pair').classList.add('opacity-50', 'pointer-events-none');
 
-      // Highlight if previously selected choice exists
       if (pairChoices[index]) {
         selectImagePairChoice(pairChoices[index], false);
       }
@@ -524,7 +533,6 @@
       document.getElementById('act-summary').classList.remove('hidden');
       document.getElementById('activity-indicator').innerText = "LESSON SUMMARY";
       
-      // Populate Summary Lists
       const verbsContainer = document.getElementById('summary-verbs-list');
       if (selectedVerbs.length > 0) {
         verbsContainer.innerHTML = selectedVerbs.map(v => `<span class="px-3 py-1 rounded-lg bg-blue-600/20 border border-blue-500/30 text-blue-300 text-xs font-bold">${v}</span>`).join('');
