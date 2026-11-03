@@ -216,14 +216,14 @@
             min-height: 22px;
         }
 
-        .link-container a {
+        .link-container a, .topic-content a {
             color: var(--brand-purple-mid);
             font-weight: 600;
             text-decoration: none;
             border-bottom: 1px dotted var(--brand-purple-mid);
         }
 
-        .link-container a:hover {
+        .link-container a:hover, .topic-content a:hover {
             color: var(--brand-red);
             border-bottom-color: var(--brand-red);
         }
@@ -839,7 +839,7 @@
                     </div>
 
                     <div class="add-topic-box">
-                        <input type="text" id="new-topic-input" placeholder="New topic...">
+                        <input type="text" id="new-topic-input" placeholder="New topic or link...">
                         <button class="btn" onclick="addTopic()" style="padding: 8px 14px; background-color: var(--brand-purple-dark);">+</button>
                     </div>
                 </div>
@@ -900,8 +900,7 @@
 
     <script>
         // =========================================================================
-        // NOME DO ALUNO NO FIREBASE (MUDE AQUI PARA CADA ALUNO NOVO)
-        // Exemplo: "aluna_cassia", "aluno_joao", "aluna_maria"
+        // NOME DO ALUNO NO FIREBASE
         // =========================================================================
         const STUDENT_DOCUMENT_NAME = "aluno_thomaz"; 
 
@@ -1175,6 +1174,7 @@
                     cards.push({
                         date: card.querySelector('.card-date').value || '',
                         topic: card.querySelector('.card-topic').value || '',
+                        objectives: card.querySelector('.card-objectives').innerHTML || '',
                         covered: card.querySelector('.card-covered').innerHTML || '',
                         grammar: card.querySelector('.card-grammar').innerHTML || '',
                         vocab: card.querySelector('.card-vocab').innerHTML || '',
@@ -1201,7 +1201,7 @@
             containerWrapper.innerHTML = '';
 
             if (!months || months.length === 0) {
-                months = [{ title: 'Month 1', cards: [{date: '', topic: '', covered: '', grammar: '', vocab: '', pronunciation: '', observations: '', nextSession: '', studentNotes: '', isOpen: true}] }];
+                months = [{ title: 'Month 1', cards: [{date: '', topic: '', objectives: '', covered: '', grammar: '', vocab: '', pronunciation: '', observations: '', nextSession: '', studentNotes: '', isOpen: true}] }];
             }
 
             if (activeSessionMonthIndex >= months.length) activeSessionMonthIndex = months.length - 1;
@@ -1235,7 +1235,7 @@
                 cardsContainer.className = 'cards-container';
 
                 if (!m.cards || m.cards.length === 0) {
-                    m.cards = [{date: '', topic: '', covered: '', grammar: '', vocab: '', pronunciation: '', observations: '', nextSession: '', studentNotes: '', isOpen: true}];
+                    m.cards = [{date: '', topic: '', objectives: '', covered: '', grammar: '', vocab: '', pronunciation: '', observations: '', nextSession: '', studentNotes: '', isOpen: true}];
                 }
 
                 m.cards.forEach((c, index) => {
@@ -1256,6 +1256,9 @@
                             <label>Topic:</label>
                             <input type="text" class="card-topic" value="${c.topic || ''}" placeholder="e.g. Past Perfect" oninput="updateCardHeader(this)">
                             
+                            <label>Session Objectives:</label>
+                            <div class="card-objectives" contenteditable="true" style="border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; background: var(--input-bg); min-height: 50px; outline: none; font-size: 0.88rem;">${c.objectives || ''}</div>
+
                             <label>Covered in session:</label>
                             <div class="card-covered" contenteditable="true" style="border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; background: var(--input-bg); min-height: 50px; outline: none; font-size: 0.88rem;">${c.covered || ''}</div>
                             
@@ -1331,7 +1334,7 @@
             const months = getSessionMonthsData();
             months.push({
                 title: `Month ${months.length + 1}`,
-                cards: [{date: '', topic: '', covered: '', grammar: '', vocab: '', pronunciation: '', observations: '', nextSession: '', studentNotes: '', isOpen: true}]
+                cards: [{date: '', topic: '', objectives: '', covered: '', grammar: '', vocab: '', pronunciation: '', observations: '', nextSession: '', studentNotes: '', isOpen: true}]
             });
             activeSessionMonthIndex = months.length - 1;
             renderSessionMonths(months);
@@ -1366,6 +1369,9 @@
                     <label>Topic:</label>
                     <input type="text" class="card-topic" placeholder="e.g. Past Perfect" oninput="updateCardHeader(this)">
                     
+                    <label>Session Objectives:</label>
+                    <div class="card-objectives" contenteditable="true" style="border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; background: var(--input-bg); min-height: 50px; outline: none; font-size: 0.88rem;"></div>
+
                     <label>Covered in session:</label>
                     <div class="card-covered" contenteditable="true" style="border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; background: var(--input-bg); min-height: 50px; outline: none; font-size: 0.88rem;"></div>
                     
@@ -1435,7 +1441,7 @@
             const topics = [];
             document.querySelectorAll('.topic-item').forEach(item => {
                 topics.push({
-                    text: item.querySelector('span').innerText || '',
+                    text: item.getAttribute('data-raw-text') || item.querySelector('span').innerText || '',
                     completed: item.querySelector('input').checked || false
                 });
             });
@@ -1455,10 +1461,23 @@
                 topics.forEach((t) => {
                     const div = document.createElement('div');
                     div.className = `topic-item ${t.completed ? 'completed' : ''}`;
+                    div.setAttribute('data-raw-text', t.text);
+
+                    let formattedTextHtml = t.text;
+                    const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9][-a-zA-Z0-90-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
+                    
+                    formattedTextHtml = t.text.replace(urlRegex, (url) => {
+                        let href = url;
+                        if (!href.startsWith('http://') && !href.startsWith('https://')) {
+                            href = 'https://' + href;
+                        }
+                        return `<a href="${href}" target="_blank">${url}</a>`;
+                    });
+
                     div.innerHTML = `
                         <div class="topic-content">
                             <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTopic(this)">
-                            <span>${t.text}</span>
+                            <span>${formattedTextHtml}</span>
                         </div>
                         <button class="delete-topic-btn" onclick="deleteTopic(this)" title="Delete topic">×</button>
                     `;
@@ -1481,7 +1500,8 @@
 
         function addTopic() {
             const input = document.getElementById('new-topic-input');
-            if (!input.value.trim()) return;
+            const val = input.value.trim();
+            if (!val) return;
             
             const activeList = document.getElementById('topics-list');
             if (activeList.querySelector('.empty-msg')) {
@@ -1490,10 +1510,23 @@
 
             const div = document.createElement('div');
             div.className = 'topic-item';
+            div.setAttribute('data-raw-text', val);
+
+            let formattedTextHtml = val;
+            const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9][-a-zA-Z0-90-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
+            
+            formattedTextHtml = val.replace(urlRegex, (url) => {
+                let href = url;
+                if (!href.startsWith('http://') && !href.startsWith('https://')) {
+                    href = 'https://' + href;
+                }
+                return `<a href="${href}" target="_blank">${url}</a>`;
+            });
+
             div.innerHTML = `
                 <div class="topic-content">
                     <input type="checkbox" onchange="toggleTopic(this)">
-                    <span>${input.value}</span>
+                    <span>${formattedTextHtml}</span>
                 </div>
                 <button class="delete-topic-btn" onclick="deleteTopic(this)" title="Delete topic">×</button>
             `;
@@ -1575,7 +1608,6 @@
                 
                 document.getElementById('sync-status').innerText = "All changes saved";
             } else {
-                // Se o documento é novo no Firebase, inicia TUDO 100% LIMPO
                 clearUI();
                 document.getElementById('sync-status').innerText = "New student log created (Ready)";
             }
