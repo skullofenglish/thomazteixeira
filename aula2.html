@@ -33,21 +33,23 @@
 
         /* Placar Global e Menu Fixo */
         .game-header {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
+            background: rgba(0, 0, 0, 0.75);
+            padding: 12px 20px;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
             border-bottom: 3px solid var(--accent-yellow);
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             position: sticky;
             top: 0;
             z-index: 100;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .score-board {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
             font-size: 1.1rem;
             font-family: 'Fredoka One', cursive;
@@ -55,26 +57,45 @@
 
         .score-box {
             background: #0b1329;
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 8px;
             border: 2px solid var(--accent-blue);
         }
 
-        .home-btn {
-            background: var(--accent-yellow);
-            color: #000;
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .home-btn, .clear-btn {
             border: none;
-            padding: 8px 16px;
+            padding: 8px 14px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
             font-family: 'Fredoka One', cursive;
+            font-size: 0.9rem;
+        }
+
+        .home-btn {
+            background: var(--accent-yellow);
+            color: #000;
         }
 
         .home-btn:hover {
             transform: scale(1.05);
             background: #ffdb4d;
+        }
+
+        .clear-btn {
+            background: var(--accent-red);
+            color: #fff;
+        }
+
+        .clear-btn:hover {
+            transform: scale(1.05);
+            background: #ff6666;
         }
 
         /* Container de Telas */
@@ -168,13 +189,6 @@
             margin-top: 10px;
         }
 
-        .game-box h2 {
-            font-family: 'Fredoka One', cursive;
-            color: var(--accent-yellow);
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-        }
-
         .action-btn {
             background: var(--accent-yellow);
             color: #000;
@@ -192,20 +206,20 @@
             transform: scale(1.05);
         }
 
-        /* Jogo 1: Spelling Bee */
-        .char-container img {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid var(--accent-yellow);
-            margin-bottom: 10px;
+        .reveal-btn {
+            background: var(--accent-blue);
+            color: #000;
         }
 
-        .hint-text {
-            font-size: 1rem;
+        /* Jogo 1: Spelling Bee */
+        .char-container img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 4px solid var(--accent-yellow);
             margin-bottom: 15px;
-            color: var(--accent-blue);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
         .word-slots {
@@ -217,15 +231,15 @@
         }
 
         .slot {
-            width: 35px;
-            height: 45px;
+            width: 38px;
+            height: 48px;
             background: #0b1329;
             border: 2px solid var(--accent-yellow);
             border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             font-family: 'Fredoka One', cursive;
         }
@@ -285,7 +299,7 @@
 
         /* Jogo 3: Number & Age Clash */
         .challenge-prompt {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 20px;
             color: var(--accent-yellow);
             font-family: 'Fredoka One', cursive;
@@ -339,9 +353,9 @@
             max-width: 500px;
         }
 
-        .card-display img {
-            width: 80px;
-            height: 80px;
+        .card-display img.char-pic {
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             border: 2px solid var(--accent-blue);
             object-fit: cover;
@@ -359,19 +373,26 @@
         }
 
         .card-icons-row img {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 8px;
             border: 1px solid var(--accent-yellow);
+            object-fit: cover;
         }
 
         .speech-target {
             background: #283655;
             padding: 12px;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--accent-yellow);
             border: 1px solid var(--accent-blue);
+            width: 100%;
+            max-width: 500px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .turn-controls {
@@ -394,23 +415,26 @@
         .p2-win { background: #3399ff; color: #fff; }
         .point-btn:hover { opacity: 0.9; transform: scale(1.05); }
 
-        /* Responsividade para telas menores */
         @media(max-width: 600px) {
             .menu-grid { grid-template-columns: 1fr; }
-            .bubbles-grid { grid-template-columns: repeat(3, 1fr); }
+            .bubbles-container { grid-template-columns: repeat(3, 1fr); }
             .game-title { font-size: 1.8rem; }
+            .game-header { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-    <!-- PLACAR GLOBAL E MENU FIXO -->
+    <!-- PLACAR GLOBAL E CONTROLES -->
     <header class="game-header">
         <div class="score-board">
-            <span class="score-box">🏴‍☠️ P1: <strong id="p1-pts">0</strong></span>
-            <span class="score-box">⚔️ P2: <strong id="p2-pts">0</strong></span>
+            <span class="score-box">🏴‍☠️ Thomaz: <strong id="p1-pts">0</strong></span>
+            <span class="score-box">⚔️ Gabriel: <strong id="p2-pts">0</strong></span>
         </div>
-        <button id="btn-home" class="home-btn" onclick="goToMenu()" style="display:none;">🏠 MENU</button>
+        <div class="header-actions">
+            <button class="clear-btn" onclick="clearScore()">🔄 CLEAR SCORE</button>
+            <button id="btn-home" class="home-btn" onclick="goToMenu()" style="display:none;">🏠 MENU</button>
+        </div>
     </header>
 
     <main class="container">
@@ -424,17 +448,17 @@
                 <div class="menu-card" onclick="startSpellingBee()">
                     <span class="card-icon">🐝</span>
                     <h2>1. Bounty Spelling Bee</h2>
-                    <p>Spell characters & words fast!</p>
+                    <p>Listen & spell words fast!</p>
                 </div>
                 <div class="menu-card" onclick="startRealMe()">
                     <span class="card-icon">💬</span>
                     <h2>2. Real Me Showdown</h2>
-                    <p>Names, greetings & introductions!</p>
+                    <p>Names, greetings & dialogues!</p>
                 </div>
                 <div class="menu-card" onclick="startNumberClash()">
                     <span class="card-icon">🔢</span>
                     <h2>3. Number & Age Clash</h2>
-                    <p>Numbers 1-15 & How old are you?</p>
+                    <p>Listen & match numbers 1-15!</p>
                 </div>
                 <div class="menu-card" onclick="startCardsBattle()">
                     <span class="card-icon">🃏</span>
@@ -450,7 +474,6 @@
             <div class="game-box">
                 <div class="char-container">
                     <img id="spell-char-img" src="images/luffy.png" alt="Character">
-                    <div id="spell-word-hint" class="hint-text">Spell this word: <strong>LUFFY</strong></div>
                 </div>
                 <div id="spell-slots" class="word-slots"></div>
                 <div id="alphabet-grid" class="alpha-grid"></div>
@@ -462,10 +485,14 @@
         <section id="game-realme" class="screen">
             <h2>💬 Real Me Showdown</h2>
             <div class="game-box">
-                <p class="hint-text">Click the blocks in the correct conversation order!</p>
+                <p class="subtitle" id="dialogue-title" style="color:var(--accent-yellow); margin-bottom:15px;">Exercise 1</p>
+                <p style="margin-bottom:15px;">Click the lines to arrange the correct conversation order!</p>
                 <div id="dialogue-blocks" class="blocks-container"></div>
                 <p id="dialogue-feedback" class="feedback-msg"></p>
-                <button class="action-btn" onclick="resetDialogue()">Shuffle 🔄</button>
+                <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                    <button class="action-btn" onclick="resetDialogue()">Shuffle 🔄</button>
+                    <button class="action-btn" onclick="nextDialogueExercise()">Next Exercise ➡️</button>
+                </div>
             </div>
         </section>
 
@@ -474,10 +501,10 @@
             <h2>🔢 Number & Age Clash</h2>
             <div class="game-box">
                 <div class="challenge-prompt">
-                    <span id="number-question">Find number: 11</span>
+                    <span>Listen to the teacher and click the correct bubble!</span>
                 </div>
                 <div id="bubbles-grid" class="bubbles-container"></div>
-                <button class="action-btn" onclick="nextNumberRound()" style="margin-top:20px;">Next Number ➡️</button>
+                <button class="action-btn" onclick="shuffleNumbers()" style="margin-top:20px;">Shuffle Numbers 🔄</button>
             </div>
         </section>
 
@@ -486,10 +513,10 @@
             <h2>🃏 Bounty Cards Battle</h2>
             <div class="game-box card-battle-box">
                 <div class="card-display">
-                    <img id="card-char-img" src="images/luffy.png" alt="Char">
+                    <img id="card-char-img" class="char-pic" src="images/luffy.png" alt="Char">
                     <div class="card-info">
                         <h3 id="card-name-title">Luffy</h3>
-                        <p>Age: <span id="card-age">11</span></p>
+                        <p>Age: <span id="card-age">19</span></p>
                         <div class="card-icons-row">
                             <img id="card-icon-1" src="images/pizza.jpg" alt="Icon 1">
                             <img id="card-icon-2" src="images/videogames.jpg" alt="Icon 2">
@@ -497,11 +524,12 @@
                     </div>
                 </div>
                 <div class="speech-target" id="target-sentence-box">
-                    "I am 11 years old. I like pizza and I like to play video games!"
+                    "I am 19 years old. I like pizza and I like to play video games!"
                 </div>
                 <div class="turn-controls">
-                    <button class="point-btn p1-win" onclick="awardPoints(1, 5)">+5 Pts Player 1 🏴‍☠️</button>
-                    <button class="point-btn p2-win" onclick="awardPoints(2, 5)">+5 Pts Player 2 ⚔️</button>
+                    <button id="btn-reveal-answer" class="action-btn reveal-btn" onclick="revealCardAnswer()" style="display:none; margin-top:0;">👁️ Reveal Answer</button>
+                    <button class="point-btn p1-win" onclick="awardPoints(1, 5)">+5 Thomaz 🏴‍☠️</button>
+                    <button class="point-btn p2-win" onclick="awardPoints(2, 5)">+5 Gabriel ⚔️</button>
                     <button class="action-btn" onclick="nextCardBattle()" style="margin-top:0;">Next Card ➡️</button>
                 </div>
             </div>
@@ -517,6 +545,14 @@
         function updateScoreDisplay() {
             document.getElementById('p1-pts').innerText = p1Score;
             document.getElementById('p2-pts').innerText = p2Score;
+        }
+
+        function clearScore() {
+            if (confirm("Reset scores for Thomaz and Gabriel?")) {
+                p1Score = 0;
+                p2Score = 0;
+                updateScoreDisplay();
+            }
         }
 
         // GERENCIAMENTO DE TELAS
@@ -544,7 +580,12 @@
             { word: "KAIDO", img: "images/kaido.png" },
             { word: "PIZZA", img: "images/pizza.jpg" },
             { word: "BURGER", img: "images/burger.jpg" },
-            { word: "DOGS", img: "images/dogs.jpg" }
+            { word: "DOGS", img: "images/dogs.jpg" },
+            { word: "CATS", img: "images/cats.jpg" },
+            { word: "BIKE", img: "images/bike.jpg" },
+            { word: "DRUMS", img: "images/drums.jpg" },
+            { word: "COOK", img: "images/cook.jpg" },
+            { word: "VIDEOGAMES", img: "images/videogames.jpg" }
         ];
         let currentSpellIndex = 0;
         let targetWord = "";
@@ -561,9 +602,8 @@
             targetWord = data.word;
             currentTypedIndex = 0;
             document.getElementById('spell-char-img').src = data.img;
-            document.getElementById('spell-word-hint').innerHTML = `Spell this word: <strong>${targetWord}</strong>`;
 
-            // Criar Slots
+            // Criar Slots vazios
             const slotsContainer = document.getElementById('spell-slots');
             slotsContainer.innerHTML = '';
             for (let i = 0; i < targetWord.length; i++) {
@@ -573,7 +613,7 @@
                 slotsContainer.appendChild(slot);
             }
 
-            // Criar Teclado do Alfabeto
+            // Criar Teclado
             const alphaGrid = document.getElementById('alphabet-grid');
             alphaGrid.innerHTML = '';
             const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
@@ -581,12 +621,12 @@
                 const btn = document.createElement('button');
                 btn.className = 'letter-btn';
                 btn.innerText = letter;
-                btn.onclick = () => handleLetterClick(letter, btn);
+                btn.onclick = () => handleLetterClick(letter);
                 alphaGrid.appendChild(btn);
             });
         }
 
-        function handleLetterClick(letter, btn) {
+        function handleLetterClick(letter) {
             if (currentTypedIndex < targetWord.length) {
                 const expectedLetter = targetWord[currentTypedIndex];
                 const slot = document.getElementById(`slot-${currentTypedIndex}`);
@@ -596,9 +636,7 @@
                     slot.style.borderColor = "#00ffcc";
                     currentTypedIndex++;
                     if (currentTypedIndex === targetWord.length) {
-                        alert("🎉 Awesome! Word spelled correctly! +3 Points!");
-                        p1Score += 3;
-                        updateScoreDisplay();
+                        alert("🎉 Word spelled correctly!");
                     }
                 } else {
                     slot.style.borderColor = "#ff3333";
@@ -613,22 +651,51 @@
         }
 
         // ================= JOGO 2: REAL ME SHOWDOWN =================
-        const dialogueLines = [
-            { id: 1, text: "Hi, I'm Lucas! What's your name?" },
-            { id: 2, text: "Hi, I'm Gabriel! Nice to meet you." },
-            { id: 3, text: "Nice to meet you too!" }
+        const dialogueExercises = [
+            {
+                title: "Exercise 1: Student Intro",
+                lines: [
+                    { id: 1, text: "Hi, I'm Thomaz! What's your name?" },
+                    { id: 2, text: "Hi, I'm Gabriel! Nice to meet you." },
+                    { id: 3, text: "Nice to meet you too!" }
+                ]
+            },
+            {
+                title: "Exercise 2: Pirate Greeting",
+                lines: [
+                    { id: 1, text: "Hi, I'm Luffy! What's your name?" },
+                    { id: 2, text: "Hi, I'm Shanks. Nice to meet you!" },
+                    { id: 3, text: "Great to meet you, Shanks!" }
+                ]
+            },
+            {
+                title: "Exercise 3: Sabo & Kaido",
+                lines: [
+                    { id: 1, text: "Hello! My name is Sabo." },
+                    { id: 2, text: "Hi Sabo, I am Kaido!" },
+                    { id: 3, text: "Nice to meet you, Kaido!" }
+                ]
+            }
         ];
+        let currentExerciseIndex = 0;
         let userOrder = [];
 
         function startRealMe() {
             showScreen('game-realme');
-            resetDialogue();
+            currentExerciseIndex = 0;
+            loadDialogueExercise();
+        }
+
+        function loadDialogueExercise() {
+            const ex = dialogueExercises[currentExerciseIndex];
+            document.getElementById('dialogue-title').innerText = ex.title;
+            userOrder = [...ex.lines].sort(() => Math.random() - 0.5);
+            renderDialogueBlocks();
+            document.getElementById('dialogue-feedback').innerText = "";
         }
 
         function resetDialogue() {
-            userOrder = [...dialogueLines].sort(() => Math.random() - 0.5);
-            renderDialogueBlocks();
-            document.getElementById('dialogue-feedback').innerText = "";
+            loadDialogueExercise();
         }
 
         function renderDialogueBlocks() {
@@ -644,7 +711,6 @@
         }
 
         function moveBlock(index) {
-            // Move o item clicado para cima se não for o primeiro
             if (index > 0) {
                 let temp = userOrder[index];
                 userOrder[index] = userOrder[index - 1];
@@ -659,64 +725,45 @@
             const feedback = document.getElementById('dialogue-feedback');
             if (isCorrect) {
                 feedback.style.color = "#00ffcc";
-                feedback.innerText = "🌟 Perfect Dialogue Order! Great job!";
-                p2Score += 5;
-                updateScoreDisplay();
+                feedback.innerText = "🌟 Perfect Dialogue Order!";
             } else {
                 feedback.innerText = "";
             }
         }
 
-        // ================= JOGO 3: NUMBER & AGE CLASH =================
-        let targetNumber = 11;
-
-        function startNumberClash() {
-            showScreen('game-numbers');
-            nextNumberRound();
+        function nextDialogueExercise() {
+            currentExerciseIndex = (currentExerciseIndex + 1) % dialogueExercises.length;
+            loadDialogueExercise();
         }
 
-        function nextNumberRound() {
-            targetNumber = Math.floor(Math.random() * 15) + 1;
-            document.getElementById('number-question').innerText = `Find number: ${targetNumber} ("How old are you?")`;
+        // ================= JOGO 3: NUMBER & AGE CLASH =================
+        function startNumberClash() {
+            showScreen('game-numbers');
+            shuffleNumbers();
+        }
 
-            // Gerar 10 números aleatórios incluindo o alvo
-            let numbersSet = new Set([targetNumber]);
-            while (numbersSet.size < 10) {
-                let rnd = Math.floor(Math.random() * 15) + 1;
-                numbersSet.add(rnd);
-            }
-            let numbersArray = Array.from(numbersSet).sort(() => Math.random() - 0.5);
-
+        function shuffleNumbers() {
+            let numbersArray = Array.from({length: 15}, (_, i) => i + 1).sort(() => Math.random() - 0.5);
             const grid = document.getElementById('bubbles-grid');
             grid.innerHTML = '';
             numbersArray.forEach(num => {
                 const bubble = document.createElement('div');
                 bubble.className = 'number-bubble';
                 bubble.innerText = num;
-                bubble.onclick = () => checkNumberClick(num, bubble);
+                bubble.onclick = () => {
+                    bubble.style.background = "#00ffcc";
+                    setTimeout(() => bubble.style.background = "var(--accent-blue)", 500);
+                };
                 grid.appendChild(bubble);
             });
         }
 
-        function checkNumberClick(num, element) {
-            if (num === targetNumber) {
-                element.style.background = "#00ffcc";
-                alert(`🎯 Correct! It's number ${targetNumber}! +3 Points!`);
-                p1Score += 3;
-                updateScoreDisplay();
-                nextNumberRound();
-            } else {
-                element.style.background = "#ff3333";
-                setTimeout(() => element.style.background = "var(--accent-blue)", 400);
-            }
-        }
-
         // ================= JOGO 4: BOUNTY CARDS BATTLE =================
         const cardsData = [
-            { name: "Luffy", age: 11, img: "images/luffy.png", icon1: "images/pizza.jpg", icon2: "images/videogames.jpg", text: "I like pizza and I like to play video games!" },
-            { name: "Shanks", age: 13, img: "images/shanks.png", icon1: "images/burger.jpg", icon2: "images/bike.jpg", text: "I like burgers and I like to ride a bike!" },
-            { name: "Sabo", age: 12, img: "images/sabo.png", icon1: "images/drums.jpg", icon2: "images/cats.jpg", text: "I like to play the drums and I like cats!" },
-            { name: "Kaido", age: 15, img: "images/kaido.png", icon1: "images/cook.jpg", icon2: "images/dogs.jpg", text: "I like to cook and I like dogs!" }
+            { name: "Luffy", age: 19, img: "images/luffy.png", icon1: "images/pizza.jpg", icon2: "images/videogames.jpg", text: "I like pizza and I like to play video games!" },
+            { name: "Shanks", age: 53, img: "images/shanks.png", icon1: "images/burger.jpg", icon2: "images/bike.jpg", text: "I like burgers and I like to ride a bike!" },
+            { name: "Sabo", age: 22, img: "images/sabo.png", icon1: "images/drums.jpg", icon2: "images/cats.jpg", text: "I like to play the drums and I like cats!" },
+            { name: "Kaido", age: 59, img: "images/kaido.png", icon1: "images/cook.jpg", icon2: "images/dogs.jpg", text: "I like to cook and I like dogs!" }
         ];
         let currentCardIndex = 0;
 
@@ -733,6 +780,23 @@
             document.getElementById('card-age').innerText = card.age;
             document.getElementById('card-icon-1').src = card.icon1;
             document.getElementById('card-icon-2').src = card.icon2;
+
+            const targetBox = document.getElementById('target-sentence-box');
+            const revealBtn = document.getElementById('btn-reveal-answer');
+
+            if (currentCardIndex === 0) {
+                // Primeira carta é o Exemplo
+                targetBox.innerText = `"I am ${card.age} years old. ${card.text}"`;
+                revealBtn.style.display = 'none';
+            } else {
+                // Cartas seguintes: Esconde a resposta e mostra o botão
+                targetBox.innerText = "❓ (Say the sentence aloud, then click reveal!)";
+                revealBtn.style.display = 'inline-block';
+            }
+        }
+
+        function revealCardAnswer() {
+            const card = cardsData[currentCardIndex];
             document.getElementById('target-sentence-box').innerText = `"I am ${card.age} years old. ${card.text}"`;
         }
 
@@ -740,8 +804,6 @@
             if (player === 1) p1Score += pts;
             if (player === 2) p2Score += pts;
             updateScoreDisplay();
-            alert(`🏆 +${pts} Points awarded to Player ${player}!`);
-            nextCardBattle();
         }
 
         function nextCardBattle() {
