@@ -31,7 +31,7 @@
             flex-direction: column;
         }
 
-        /* Placar Global e Menu Fixo */
+        /* Placar Global e Header */
         .game-header {
             background: rgba(0, 0, 0, 0.75);
             padding: 12px 20px;
@@ -78,25 +78,11 @@
             font-size: 0.9rem;
         }
 
-        .home-btn {
-            background: var(--accent-yellow);
-            color: #000;
-        }
+        .home-btn { background: var(--accent-yellow); color: #000; }
+        .home-btn:hover { transform: scale(1.05); background: #ffdb4d; }
 
-        .home-btn:hover {
-            transform: scale(1.05);
-            background: #ffdb4d;
-        }
-
-        .clear-btn {
-            background: var(--accent-red);
-            color: #fff;
-        }
-
-        .clear-btn:hover {
-            transform: scale(1.05);
-            background: #ff6666;
-        }
+        .clear-btn { background: var(--accent-red); color: #fff; }
+        .clear-btn:hover { transform: scale(1.05); background: #ff6666; }
 
         /* Container de Telas */
         .container {
@@ -189,6 +175,42 @@
             margin-top: 10px;
         }
 
+        /* Painel de Cronômetro Integrado */
+        .timer-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--accent-yellow);
+            border-radius: 12px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .timer-display {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            color: var(--accent-yellow);
+        }
+
+        .timer-controls select, .timer-controls button {
+            background: #283655;
+            color: #fff;
+            border: 1px solid var(--accent-blue);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .timer-controls button:hover {
+            background: var(--accent-blue);
+            color: #000;
+        }
+
         .action-btn {
             background: var(--accent-yellow);
             color: #000;
@@ -202,14 +224,7 @@
             transition: transform 0.2s;
         }
 
-        .action-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .reveal-btn {
-            background: var(--accent-blue);
-            color: #000;
-        }
+        .action-btn:hover { transform: scale(1.05); }
 
         /* Jogo 1: Spelling Bee */
         .char-container img {
@@ -263,10 +278,7 @@
             transition: background 0.2s;
         }
 
-        .letter-btn:hover {
-            background: var(--accent-blue);
-            color: #000;
-        }
+        .letter-btn:hover { background: var(--accent-blue); color: #000; }
 
         /* Jogo 2: Real Me Showdown */
         .blocks-container {
@@ -286,9 +298,7 @@
             transition: background 0.2s;
         }
 
-        .dialogue-block:hover {
-            background: #3e4f7c;
-        }
+        .dialogue-block:hover { background: #3e4f7c; }
 
         .feedback-msg {
             font-size: 1.1rem;
@@ -328,10 +338,7 @@
             transition: transform 0.2s, background 0.2s;
         }
 
-        .number-bubble:hover {
-            transform: scale(1.1);
-            background: var(--accent-yellow);
-        }
+        .number-bubble:hover { transform: scale(1.1); background: var(--accent-yellow); }
 
         /* Jogo 4: Bounty Cards Battle */
         .card-battle-box {
@@ -345,54 +352,42 @@
             background: #0b1329;
             border: 3px solid var(--accent-yellow);
             border-radius: 15px;
-            padding: 15px;
+            padding: 20px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
         }
 
         .card-display img.char-pic {
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            border: 2px solid var(--accent-blue);
+            border: 3px solid var(--accent-blue);
             object-fit: cover;
         }
 
         .card-info h3 {
             color: var(--accent-yellow);
             font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
         }
 
         .card-icons-row {
             display: flex;
-            gap: 10px;
-            margin-top: 8px;
+            gap: 15px;
+            margin-top: 5px;
+            justify-content: center;
         }
 
         .card-icons-row img {
-            width: 45px;
-            height: 45px;
-            border-radius: 8px;
-            border: 1px solid var(--accent-yellow);
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            border: 2px solid var(--accent-yellow);
             object-fit: cover;
-        }
-
-        .speech-target {
-            background: #283655;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 1.05rem;
-            color: var(--accent-yellow);
-            border: 1px solid var(--accent-blue);
-            width: 100%;
-            max-width: 500px;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .turn-controls {
@@ -400,12 +395,13 @@
             gap: 10px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 10px;
         }
 
         .point-btn {
-            padding: 8px 14px;
+            padding: 10px 16px;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
             font-family: 'Fredoka One', cursive;
@@ -472,6 +468,23 @@
         <section id="game-spelling" class="screen">
             <h2>🐝 Bounty Spelling Bee</h2>
             <div class="game-box">
+                <!-- CRONÔMETRO -->
+                <div class="timer-panel">
+                    <div class="timer-display" id="timer-display-spelling">00:00</div>
+                    <div class="timer-controls">
+                        <select id="timer-mode-spelling" onchange="changeTimerMode('spelling')">
+                            <option value="stopwatch">Stopwatch ⏱️</option>
+                            <option value="15">15s ⏳</option>
+                            <option value="30">30s ⏳</option>
+                            <option value="60">60s ⏳</option>
+                            <option value="120">120s ⏳</option>
+                        </select>
+                        <button onclick="startTimer('spelling')">Start ▶️</button>
+                        <button onclick="pauseTimer('spelling')">Pause ⏸️</button>
+                        <button onclick="resetTimer('spelling')">Reset 🔄</button>
+                    </div>
+                </div>
+
                 <div class="char-container">
                     <img id="spell-char-img" src="images/luffy.png" alt="Character">
                 </div>
@@ -485,6 +498,23 @@
         <section id="game-realme" class="screen">
             <h2>💬 Real Me Showdown</h2>
             <div class="game-box">
+                <!-- CRONÔMETRO -->
+                <div class="timer-panel">
+                    <div class="timer-display" id="timer-display-realme">00:00</div>
+                    <div class="timer-controls">
+                        <select id="timer-mode-realme" onchange="changeTimerMode('realme')">
+                            <option value="stopwatch">Stopwatch ⏱️</option>
+                            <option value="15">15s ⏳</option>
+                            <option value="30">30s ⏳</option>
+                            <option value="60">60s ⏳</option>
+                            <option value="120">120s ⏳</option>
+                        </select>
+                        <button onclick="startTimer('realme')">Start ▶️</button>
+                        <button onclick="pauseTimer('realme')">Pause ⏸️</button>
+                        <button onclick="resetTimer('realme')">Reset 🔄</button>
+                    </div>
+                </div>
+
                 <p class="subtitle" id="dialogue-title" style="color:var(--accent-yellow); margin-bottom:15px;">Exercise 1</p>
                 <p style="margin-bottom:15px;">Click the lines to arrange the correct conversation order!</p>
                 <div id="dialogue-blocks" class="blocks-container"></div>
@@ -500,6 +530,23 @@
         <section id="game-numbers" class="screen">
             <h2>🔢 Number & Age Clash</h2>
             <div class="game-box">
+                <!-- CRONÔMETRO -->
+                <div class="timer-panel">
+                    <div class="timer-display" id="timer-display-numbers">00:00</div>
+                    <div class="timer-controls">
+                        <select id="timer-mode-numbers" onchange="changeTimerMode('numbers')">
+                            <option value="stopwatch">Stopwatch ⏱️</option>
+                            <option value="15">15s ⏳</option>
+                            <option value="30">30s ⏳</option>
+                            <option value="60">60s ⏳</option>
+                            <option value="120">120s ⏳</option>
+                        </select>
+                        <button onclick="startTimer('numbers')">Start ▶️</button>
+                        <button onclick="pauseTimer('numbers')">Pause ⏸️</button>
+                        <button onclick="resetTimer('numbers')">Reset 🔄</button>
+                    </div>
+                </div>
+
                 <div class="challenge-prompt">
                     <span>Listen to the teacher and click the correct bubble!</span>
                 </div>
@@ -512,22 +559,38 @@
         <section id="game-cards" class="screen">
             <h2>🃏 Bounty Cards Battle</h2>
             <div class="game-box card-battle-box">
+                <!-- CRONÔMETRO -->
+                <div class="timer-panel" style="width:100%; max-width:450px;">
+                    <div class="timer-display" id="timer-display-cards">00:00</div>
+                    <div class="timer-controls">
+                        <select id="timer-mode-cards" onchange="changeTimerMode('cards')">
+                            <option value="stopwatch">Stopwatch ⏱️</option>
+                            <option value="15">15s ⏳</option>
+                            <option value="30">30s ⏳</option>
+                            <option value="60">60s ⏳</option>
+                            <option value="120">120s ⏳</option>
+                        </select>
+                        <button onclick="startTimer('cards')">Start ▶️</button>
+                        <button onclick="pauseTimer('cards')">Pause ⏸️</button>
+                        <button onclick="resetTimer('cards')">Reset 🔄</button>
+                    </div>
+                </div>
+
                 <div class="card-display">
                     <img id="card-char-img" class="char-pic" src="images/luffy.png" alt="Char">
                     <div class="card-info">
                         <h3 id="card-name-title">Luffy</h3>
                         <p>Age: <span id="card-age">19</span></p>
-                        <div class="card-icons-row">
-                            <img id="card-icon-1" src="images/pizza.jpg" alt="Icon 1">
-                            <img id="card-icon-2" src="images/videogames.jpg" alt="Icon 2">
-                        </div>
+                    </div>
+                    <div class="card-icons-row">
+                        <img id="card-icon-1" src="images/pizza.jpg" alt="Icon 1">
+                        <img id="card-icon-2" src="images/videogames.jpg" alt="Icon 2">
                     </div>
                 </div>
-                <div class="speech-target" id="target-sentence-box">
-                    "I am 19 years old. I like pizza and I like to play video games!"
-                </div>
+
+                <p style="color:var(--accent-blue); font-size:0.95rem;">Flip card & say: <em>"I am [Age]. I like [X] and I like to [Y]!"</em></p>
+
                 <div class="turn-controls">
-                    <button id="btn-reveal-answer" class="action-btn reveal-btn" onclick="playSound('success'); revealCardAnswer()" style="display:none; margin-top:0;">👁️ Reveal Answer</button>
                     <button class="point-btn p1-win" onclick="playSound('success'); awardPoints(1, 5)">+5 Thomaz 🏴‍☠️</button>
                     <button class="point-btn p2-win" onclick="playSound('success'); awardPoints(2, 5)">+5 Gabriel ⚔️</button>
                     <button class="action-btn" onclick="playSound('click'); nextCardBattle()" style="margin-top:0;">Next Card ➡️</button>
@@ -542,14 +605,11 @@
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playSound(type) {
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
             osc.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-
             let now = audioCtx.currentTime;
 
             if (type === 'click') {
@@ -558,28 +618,106 @@
                 osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
                 gainNode.gain.setValueAtTime(0.15, now);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-                osc.start(now);
-                osc.stop(now + 0.08);
+                osc.start(now); osc.stop(now + 0.08);
             } 
             else if (type === 'success') {
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(523.25, now); // Nota C5
-                osc.frequency.setValueAtTime(659.25, now + 0.1); // Nota E5
-                osc.frequency.setValueAtTime(783.99, now + 0.2); // Nota G5
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.1);
+                osc.frequency.setValueAtTime(783.99, now + 0.2);
                 gainNode.gain.setValueAtTime(0.2, now);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-                osc.start(now);
-                osc.stop(now + 0.4);
+                osc.start(now); osc.stop(now + 0.4);
             } 
+            else if (type === 'alarm') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(600, now + 0.1);
+                osc.frequency.setValueAtTime(300, now + 0.2);
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now); osc.stop(now + 0.35);
+            }
             else if (type === 'error') {
                 osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(150, now);
                 osc.frequency.setValueAtTime(100, now + 0.15);
                 gainNode.gain.setValueAtTime(0.2, now);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                osc.start(now);
-                osc.stop(now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
             }
+        }
+
+        // --- SISTEMA DE CRONÔMETRO UNIVERSAL ---
+        const timers = {};
+
+        function getTimerState(gameKey) {
+            if (!timers[gameKey]) {
+                timers[gameKey] = { interval: null, seconds: 0, mode: 'stopwatch', running: false, targetSeconds: 0 };
+            }
+            return timers[gameKey];
+        }
+
+        function formatTime(sec) {
+            let m = Math.floor(sec / 60).toString().padStart(2, '0');
+            let s = (sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function changeTimerMode(gameKey) {
+            let t = getTimerState(gameKey);
+            pauseTimer(gameKey);
+            let val = document.getElementById(`timer-mode-${gameKey}`).value;
+            t.mode = val;
+            if (val === 'stopwatch') {
+                t.seconds = 0;
+            } else {
+                t.seconds = parseInt(val);
+                t.targetSeconds = parseInt(val);
+            }
+            document.getElementById(`timer-display-${gameKey}`).innerText = formatTime(t.seconds);
+        }
+
+        function startTimer(gameKey) {
+            let t = getTimerState(gameKey);
+            if (t.running) return;
+            
+            // Se estiver zerado no modo regressivo, reinicia
+            if (t.mode !== 'stopwatch' && t.seconds <= 0) {
+                t.seconds = t.targetSeconds;
+            }
+
+            t.running = true;
+            t.interval = setInterval(() => {
+                if (t.mode === 'stopwatch') {
+                    t.seconds++;
+                } else {
+                    t.seconds--;
+                    if (t.seconds <= 0) {
+                        t.seconds = 0;
+                        pauseTimer(gameKey);
+                        playSound('alarm');
+                    }
+                }
+                document.getElementById(`timer-display-${gameKey}`).innerText = formatTime(t.seconds);
+            }, 1000);
+        }
+
+        function pauseTimer(gameKey) {
+            let t = getTimerState(gameKey);
+            t.running = false;
+            clearInterval(t.interval);
+        }
+
+        function resetTimer(gameKey) {
+            let t = getTimerState(gameKey);
+            pauseTimer(gameKey);
+            if (t.mode === 'stopwatch') {
+                t.seconds = 0;
+            } else {
+                t.seconds = t.targetSeconds;
+            }
+            document.getElementById(`timer-display-${gameKey}`).innerText = formatTime(t.seconds);
         }
 
         // ESTADO GLOBAL DE PONTUAÇÃO
@@ -807,10 +945,10 @@
 
         // ================= JOGO 4: BOUNTY CARDS BATTLE =================
         const cardsData = [
-            { name: "Luffy", age: 19, img: "images/luffy.png", icon1: "images/pizza.jpg", icon2: "images/videogames.jpg", text: "I like pizza and I like to play video games!" },
-            { name: "Shanks", age: 53, img: "images/shanks.png", icon1: "images/burger.jpg", icon2: "images/bike.jpg", text: "I like burgers and I like to ride a bike!" },
-            { name: "Sabo", age: 22, img: "images/sabo.png", icon1: "images/drums.jpg", icon2: "images/cats.jpg", text: "I like to play the drums and I like cats!" },
-            { name: "Kaido", age: 59, img: "images/kaido.png", icon1: "images/cook.jpg", icon2: "images/dogs.jpg", text: "I like to cook and I like dogs!" }
+            { name: "Luffy", age: 19, img: "images/luffy.png", icon1: "images/pizza.jpg", icon2: "images/videogames.jpg" },
+            { name: "Shanks", age: 53, img: "images/shanks.png", icon1: "images/burger.jpg", icon2: "images/bike.jpg" },
+            { name: "Sabo", age: 22, img: "images/sabo.png", icon1: "images/drums.jpg", icon2: "images/cats.jpg" },
+            { name: "Kaido", age: 59, img: "images/kaido.png", icon1: "images/cook.jpg", icon2: "images/dogs.jpg" }
         ];
         let currentCardIndex = 0;
 
@@ -827,22 +965,6 @@
             document.getElementById('card-age').innerText = card.age;
             document.getElementById('card-icon-1').src = card.icon1;
             document.getElementById('card-icon-2').src = card.icon2;
-
-            const targetBox = document.getElementById('target-sentence-box');
-            const revealBtn = document.getElementById('btn-reveal-answer');
-
-            if (currentCardIndex === 0) {
-                targetBox.innerText = `"I am ${card.age} years old. ${card.text}"`;
-                revealBtn.style.display = 'none';
-            } else {
-                targetBox.innerText = "❓ (Say the sentence aloud, then click reveal!)";
-                revealBtn.style.display = 'inline-block';
-            }
-        }
-
-        function revealCardAnswer() {
-            const card = cardsData[currentCardIndex];
-            document.getElementById('target-sentence-box').innerText = `"I am ${card.age} years old. ${card.text}"`;
         }
 
         function awardPoints(player, pts) {
