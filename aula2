@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Piece Bounty English - A1 ESL Lesson</title>
+    <!-- Google Fonts para estilo arcade/gamer -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b1329;
+            --card-bg: #1c2541;
+            --accent-yellow: #ffcc00;
+            --accent-red: #ff3333;
+            --accent-blue: #00d2ff;
+            --text-white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle, #1c2541 0%, #0b1329 100%);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Placar Global e Menu Fixo */
+        .game-header {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 3px solid var(--accent-yellow);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .score-board {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-size: 1.1rem;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .score-box {
+            background: #0b1329;
+            padding: 5px 12px;
+            border-radius: 8px;
+            border: 2px solid var(--accent-blue);
+        }
+
+        .home-btn {
+            background: var(--accent-yellow);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .home-btn:hover {
+            transform: scale(1.05);
+            background: #ffdb4d;
+        }
+
+        /* Container de Telas */
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Menu Principal */
+        .game-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.3rem;
+            color: var(--accent-yellow);
+            text-shadow: 3px 3px var(--accent-red);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .menu-card {
+            background: var(--card-bg);
+            border: 3px solid var(--accent-yellow);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: #283655;
+            border-color: var(--accent-blue);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .menu-card h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            color: var(--accent-yellow);
+            margin-bottom: 8px;
+        }
+
+        .menu-card p {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Layout Comum dos Jogos */
+        .game-box {
+            background: var(--card-bg);
+            border: 3px solid var(--accent-blue);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            margin-top: 10px;
+        }
+
+        .game-box h2 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--accent-yellow);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .action-btn {
+            background: var(--accent-yellow);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-family: 'Fredoka One', cursive;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Jogo 1: Spelling Bee */
+        .char-container img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--accent-yellow);
+            margin-bottom: 10px;
+        }
+
+        .hint-text {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--accent-blue);
+        }
+
+        .word-slots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .slot {
+            width: 35px;
+            height: 45px;
+            background: #0b1329;
+            border: 2px solid var(--accent-yellow);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .alpha-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .letter-btn {
+            background: #283655;
+            color: #fff;
+            border: 1px solid var(--accent-blue);
+            padding: 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .letter-btn:hover {
+            background: var(--accent-blue);
+            color: #000;
+        }
+
+        /* Jogo 2: Real Me Showdown */
+        .blocks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .dialogue-block {
+            background: #283655;
+            border: 2px dashed var(--accent-yellow);
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .dialogue-block:hover {
+            background: #3e4f7c;
+        }
+
+        .feedback-msg {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 10px;
+            min-height: 25px;
+        }
+
+        /* Jogo 3: Number & Age Clash */
+        .challenge-prompt {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--accent-yellow);
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .bubbles-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .number-bubble {
+            background: var(--accent-blue);
+            color: #000;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .number-bubble:hover {
+            transform: scale(1.1);
+            background: var(--accent-yellow);
+        }
+
+        /* Jogo 4: Bounty Cards Battle */
+        .card-battle-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .card-display {
+            background: #0b1329;
+            border: 3px solid var(--accent-yellow);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .card-display img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-blue);
+            object-fit: cover;
+        }
+
+        .card-info h3 {
+            color: var(--accent-yellow);
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .card-icons-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .card-icons-row img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-yellow);
+        }
+
+        .speech-target {
+            background: #283655;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--accent-yellow);
+            border: 1px solid var(--accent-blue);
+        }
+
+        .turn-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .point-btn {
+            padding: 8px 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .p1-win { background: #ff4d4d; color: #fff; }
+        .p2-win { background: #3399ff; color: #fff; }
+        .point-btn:hover { opacity: 0.9; transform: scale(1.05); }
+
+        /* Responsividade para telas menores */
+        @media(max-width: 600px) {
+            .menu-grid { grid-template-columns: 1fr; }
+            .bubbles-grid { grid-template-columns: repeat(3, 1fr); }
+            .game-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PLACAR GLOBAL E MENU FIXO -->
+    <header class="game-header">
+        <div class="score-board">
+            <span class="score-box">🏴‍☠️ P1: <strong id="p1-pts">0</strong></span>
+            <span class="score-box">⚔️ P2: <strong id="p2-pts">0</strong></span>
+        </div>
+        <button id="btn-home" class="home-btn" onclick="goToMenu()" style="display:none;">🏠 MENU</button>
+    </header>
+
+    <main class="container">
+
+        <!-- TELA 1: MENU PRINCIPAL -->
+        <section id="menu-screen" class="screen active">
+            <h1 class="game-title">⚡ ONE PIECE BOUNTY ENGLISH ⚡</h1>
+            <p class="subtitle">Select your game mode, Captains!</p>
+            
+            <div class="menu-grid">
+                <div class="menu-card" onclick="startSpellingBee()">
+                    <span class="card-icon">🐝</span>
+                    <h2>1. Bounty Spelling Bee</h2>
+                    <p>Spell characters & words fast!</p>
+                </div>
+                <div class="menu-card" onclick="startRealMe()">
+                    <span class="card-icon">💬</span>
+                    <h2>2. Real Me Showdown</h2>
+                    <p>Names, greetings & introductions!</p>
+                </div>
+                <div class="menu-card" onclick="startNumberClash()">
+                    <span class="card-icon">🔢</span>
+                    <h2>3. Number & Age Clash</h2>
+                    <p>Numbers 1-15 & How old are you?</p>
+                </div>
+                <div class="menu-card" onclick="startCardsBattle()">
+                    <span class="card-icon">🃏</span>
+                    <h2>4. Bounty Cards Battle</h2>
+                    <p>I like food, animals & hobbies!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TELA 2: BOUNTY SPELLING BEE -->
+        <section id="game-spelling" class="screen">
+            <h2>🐝 Bounty Spelling Bee</h2>
+            <div class="game-box">
+                <div class="char-container">
+                    <img id="spell-char-img" src="images/luffy.png" alt="Character">
+                    <div id="spell-word-hint" class="hint-text">Spell this word: <strong>LUFFY</strong></div>
+                </div>
+                <div id="spell-slots" class="word-slots"></div>
+                <div id="alphabet-grid" class="alpha-grid"></div>
+                <button class="action-btn" onclick="nextSpellingWord()">Next Word ➡️</button>
+            </div>
+        </section>
+
+        <!-- TELA 3: REAL ME SHOWDOWN -->
+        <section id="game-realme" class="screen">
+            <h2>💬 Real Me Showdown</h2>
+            <div class="game-box">
+                <p class="hint-text">Click the blocks in the correct conversation order!</p>
+                <div id="dialogue-blocks" class="blocks-container"></div>
+                <p id="dialogue-feedback" class="feedback-msg"></p>
+                <button class="action-btn" onclick="resetDialogue()">Shuffle 🔄</button>
+            </div>
+        </section>
+
+        <!-- TELA 4: NUMBER & AGE CLASH -->
+        <section id="game-numbers" class="screen">
+            <h2>🔢 Number & Age Clash</h2>
+            <div class="game-box">
+                <div class="challenge-prompt">
+                    <span id="number-question">Find number: 11</span>
+                </div>
+                <div id="bubbles-grid" class="bubbles-container"></div>
+                <button class="action-btn" onclick="nextNumberRound()" style="margin-top:20px;">Next Number ➡️</button>
+            </div>
+        </section>
+
+        <!-- TELA 5: BOUNTY CARDS BATTLE -->
+        <section id="game-cards" class="screen">
+            <h2>🃏 Bounty Cards Battle</h2>
+            <div class="game-box card-battle-box">
+                <div class="card-display">
+                    <img id="card-char-img" src="images/luffy.png" alt="Char">
+                    <div class="card-info">
+                        <h3 id="card-name-title">Luffy</h3>
+                        <p>Age: <span id="card-age">11</span></p>
+                        <div class="card-icons-row">
+                            <img id="card-icon-1" src="images/pizza.jpg" alt="Icon 1">
+                            <img id="card-icon-2" src="images/videogames.jpg" alt="Icon 2">
+                        </div>
+                    </div>
+                </div>
+                <div class="speech-target" id="target-sentence-box">
+                    "I am 11 years old. I like pizza and I like to play video games!"
+                </div>
+                <div class="turn-controls">
+                    <button class="point-btn p1-win" onclick="awardPoints(1, 5)">+5 Pts Player 1 🏴‍☠️</button>
+                    <button class="point-btn p2-win" onclick="awardPoints(2, 5)">+5 Pts Player 2 ⚔️</button>
+                    <button class="action-btn" onclick="nextCardBattle()" style="margin-top:0;">Next Card ➡️</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // ESTADO GLOBAL DE PONTUAÇÃO
+        let p1Score = 0;
+        let p2Score = 0;
+
+        function updateScoreDisplay() {
+            document.getElementById('p1-pts').innerText = p1Score;
+            document.getElementById('p2-pts').innerText = p2Score;
+        }
+
+        // GERENCIAMENTO DE TELAS
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            const homeBtn = document.getElementById('btn-home');
+            if (screenId === 'menu-screen') {
+                homeBtn.style.display = 'none';
+            } else {
+                homeBtn.style.display = 'inline-block';
+            }
+        }
+
+        function goToMenu() {
+            showScreen('menu-screen');
+        }
+
+        // ================= JOGO 1: SPELLING BEE =================
+        const spellingData = [
+            { word: "LUFFY", img: "images/luffy.png" },
+            { word: "SHANKS", img: "images/shanks.png" },
+            { word: "SABO", img: "images/sabo.png" },
+            { word: "KAIDO", img: "images/kaido.png" },
+            { word: "PIZZA", img: "images/pizza.jpg" },
+            { word: "BURGER", img: "images/burger.jpg" },
+            { word: "DOGS", img: "images/dogs.jpg" }
+        ];
+        let currentSpellIndex = 0;
+        let targetWord = "";
+        let currentTypedIndex = 0;
+
+        function startSpellingBee() {
+            showScreen('game-spelling');
+            currentSpellIndex = 0;
+            loadSpellingWord();
+        }
+
+        function loadSpellingWord() {
+            const data = spellingData[currentSpellIndex];
+            targetWord = data.word;
+            currentTypedIndex = 0;
+            document.getElementById('spell-char-img').src = data.img;
+            document.getElementById('spell-word-hint').innerHTML = `Spell this word: <strong>${targetWord}</strong>`;
+
+            // Criar Slots
+            const slotsContainer = document.getElementById('spell-slots');
+            slotsContainer.innerHTML = '';
+            for (let i = 0; i < targetWord.length; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'slot';
+                slot.id = `slot-${i}`;
+                slotsContainer.appendChild(slot);
+            }
+
+            // Criar Teclado do Alfabeto
+            const alphaGrid = document.getElementById('alphabet-grid');
+            alphaGrid.innerHTML = '';
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+            alphabet.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.className = 'letter-btn';
+                btn.innerText = letter;
+                btn.onclick = () => handleLetterClick(letter, btn);
+                alphaGrid.appendChild(btn);
+            });
+        }
+
+        function handleLetterClick(letter, btn) {
+            if (currentTypedIndex < targetWord.length) {
+                const expectedLetter = targetWord[currentTypedIndex];
+                const slot = document.getElementById(`slot-${currentTypedIndex}`);
+                slot.innerText = letter;
+
+                if (letter === expectedLetter) {
+                    slot.style.borderColor = "#00ffcc";
+                    currentTypedIndex++;
+                    if (currentTypedIndex === targetWord.length) {
+                        alert("🎉 Awesome! Word spelled correctly! +3 Points!");
+                        p1Score += 3;
+                        updateScoreDisplay();
+                    }
+                } else {
+                    slot.style.borderColor = "#ff3333";
+                    setTimeout(() => { slot.innerText = ""; slot.style.borderColor = "var(--accent-yellow)"; }, 400);
+                }
+            }
+        }
+
+        function nextSpellingWord() {
+            currentSpellIndex = (currentSpellIndex + 1) % spellingData.length;
+            loadSpellingWord();
+        }
+
+        // ================= JOGO 2: REAL ME SHOWDOWN =================
+        const dialogueLines = [
+            { id: 1, text: "Hi, I'm Lucas! What's your name?" },
+            { id: 2, text: "Hi, I'm Gabriel! Nice to meet you." },
+            { id: 3, text: "Nice to meet you too!" }
+        ];
+        let userOrder = [];
+
+        function startRealMe() {
+            showScreen('game-realme');
+            resetDialogue();
+        }
+
+        function resetDialogue() {
+            userOrder = [...dialogueLines].sort(() => Math.random() - 0.5);
+            renderDialogueBlocks();
+            document.getElementById('dialogue-feedback').innerText = "";
+        }
+
+        function renderDialogueBlocks() {
+            const container = document.getElementById('dialogue-blocks');
+            container.innerHTML = '';
+            userOrder.forEach((item, index) => {
+                const block = document.createElement('div');
+                block.className = 'dialogue-block';
+                block.innerText = `${index + 1}. ${item.text}`;
+                block.onclick = () => moveBlock(index);
+                container.appendChild(block);
+            });
+        }
+
+        function moveBlock(index) {
+            // Move o item clicado para cima se não for o primeiro
+            if (index > 0) {
+                let temp = userOrder[index];
+                userOrder[index] = userOrder[index - 1];
+                userOrder[index - 1] = temp;
+                renderDialogueBlocks();
+                checkDialogueWin();
+            }
+        }
+
+        function checkDialogueWin() {
+            let isCorrect = userOrder.every((item, idx) => item.id === idx + 1);
+            const feedback = document.getElementById('dialogue-feedback');
+            if (isCorrect) {
+                feedback.style.color = "#00ffcc";
+                feedback.innerText = "🌟 Perfect Dialogue Order! Great job!";
+                p2Score += 5;
+                updateScoreDisplay();
+            } else {
+                feedback.innerText = "";
+            }
+        }
+
+        // ================= JOGO 3: NUMBER & AGE CLASH =================
+        let targetNumber = 11;
+
+        function startNumberClash() {
+            showScreen('game-numbers');
+            nextNumberRound();
+        }
+
+        function nextNumberRound() {
+            targetNumber = Math.floor(Math.random() * 15) + 1;
+            document.getElementById('number-question').innerText = `Find number: ${targetNumber} ("How old are you?")`;
+
+            // Gerar 10 números aleatórios incluindo o alvo
+            let numbersSet = new Set([targetNumber]);
+            while (numbersSet.size < 10) {
+                let rnd = Math.floor(Math.random() * 15) + 1;
+                numbersSet.add(rnd);
+            }
+            let numbersArray = Array.from(numbersSet).sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('bubbles-grid');
+            grid.innerHTML = '';
+            numbersArray.forEach(num => {
+                const bubble = document.createElement('div');
+                bubble.className = 'number-bubble';
+                bubble.innerText = num;
+                bubble.onclick = () => checkNumberClick(num, bubble);
+                grid.appendChild(bubble);
+            });
+        }
+
+        function checkNumberClick(num, element) {
+            if (num === targetNumber) {
+                element.style.background = "#00ffcc";
+                alert(`🎯 Correct! It's number ${targetNumber}! +3 Points!`);
+                p1Score += 3;
+                updateScoreDisplay();
+                nextNumberRound();
+            } else {
+                element.style.background = "#ff3333";
+                setTimeout(() => element.style.background = "var(--accent-blue)", 400);
+            }
+        }
+
+        // ================= JOGO 4: BOUNTY CARDS BATTLE =================
+        const cardsData = [
+            { name: "Luffy", age: 11, img: "images/luffy.png", icon1: "images/pizza.jpg", icon2: "images/videogames.jpg", text: "I like pizza and I like to play video games!" },
+            { name: "Shanks", age: 13, img: "images/shanks.png", icon1: "images/burger.jpg", icon2: "images/bike.jpg", text: "I like burgers and I like to ride a bike!" },
+            { name: "Sabo", age: 12, img: "images/sabo.png", icon1: "images/drums.jpg", icon2: "images/cats.jpg", text: "I like to play the drums and I like cats!" },
+            { name: "Kaido", age: 15, img: "images/kaido.png", icon1: "images/cook.jpg", icon2: "images/dogs.jpg", text: "I like to cook and I like dogs!" }
+        ];
+        let currentCardIndex = 0;
+
+        function startCardsBattle() {
+            showScreen('game-cards');
+            currentCardIndex = 0;
+            loadCardData();
+        }
+
+        function loadCardData() {
+            const card = cardsData[currentCardIndex];
+            document.getElementById('card-char-img').src = card.img;
+            document.getElementById('card-name-title').innerText = card.name;
+            document.getElementById('card-age').innerText = card.age;
+            document.getElementById('card-icon-1').src = card.icon1;
+            document.getElementById('card-icon-2').src = card.icon2;
+            document.getElementById('target-sentence-box').innerText = `"I am ${card.age} years old. ${card.text}"`;
+        }
+
+        function awardPoints(player, pts) {
+            if (player === 1) p1Score += pts;
+            if (player === 2) p2Score += pts;
+            updateScoreDisplay();
+            alert(`🏆 +${pts} Points awarded to Player ${player}!`);
+            nextCardBattle();
+        }
+
+        function nextCardBattle() {
+            currentCardIndex = (currentCardIndex + 1) % cardsData.length;
+            loadCardData();
+        }
+    </script>
+</body>
+</html>
