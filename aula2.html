@@ -432,8 +432,8 @@
             <span class="score-box">⚔️ Gabriel: <strong id="p2-pts">0</strong></span>
         </div>
         <div class="header-actions">
-            <button class="clear-btn" onclick="clearScore()">🔄 CLEAR SCORE</button>
-            <button id="btn-home" class="home-btn" onclick="goToMenu()" style="display:none;">🏠 MENU</button>
+            <button class="clear-btn" onclick="playSound('click'); clearScore()">🔄 CLEAR SCORE</button>
+            <button id="btn-home" class="home-btn" onclick="playSound('click'); goToMenu()" style="display:none;">🏠 MENU</button>
         </div>
     </header>
 
@@ -445,22 +445,22 @@
             <p class="subtitle">Select your game mode, Captains!</p>
             
             <div class="menu-grid">
-                <div class="menu-card" onclick="startSpellingBee()">
+                <div class="menu-card" onclick="playSound('click'); startSpellingBee()">
                     <span class="card-icon">🐝</span>
                     <h2>1. Bounty Spelling Bee</h2>
                     <p>Listen & spell words fast!</p>
                 </div>
-                <div class="menu-card" onclick="startRealMe()">
+                <div class="menu-card" onclick="playSound('click'); startRealMe()">
                     <span class="card-icon">💬</span>
                     <h2>2. Real Me Showdown</h2>
                     <p>Names, greetings & dialogues!</p>
                 </div>
-                <div class="menu-card" onclick="startNumberClash()">
+                <div class="menu-card" onclick="playSound('click'); startNumberClash()">
                     <span class="card-icon">🔢</span>
                     <h2>3. Number & Age Clash</h2>
                     <p>Listen & match numbers 1-15!</p>
                 </div>
-                <div class="menu-card" onclick="startCardsBattle()">
+                <div class="menu-card" onclick="playSound('click'); startCardsBattle()">
                     <span class="card-icon">🃏</span>
                     <h2>4. Bounty Cards Battle</h2>
                     <p>I like food, animals & hobbies!</p>
@@ -477,7 +477,7 @@
                 </div>
                 <div id="spell-slots" class="word-slots"></div>
                 <div id="alphabet-grid" class="alpha-grid"></div>
-                <button class="action-btn" onclick="nextSpellingWord()">Next Word ➡️</button>
+                <button class="action-btn" onclick="playSound('click'); nextSpellingWord()">Next Word ➡️</button>
             </div>
         </section>
 
@@ -490,8 +490,8 @@
                 <div id="dialogue-blocks" class="blocks-container"></div>
                 <p id="dialogue-feedback" class="feedback-msg"></p>
                 <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                    <button class="action-btn" onclick="resetDialogue()">Shuffle 🔄</button>
-                    <button class="action-btn" onclick="nextDialogueExercise()">Next Exercise ➡️</button>
+                    <button class="action-btn" onclick="playSound('click'); resetDialogue()">Shuffle 🔄</button>
+                    <button class="action-btn" onclick="playSound('click'); nextDialogueExercise()">Next Exercise ➡️</button>
                 </div>
             </div>
         </section>
@@ -504,7 +504,7 @@
                     <span>Listen to the teacher and click the correct bubble!</span>
                 </div>
                 <div id="bubbles-grid" class="bubbles-container"></div>
-                <button class="action-btn" onclick="shuffleNumbers()" style="margin-top:20px;">Shuffle Numbers 🔄</button>
+                <button class="action-btn" onclick="playSound('click'); shuffleNumbers()" style="margin-top:20px;">Shuffle Numbers 🔄</button>
             </div>
         </section>
 
@@ -527,10 +527,10 @@
                     "I am 19 years old. I like pizza and I like to play video games!"
                 </div>
                 <div class="turn-controls">
-                    <button id="btn-reveal-answer" class="action-btn reveal-btn" onclick="revealCardAnswer()" style="display:none; margin-top:0;">👁️ Reveal Answer</button>
-                    <button class="point-btn p1-win" onclick="awardPoints(1, 5)">+5 Thomaz 🏴‍☠️</button>
-                    <button class="point-btn p2-win" onclick="awardPoints(2, 5)">+5 Gabriel ⚔️</button>
-                    <button class="action-btn" onclick="nextCardBattle()" style="margin-top:0;">Next Card ➡️</button>
+                    <button id="btn-reveal-answer" class="action-btn reveal-btn" onclick="playSound('success'); revealCardAnswer()" style="display:none; margin-top:0;">👁️ Reveal Answer</button>
+                    <button class="point-btn p1-win" onclick="playSound('success'); awardPoints(1, 5)">+5 Thomaz 🏴‍☠️</button>
+                    <button class="point-btn p2-win" onclick="playSound('success'); awardPoints(2, 5)">+5 Gabriel ⚔️</button>
+                    <button class="action-btn" onclick="playSound('click'); nextCardBattle()" style="margin-top:0;">Next Card ➡️</button>
                 </div>
             </div>
         </section>
@@ -538,6 +538,50 @@
     </main>
 
     <script>
+        // GERADOR DE EFEITOS SONOROS NATIVOS (Web Audio API)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } 
+            else if (type === 'success') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // Nota C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // Nota E5
+                osc.frequency.setValueAtTime(783.99, now + 0.2); // Nota G5
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } 
+            else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.setValueAtTime(100, now + 0.15);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+        }
+
         // ESTADO GLOBAL DE PONTUAÇÃO
         let p1Score = 0;
         let p2Score = 0;
@@ -603,7 +647,6 @@
             currentTypedIndex = 0;
             document.getElementById('spell-char-img').src = data.img;
 
-            // Criar Slots vazios
             const slotsContainer = document.getElementById('spell-slots');
             slotsContainer.innerHTML = '';
             for (let i = 0; i < targetWord.length; i++) {
@@ -613,7 +656,6 @@
                 slotsContainer.appendChild(slot);
             }
 
-            // Criar Teclado
             const alphaGrid = document.getElementById('alphabet-grid');
             alphaGrid.innerHTML = '';
             const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
@@ -633,12 +675,15 @@
                 slot.innerText = letter;
 
                 if (letter === expectedLetter) {
+                    playSound('click');
                     slot.style.borderColor = "#00ffcc";
                     currentTypedIndex++;
                     if (currentTypedIndex === targetWord.length) {
+                        playSound('success');
                         alert("🎉 Word spelled correctly!");
                     }
                 } else {
+                    playSound('error');
                     slot.style.borderColor = "#ff3333";
                     setTimeout(() => { slot.innerText = ""; slot.style.borderColor = "var(--accent-yellow)"; }, 400);
                 }
@@ -705,7 +750,7 @@
                 const block = document.createElement('div');
                 block.className = 'dialogue-block';
                 block.innerText = `${index + 1}. ${item.text}`;
-                block.onclick = () => moveBlock(index);
+                block.onclick = () => { playSound('click'); moveBlock(index); };
                 container.appendChild(block);
             });
         }
@@ -724,6 +769,7 @@
             let isCorrect = userOrder.every((item, idx) => item.id === idx + 1);
             const feedback = document.getElementById('dialogue-feedback');
             if (isCorrect) {
+                playSound('success');
                 feedback.style.color = "#00ffcc";
                 feedback.innerText = "🌟 Perfect Dialogue Order!";
             } else {
@@ -751,6 +797,7 @@
                 bubble.className = 'number-bubble';
                 bubble.innerText = num;
                 bubble.onclick = () => {
+                    playSound('click');
                     bubble.style.background = "#00ffcc";
                     setTimeout(() => bubble.style.background = "var(--accent-blue)", 500);
                 };
@@ -785,11 +832,9 @@
             const revealBtn = document.getElementById('btn-reveal-answer');
 
             if (currentCardIndex === 0) {
-                // Primeira carta é o Exemplo
                 targetBox.innerText = `"I am ${card.age} years old. ${card.text}"`;
                 revealBtn.style.display = 'none';
             } else {
-                // Cartas seguintes: Esconde a resposta e mostra o botão
                 targetBox.innerText = "❓ (Say the sentence aloud, then click reveal!)";
                 revealBtn.style.display = 'inline-block';
             }
