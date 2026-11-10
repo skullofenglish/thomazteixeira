@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Piece Bounty Homework - Multiplayer Duel</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b1329;
+            --card-bg: #1c2541;
+            --accent-yellow: #ffcc00;
+            --accent-red: #ff3333;
+            --accent-blue: #00d2ff;
+            --text-white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle, #1c2541 0%, #0b1329 100%);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Tela de Seleção de Jogador */
+        #login-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .login-box {
+            background: var(--card-bg);
+            border: 3px solid var(--accent-yellow);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        }
+
+        .login-box h1 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--accent-yellow);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .login-box p {
+            color: var(--accent-blue);
+            margin-bottom: 25px;
+        }
+
+        .player-select-btn {
+            background: #283655;
+            color: #fff;
+            border: 2px solid var(--accent-blue);
+            padding: 15px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-family: 'Fredoka One', cursive;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+
+        .player-select-btn:hover {
+            background: var(--accent-blue);
+            color: #000;
+            transform: scale(1.03);
+        }
+
+        /* Placar Global e Header */
+        .game-header {
+            background: rgba(0, 0, 0, 0.75);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--accent-yellow);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .score-board {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-size: 1.1rem;
+            font-family: 'Fredoka One', cursive;
+        }
+
+        .score-box {
+            background: #0b1329;
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 2px solid var(--accent-blue);
+        }
+
+        .user-tag {
+            background: var(--accent-yellow);
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.9rem;
+        }
+
+        /* Container Principal do Jogo */
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .game-box {
+            background: var(--card-bg);
+            border: 3px solid var(--accent-blue);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+        }
+
+        .game-box h2 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--accent-yellow);
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+        }
+
+        /* Jogo de Perguntas (Homework Challenge) */
+        .question-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--accent-yellow);
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: var(--text-white);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .option-btn {
+            background: #283655;
+            color: #fff;
+            border: 2px solid var(--accent-yellow);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background: var(--accent-yellow);
+            color: #000;
+            transform: scale(1.03);
+        }
+
+        .action-btn {
+            background: var(--accent-yellow);
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            font-family: 'Fredoka One', cursive;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        #waiting-msg {
+            font-size: 1.2rem;
+            color: var(--accent-yellow);
+            margin-top: 20px;
+            font-family: 'Fredoka One', cursive;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TELA 1: LOGIN / ESCOLHA DE JOGADOR -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h1>🏴‍☠️ BOUNTY HOMEWORK ⚔️</h1>
+            <p>Select your captain profile to join the live match:</p>
+            <button class="player-select-btn" onclick="loginAs('Thomaz')">🏴‍☠️ I am Thomaz</button>
+            <button class="player-select-btn" onclick="loginAs('Gabriel')">⚔️ I am Gabriel</button>
+        </div>
+    </div>
+
+    <!-- PLACAR GLOBAL E HEADER (Visível após login) -->
+    <header class="game-header" id="main-header" style="display:none;">
+        <div class="score-board">
+            <span class="score-box">🏴‍☠️ Thomaz: <strong id="thomaz-pts">0</strong></span>
+            <span class="score-box">⚔️ Gabriel: <strong id="gabriel-pts">0</strong></span>
+        </div>
+        <span class="user-tag" id="current-user-tag">Player: --</span>
+    </header>
+
+    <main class="container">
+        <!-- TELA DO HOMEWORK DESAFIO -->
+        <section id="homework-screen" class="screen">
+            <div class="game-box">
+                <h2>⚡ Bounty Homework Challenge ⚡</h2>
+                <div id="quiz-container">
+                    <div class="question-card">
+                        <img id="q-img" src="images/luffy.png" alt="Character">
+                        <div class="question-text" id="q-text">Loading challenge...</div>
+                    </div>
+                    <div class="options-grid" id="options-grid"></div>
+                </div>
+                <div id="waiting-msg" style="display:none;">🎉 Challenge completed! Waiting for the other captain or check the final scores above!</div>
+                <button class="action-btn" id="next-q-btn" onclick="nextQuestion()" style="display:none;">Next Question ➡️</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- SDKs do Firebase via CDN (Compatível com a sua config) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Sua configuração exata do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyC2pSwDBIREaPmpOvainZZWGUcEupx1c",
+            authDomain: "studendtrackerpanel.firebaseapp.com",
+            projectId: "studendtrackerpanel",
+            storageBucket: "studendtrackerpanel.appspot.com",
+            messagingSenderId: "1004678184015",
+            appId: "1:1004678184015:web:be965625c08d8ee73ffe3a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let myRole = ""; // 'Thomaz' ou 'Gabriel'
+
+        // Perguntas do Homework baseadas na aula
+        const homeworkQuestions = [
+            {
+                img: "images/luffy.png",
+                text: "How old is Luffy in the official dialogue?",
+                options: ["11 years old", "19 years old", "13 years old", "22 years old"],
+                correct: "19 years old"
+            },
+            {
+                img: "images/shanks.png",
+                text: "What does Shanks like to do?",
+                options: ["I like to cook", "I like to ride a bike", "I like cats", "I like dogs"],
+                correct: "I like to ride a bike"
+            },
+            {
+                img: "images/sabo.png",
+                text: "How old is Sabo?",
+                options: ["19 years old", "59 years old", "22 years old", "11 years old"],
+                correct: "22 years old"
+            },
+            {
+                img: "images/kaido.png",
+                text: "What does Kaido like?",
+                options: ["I like pizza", "I like dogs", "I like burgers", "I like video games"],
+                correct: "I like dogs"
+            }
+        ];
+        let currentQIndex = 0;
+
+        window.loginAs = async function(playerName) {
+            myRole = playerName;
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-header').style.display = 'flex';
+            document.getElementById('homework-screen').classList.add('active');
+            document.getElementById('current-user-tag').innerText = `Logged as: ${myRole}`;
+
+            // Inicializa ou escuta o documento de estado da sala no Firestore
+            setupFirestoreListener();
+            loadQuestion();
+        }
+
+        async function setupFirestoreListener() {
+            const roomRef = doc(db, "matches", "homework_room");
+            
+            // Verifica se a sala já existe, senão cria
+            const docSnap = await getDoc(roomRef);
+            if (!docSnap.exists()) {
+                await setDoc(roomRef, { thomazScore: 0, gabrielScore: 0 });
+            }
+
+            // Escuta alterações em tempo real no Firestore
+            onSnapshot(roomRef, (doc) => {
+                if (doc.exists()) {
+                    const data = doc.data();
+                    document.getElementById('thomaz-pts').innerText = data.thomazScore || 0;
+                    document.getElementById('gabriel-pts').innerText = data.gabrielScore || 0;
+                }
+            });
+        }
+
+        window.loadQuestion = function() {
+            if (currentQIndex >= homeworkQuestions.length) {
+                document.getElementById('quiz-container').style.display = 'none';
+                document.getElementById('waiting-msg').style.display = 'block';
+                document.getElementById('next-q-btn').style.display = 'none';
+                return;
+            }
+
+            const q = homeworkQuestions[currentQIndex];
+            document.getElementById('q-img').src = q.img;
+            document.getElementById('q-text').innerText = q.text;
+
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt, q.correct, btn);
+                grid.appendChild(btn);
+            });
+            document.getElementById('next-q-btn').style.display = 'none';
+        }
+
+        async function checkAnswer(selected, correct, buttonElement) {
+            const roomRef = doc(db, "matches", "homework_room");
+            const docSnap = await getDoc(roomRef);
+            const data = docSnap.data();
+
+            if (selected === correct) {
+                buttonElement.style.background = "#00ffcc";
+                buttonElement.style.color = "#000";
+                alert("🎯 Correct! +5 Points!");
+
+                // Atualiza o placar do jogador no Firestore
+                let updates = {};
+                if (myRole === 'Thomaz') {
+                    updates.thomazScore = (data.thomazScore || 0) + 5;
+                } else {
+                    updates.gabrielScore = (data.gabrielScore || 0) + 5;
+                }
+                await updateDoc(roomRef, updates);
+            } else {
+                buttonElement.style.background = "#ff3333";
+                alert("❌ Ops, wrong answer!");
+            }
+
+            // Desabilita os botões e mostra o botão de próxima
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.disabled = true);
+            document.getElementById('next-q-btn').style.display = 'inline-block';
+        }
+
+        window.nextQuestion = function() {
+            currentQIndex++;
+            loadQuestion();
+        }
+    </script>
+</body>
+</html>
