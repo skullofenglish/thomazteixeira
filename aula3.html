@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawl School Quest - ESL Lesson (A1)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Fredoka & Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .brawl-title { font-family: 'Fredoka One', cursive; text-shadow: 3px 3px 0px #000; }
+        .brawl-card { border: 4px solid #1e1b4b; box-shadow: 0 8px 0px #1e1b4b; }
+        .brawl-btn { border: 3px solid #000; box-shadow: 0 4px 0px #000; transition: all 0.1s ease; }
+        .brawl-btn:active { transform: translateY(4px); box-shadow: 0 0px 0px #000; }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-indigo-950 text-white min-h-screen flex flex-col justify-between p-4 md:p-6">
+
+    <!-- TOP HEADER: TITLE & SCOREBOARD -->
+    <header class="max-w-6xl mx-auto w-full flex flex-col md:flex-row justify-between items-center bg-purple-900 p-4 rounded-2xl brawl-card mb-6 gap-4">
+        <div class="flex items-center gap-3">
+            <span class="text-4xl">⭐</span>
+            <div>
+                <h1 class="brawl-title text-2xl md:text-3xl text-yellow-400 tracking-wider">BRAWL SCHOOL QUEST</h1>
+                <p class="text-xs text-purple-200">Unit 1: At School | 1-on-1 ESL Lesson with Thomaz</p>
+            </div>
+        </div>
+
+        <!-- SCOREBOARD & TIMER CONTROLS -->
+        <div class="flex flex-wrap items-center gap-4">
+            <!-- Score: Thomaz vs Boss -->
+            <div class="flex items-center bg-indigo-900 px-4 py-2 rounded-xl border-2 border-yellow-400 gap-3">
+                <div class="text-center">
+                    <span class="block text-xs text-yellow-300 font-bold">THOMAZ (GEMS)</span>
+                    <span id="thomaz-score" class="brawl-title text-xl text-green-400">0</span>
+                </div>
+                <button onclick="modifyScore('thomaz', 10)" class="bg-green-600 hover:bg-green-500 text-white px-2 py-1 rounded text-xs font-bold brawl-btn">+10</button>
+                <span class="text-xl font-bold text-gray-400">VS</span>
+                <div class="text-center">
+                    <span class="block text-xs text-red-300 font-bold">BRAWL BOSS</span>
+                    <span id="boss-score" class="brawl-title text-xl text-red-400">0</span>
+                </div>
+                <button onclick="modifyScore('boss', 10)" class="bg-red-600 hover:bg-red-500 text-white px-2 py-1 rounded text-xs font-bold brawl-btn">+10</button>
+            </div>
+
+            <!-- Universal Timer Widget -->
+            <div class="flex items-center bg-indigo-900 px-3 py-2 rounded-xl border-2 border-cyan-400 gap-2">
+                <span class="text-xl">⏱️</span>
+                <div>
+                    <div id="timer-display" class="brawl-title text-lg text-cyan-300">00:00</div>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <select id="timer-mode" class="bg-indigo-950 text-xs text-cyan-200 rounded border border-cyan-500 px-1">
+                        <option value="stopwatch">Stopwatch</option>
+                        <option value="15">15s Timer</option>
+                        <option value="30">30s Timer</option>
+                        <option value="60">60s Timer</option>
+                    </select>
+                    <div class="flex gap-1">
+                        <button onclick="startTimer()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-2 py-0.5 rounded text-[10px] font-bold brawl-btn">Start</button>
+                        <button onclick="pauseTimer()" class="bg-amber-600 hover:bg-amber-500 text-white px-2 py-0.5 rounded text-[10px] font-bold brawl-btn">Pause</button>
+                        <button onclick="resetTimer()" class="bg-rose-600 hover:bg-rose-500 text-white px-2 py-0.5 rounded text-[10px] font-bold brawl-btn">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-6xl mx-auto w-full flex-grow">
+
+        <!-- MENU / HUB SCREEN -->
+        <div id="screen-hub" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 my-auto">
+            <!-- Module 1 -->
+            <div onclick="switchScreen('game-spelling')" class="bg-amber-500 hover:bg-amber-400 cursor-pointer p-6 rounded-2xl brawl-card text-center flex flex-col items-center justify-center transition transform hover:-translate-y-1">
+                <span class="text-5xl mb-3">🎒</span>
+                <h3 class="brawl-title text-xl text-black">1. Brawler's Backpack</h3>
+                <p class="text-xs text-indigo-950 font-semibold mt-2">Spelling & Classroom Objects Vocabulary</p>
+            </div>
+            <!-- Module 2 -->
+            <div onclick="switchScreen('game-listening')" class="bg-cyan-500 hover:bg-cyan-400 cursor-pointer p-6 rounded-2xl brawl-card text-center flex flex-col items-center justify-center transition transform hover:-translate-y-1">
+                <span class="text-5xl mb-3">🎧</span>
+                <h3 class="brawl-title text-xl text-black">2. Shelly's Dialogue</h3>
+                <p class="text-xs text-indigo-950 font-semibold mt-2">Listening & Comprehension (External Player)</p>
+            </div>
+            <!-- Module 3 -->
+            <div onclick="switchScreen('game-mystery')" class="bg-emerald-500 hover:bg-emerald-400 cursor-pointer p-6 rounded-2xl brawl-card text-center flex flex-col items-center justify-center transition transform hover:-translate-y-1">
+                <span class="text-5xl mb-3">📦</span>
+                <h3 class="brawl-title text-xl text-black">3. Mystery Box</h3>
+                <p class="text-xs text-indigo-950 font-semibold mt-2">Grammar: "What's this? It's a..."</p>
+            </div>
+            <!-- Module 4 -->
+            <div onclick="switchScreen('game-commands')" class="bg-rose-500 hover:bg-rose-400 cursor-pointer p-6 rounded-2xl brawl-card text-center flex flex-col items-center justify-center transition transform hover:-translate-y-1">
+                <span class="text-5xl mb-3">⚡</span>
+                <h3 class="brawl-title text-xl text-black">4. Commands & Phonics</h3>
+                <p class="text-xs text-indigo-950 font-semibold mt-2">Classroom Commands & Short 'A' Sound</p>
+            </div>
+        </div>
+
+        <!-- ================= MODULE 1: SPELLING (BRAWLER'S BACKPACK) ================= -->
+        <div id="game-spelling" class="hidden bg-purple-900 p-6 rounded-2xl brawl-card max-w-3xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="switchScreen('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold brawl-btn">⬅️ Back to Menu</button>
+                <h2 class="brawl-title text-2xl text-yellow-400">🎒 Brawler's Backpack Spelling</h2>
+                <span id="spelling-progress" class="text-sm font-bold text-cyan-300">Item 1 / 7</span>
+            </div>
+            <div class="flex flex-col items-center bg-indigo-950 p-6 rounded-xl border-2 border-purple-700">
+                <img id="spelling-img" src="" alt="School Item" class="w-40 h-40 object-cover rounded-xl border-4 border-yellow-400 mb-4 bg-white">
+                <p class="text-sm text-purple-300 mb-2">Unscramble or type the word:</p>
+                <div id="spelling-slots" class="flex gap-2 mb-6"></div>
+                <div id="virtual-keyboard" class="flex flex-wrap justify-center gap-2 max-w-lg mb-4"></div>
+                <div class="flex gap-4">
+                    <button onclick="checkSpelling()" class="bg-green-600 hover:bg-green-500 px-6 py-2 rounded-xl font-bold brawl-btn">Check Word</button>
+                    <button onclick="nextSpellingItem()" class="bg-yellow-500 hover:bg-yellow-400 text-indigo-950 px-6 py-2 rounded-xl font-bold brawl-btn">Next Item ➡️</button>
+                </div>
+                <p id="spelling-feedback" class="mt-4 text-lg font-bold"></p>
+            </div>
+        </div>
+
+        <!-- ================= MODULE 2: LISTENING (SHELLY'S DIALOGUE) ================= -->
+        <div id="game-listening" class="hidden bg-purple-900 p-6 rounded-2xl brawl-card max-w-3xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="switchScreen('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold brawl-btn">⬅️ Back to Menu</button>
+                <h2 class="brawl-title text-2xl text-cyan-400">🎧 Shelly's Listening Challenge</h2>
+                <span class="text-sm font-bold text-yellow-300">External Audio Player</span>
+            </div>
+            <div class="bg-indigo-950 p-6 rounded-xl border-2 border-cyan-700 mb-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <img src="images/shelly.png" alt="Shelly" class="w-16 h-16 rounded-full border-2 border-cyan-400 bg-purple-800 object-cover">
+                    <div>
+                        <h3 class="brawl-title text-lg text-yellow-300">Dialogue Script (Play on your audio player)</h3>
+                        <p class="text-xs text-gray-300">Listen carefully to the audio track and answer Thomaz's questions below:</p>
+                    </div>
+                </div>
+                <div class="bg-indigo-900 p-4 rounded-xl text-sm text-purple-200 italic space-y-2 border border-purple-700">
+                    <p><strong>Shelly:</strong> Hi, Colt! Look at my school bag.</p>
+                    <p><strong>Colt:</strong> Wow, Shelly! What’s this? Is it a pencil case?</p>
+                    <p><strong>Shelly:</strong> No, it isn’t. It’s a red pencil!</p>
+                    <p><strong>Colt:</strong> Ah, nice! And what’s this?</p>
+                    <p><strong>Shelly:</strong> It’s a blue eraser.</p>
+                    <p><strong>Colt:</strong> Perfect! Now, open your book, please!</p>
+                </div>
+            </div>
+
+            <!-- Listening Comprehension Quiz -->
+            <div class="bg-indigo-950 p-6 rounded-xl border-2 border-purple-700">
+                <h3 id="listening-question" class="text-lg font-bold text-yellow-400 mb-4">Q1: What is in Shelly's bag? Is it a pencil or a pen?</h3>
+                <div id="listening-options" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <!-- Options injected via JS -->
+                </div>
+                <div class="flex justify-between items-center">
+                    <p id="listening-feedback" class="text-lg font-bold"></p>
+                    <button onclick="nextListeningQuestion()" class="bg-yellow-500 hover:bg-yellow-400 text-indigo-950 px-6 py-2 rounded-xl font-bold brawl-btn">Next Question ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MODULE 3: MYSTERY BOX (GRAMMAR) ================= -->
+        <div id="game-mystery" class="hidden bg-purple-900 p-6 rounded-2xl brawl-card max-w-4xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="switchScreen('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold brawl-btn">⬅️ Back to Menu</button>
+                <h2 class="brawl-title text-2xl text-emerald-400">📦 Shelly's Mystery Box</h2>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-emerald-300">Mode:</span>
+                    <button id="mode-toggle" onclick="toggleMysteryMode()" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded text-xs font-bold brawl-btn">Teacher Asks 🔄</button>
+                </div>
+            </div>
+            <p class="text-center text-sm text-emerald-200 mb-6">Click a mystery box to reveal the item. Practice: <span class="text-yellow-300 font-bold">"What's this? It's a..."</span> / <span class="text-yellow-300 font-bold">"Is it a...? Yes, it is / No, it isn't."</span></p>
+            
+            <div id="mystery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Injected via JS -->
+            </div>
+            <div class="mt-8 text-center">
+                <button onclick="resetMysteryBoxes()" class="bg-emerald-600 hover:bg-emerald-500 px-6 py-2 rounded-xl font-bold brawl-btn">Reset Boxes 🔄</button>
+            </div>
+        </div>
+
+        <!-- ================= MODULE 4: COMMANDS & PHONICS ================= -->
+        <div id="game-commands" class="hidden bg-purple-900 p-6 rounded-2xl brawl-card max-w-3xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="switchScreen('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold brawl-btn">⬅️ Back to Menu</button>
+                <h2 class="brawl-title text-2xl text-rose-400">⚡ Commands & Phonics Arena</h2>
+                <span class="text-sm font-bold text-yellow-300">Action & Short 'A'</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Classroom Commands Card -->
+                <div class="bg-indigo-950 p-6 rounded-xl border-2 border-rose-700 flex flex-col justify-between">
+                    <div>
+                        <h3 class="brawl-title text-lg text-rose-300 mb-2">🏫 Classroom Commands</h3>
+                        <p class="text-xs text-gray-300 mb-4">Teacher gives the order. Thomaz executes or freezes (Watch out for "Please!"):</p>
+                        <div id="command-display" class="bg-purple-950 p-4 rounded-xl text-center text-xl font-bold text-yellow-300 border border-purple-700 mb-4">
+                            Click Generate Command!
+                        </div>
+                    </div>
+                    <button onclick="generateCommand()" class="bg-rose-600 hover:bg-rose-500 py-2 rounded-xl font-bold brawl-btn text-white">Generate Command 🎲</button>
+                </div>
+
+                <!-- Phonics Card -->
+                <div class="bg-indigo-950 p-6 rounded-xl border-2 border-rose-700 flex flex-col justify-between">
+                    <div>
+                        <h3 class="brawl-title text-lg text-rose-300 mb-2">🔤 Short 'A' Sound Phonics</h3>
+                        <p class="text-xs text-gray-300 mb-4">Practice the short /æ/ sound words from Unit 1:</p>
+                        <div id="phonics-display" class="bg-purple-950 p-4 rounded-xl text-center text-xl font-bold text-cyan-300 border border-purple-700 mb-4">
+                            /æ/ - Bag, Cat, Map
+                        </div>
+                    </div>
+                    <button onclick="nextPhonicsWord()" class="bg-cyan-600 hover:bg-cyan-500 py-2 rounded-xl font-bold brawl-btn text-white">Next Phonics Word 🔊</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center text-xs text-purple-300 py-4 mt-6">
+        Brawl School Quest • Interactive ESL Lesson (A1) • Designed for Thomaz 🎮
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- GLOBAL STATE & SCOREBOARD ---
+        let scores = { thomaz: 0, boss: 0 };
+        function modifyScore(player, amount) {
+            scores[player] += amount;
+            if (scores[player] < 0) scores[player] = 0;
+            document.getElementById('thomaz-score').innerText = scores.thomaz;
+            document.getElementById('boss-score').innerText = scores.boss;
+        }
+
+        // --- UNIVERSAL TIMER ---
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let timerMode = 'stopwatch';
+
+        function updateTimerDisplay() {
+            let m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+            let s = (timerSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('timer-display').innerText = `${m}:${s}`;
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+            let modeSelect = document.getElementById('timer-mode').value;
+            timerMode = modeSelect;
+            if (timerMode !== 'stopwatch' && timerSeconds === 0) {
+                timerSeconds = parseInt(timerMode);
+            }
+            timerInterval = setInterval(() => {
+                if (timerMode === 'stopwatch') {
+                    timerSeconds++;
+                } else {
+                    if (timerSeconds > 0) {
+                        timerSeconds--;
+                    } else {
+                        pauseTimer();
+                        playAudioTone(600, 300);
+                    }
+                }
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            let modeSelect = document.getElementById('timer-mode').value;
+            timerSeconds = modeSelect === 'stopwatch' ? 0 : parseInt(modeSelect);
+            updateTimerDisplay();
+        }
+
+        document.getElementById('timer-mode').addEventListener('change', (e) => {
+            resetTimer();
+        });
+
+        // --- SCREEN NAVIGATION ---
+        function switchScreen(screenId) {
+            ['screen-hub', 'game-spelling', 'game-listening', 'game-mystery', 'game-commands'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+            if (screenId === 'game-spelling') initSpelling();
+            if (screenId === 'game-listening') initListening();
+            if (screenId === 'game-mystery') initMystery();
+        }
+
+        // --- WEB AUDIO API SOUNDS ---
+        function playAudioTone(freq, duration) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration / 1000);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration / 1000);
+            } catch(e) {}
+        }
+
+        // --- MODULE 1: SPELLING GAME ---
+        const spellingItems = [
+            { word: "PEN", img: "images/pen.jpg" },
+            { word: "PENCIL", img: "images/pencil.jpg" },
+            { word: "ERASER", img: "images/eraser.jpg" },
+            { word: "RULER", img: "images/ruler.jpg" },
+            { word: "BOOK", img: "images/book.jpg" },
+            { word: "SCHOOLBAG", img: "images/schoolbag.jpg" },
+            { word: "PENCILCASE", img: "images/pencilcase.jpg" }
+        ];
+        let currentSpellingIndex = 0;
+        let selectedLetters = [];
+
+        function initSpelling() {
+            currentSpellingIndex = 0;
+            loadSpellingItem();
+        }
+
+        function loadSpellingItem() {
+            if (currentSpellingIndex >= spellingItems.length) {
+                document.getElementById('game-spelling').innerHTML = `
+                    <div class="text-center py-10">
+                        <span class="text-6xl">🏆</span>
+                        <h2 class="brawl-title text-3xl text-yellow-400 mt-4">Brawler's Backpack Cleared!</h2>
+                        <p class="text-purple-200 mt-2">Awesome spelling job, Thomaz!</p>
+                        <button onclick="switchScreen('hub')" class="mt-6 bg-yellow-500 hover:bg-yellow-400 text-indigo-950 px-6 py-3 rounded-xl font-bold brawl-btn">Back to Menu</button>
+                    </div>
+                `;
+                modifyScore('thomaz', 30);
+                return;
+            }
+            let item = spellingItems[currentSpellingIndex];
+            document.getElementById('spelling-progress').innerText = `Item ${currentSpellingIndex + 1} / ${spellingItems.length}`;
+            document.getElementById('spelling-img').src = item.img;
+            document.getElementById('spelling-feedback').innerText = "";
+            selectedLetters = new Array(item.word.length).fill("");
+            renderSpellingSlots();
+            renderVirtualKeyboard(item.word);
+        }
+
+        function renderSpellingSlots() {
+            let container = document.getElementById('spelling-slots');
+            container.innerHTML = "";
+            selectedLetters.forEach((letter, idx) => {
+                let box = document.createElement('div');
+                box.className = "w-10 h-12 bg-indigo-900 border-2 border-yellow-400 rounded-lg flex items-center justify-center text-xl font-bold text-white";
+                box.innerText = letter;
+                box.onclick = () => { selectedLetters[idx] = ""; renderSpellingSlots(); };
+                container.appendChild(box);
+            });
+        }
+
+        function renderVirtualKeyboard(targetWord) {
+            let kb = document.getElementById('virtual-keyboard');
+            kb.innerHTML = "";
+            // Generate shuffled letters + distractors
+            let letters = targetWord.split('');
+            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            while(letters.length < Math.max(10, targetWord.length + 3)) {
+                let randLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+                letters.push(randLetter);
+            }
+            letters.sort(() => Math.random() - 0.5);
+
+            letters.forEach(char => {
+                let btn = document.createElement('button');
+                btn.className = "w-10 h-10 bg-purple-700 hover:bg-purple-600 rounded-lg font-bold text-white brawl-btn text-lg";
+                btn.innerText = char;
+                btn.onclick = () => {
+                    let emptyIdx = selectedLetters.indexOf("");
+                    if (emptyIdx !== -1) {
+                        selectedLetters[emptyIdx] = char;
+                        renderSpellingSlots();
+                        playAudioTone(400, 100);
+                    }
+                };
+                kb.appendChild(btn);
+            });
+        }
+
+        function checkSpelling() {
+            let item = spellingItems[currentSpellingIndex];
+            let currentWord = selectedLetters.join("");
+            let feedback = document.getElementById('spelling-feedback');
+            if (currentWord === item.word) {
+                feedback.className = "mt-4 text-lg font-bold text-green-400";
+                feedback.innerText = "🎉 Awesome! Correct!";
+                modifyScore('thomaz', 10);
+                playAudioTone(800, 200);
+            } else {
+                feedback.className = "mt-4 text-lg font-bold text-rose-400";
+                feedback.innerText = "❌ Oops! Try again.";
+                playAudioTone(200, 200);
+            }
+        }
+
+        function nextSpellingItem() {
+            currentSpellingIndex++;
+            loadSpellingItem();
+        }
+
+        // --- MODULE 2: LISTENING ACTIVITY ---
+        const listeningQuestions = [
+            {
+                q: "Q1: What is in Shelly's bag? Is it a pencil or a pen?",
+                options: [
+                    { text: "It's a red pencil!", correct: true, img: "images/red_pencil.jpg" },
+                    { text: "It's a blue pen!", correct: false, img: "images/pen.jpg" }
+                ]
+            },
+            {
+                q: "Q2: What color is Shelly's eraser?",
+                options: [
+                    { text: "It's a blue eraser!", correct: true, img: "images/blue_eraser.jpg" },
+                    { text: "It's a red eraser!", correct: false, img: "images/eraser.jpg" }
+                ]
+            }
+        ];
+        let currentListeningIdx = 0;
+
+        function initListening() {
+            currentListeningIdx = 0;
+            loadListeningQuestion();
+        }
+
+        function loadListeningQuestion() {
+            if (currentListeningIdx >= listeningQuestions.length) {
+                document.getElementById('game-listening').innerHTML = `
+                    <div class="text-center py-10">
+                        <span class="text-6xl">🏆</span>
+                        <h2 class="brawl-title text-3xl text-cyan-400 mt-4">Listening Challenge Completed!</h2>
+                        <p class="text-purple-200 mt-2">Great ear, Thomaz!</p>
+                        <button onclick="switchScreen('hub')" class="mt-6 bg-cyan-500 hover:bg-cyan-400 text-indigo-950 px-6 py-3 rounded-xl font-bold brawl-btn">Back to Menu</button>
+                    </div>
+                `;
+                modifyScore('thomaz', 20);
+                return;
+            }
+            let qData = listeningQuestions[currentListeningIdx];
+            document.getElementById('listening-question').innerText = qData.q;
+            document.getElementById('listening-feedback').innerText = "";
+            let optContainer = document.getElementById('listening-options');
+            optContainer.innerHTML = "";
+
+            qData.options.forEach(opt => {
+                let card = document.createElement('div');
+                card.className = "bg-indigo-950 border-2 border-purple-700 hover:border-cyan-400 p-4 rounded-xl cursor-pointer flex items-center gap-4 transition";
+                card.innerHTML = `
+                    <img src="${opt.img}" class="w-16 h-16 object-cover rounded-lg border-2 border-yellow-400 bg-white">
+                    <span class="font-bold text-white text-lg">${opt.text}</span>
+                `;
+                card.onclick = () => {
+                    let feedback = document.getElementById('listening-feedback');
+                    if (opt.correct) {
+                        feedback.className = "text-lg font-bold text-green-400";
+                        feedback.innerText = "✅ Correct! Great listening!";
+                        modifyScore('thomaz', 10);
+                        playAudioTone(800, 200);
+                    } else {
+                        feedback.className = "text-lg font-bold text-rose-400";
+                        feedback.innerText = "❌ Not quite! Listen to the external audio again.";
+                        playAudioTone(200, 200);
+                    }
+                };
+                optContainer.appendChild(card);
+            });
+        }
+
+        function nextListeningQuestion() {
+            currentListeningIdx++;
+            loadListeningQuestion();
+        }
+
+        // --- MODULE 3: MYSTERY BOX ---
+        const mysteryItems = [
+            { name: "Pencil", img: "images/pencil.jpg" },
+            { name: "Pen", img: "images/pen.jpg" },
+            { name: "Eraser", img: "images/eraser.jpg" },
+            { name: "Ruler", img: "images/ruler.jpg" },
+            { name: "Book", img: "images/book.jpg" },
+            { name: "School Bag", img: "images/schoolbag.jpg" },
+            { name: "Pencil Case", img: "images/pencilcase.jpg" },
+            { name: "Red Pencil", img: "images/red_pencil.jpg" }
+        ];
+        let mysteryModeTeacher = true;
+
+        function initMystery() {
+            renderMysteryBoxes();
+        }
+
+        function toggleMysteryMode() {
+            mysteryModeTeacher = !mysteryModeTeacher;
+            let btn = document.getElementById('mode-toggle');
+            btn.innerText = mysteryModeTeacher ? "Teacher Asks 🔄" : "Thomaz Asks 🔄";
+            btn.className = mysteryModeTeacher ? "bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded text-xs font-bold brawl-btn" : "bg-amber-600 hover:bg-amber-500 px-3 py-1 rounded text-xs font-bold brawl-btn";
+        }
+
+        function renderMysteryBoxes() {
+            let grid = document.getElementById('mystery-grid');
+            grid.innerHTML = "";
+            mysteryItems.forEach((item, idx) => {
+                let box = document.createElement('div');
+                box.className = "h-48 perspective-1000 cursor-pointer";
+                box.innerHTML = `
+                    <div class="relative w-full h-full duration-500 transform-style-3d shadow-xl rounded-2xl" id="box-${idx}" onclick="flipBox(${idx})">
+                        <div class="absolute w-full h-full bg-emerald-700 border-4 border-emerald-400 rounded-2xl flex flex-col items-center justify-center backface-hidden">
+                            <span class="text-4xl mb-2">📦</span>
+                            <span class="brawl-title text-lg text-white">Box #${idx + 1}</span>
+                            <span class="text-xs text-emerald-200 mt-1">${mysteryModeTeacher ? "What's this?" : "Thomaz Asks!"}</span>
+                        </div>
+                        <div class="absolute w-full h-full bg-indigo-950 border-4 border-yellow-400 rounded-2xl flex flex-col items-center justify-center backface-hidden rotate-y-180 p-2">
+                            <img src="${item.img}" class="w-24 h-24 object-cover rounded-xl border-2 border-white mb-2 bg-white">
+                            <span class="brawl-title text-sm text-yellow-300 text-center">It's a ${item.name}!</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(box);
+            });
+        }
+
+        function flipBox(idx) {
+            let card = document.getElementById(`box-${idx}`);
+            card.classList.toggle('rotate-y-180');
+            playAudioTone(600, 150);
+            modifyScore('thomaz', 5);
+        }
+
+        function resetMysteryBoxes() {
+            renderMysteryBoxes();
+        }
+
+        // --- MODULE 4: COMMANDS & PHONICS ---
+        const classroomCommands = [
+            "Open your book, please!",
+            "Close your school bag!",
+            "Take out your pencil!",
+            "Open your pencil case!",
+            "Show me your ruler!",
+            "Show me your eraser!"
+        ];
+
+        function generateCommand() {
+            let cmd = classroomCommands[Math.floor(Math.random() * classroomCommands.length)];
+            document.getElementById('command-display').innerText = cmd;
+            playAudioTone(500, 100);
+        }
+
+        const phonicsWords = [
+            "/æ/ - BAG (B-A-G)",
+            "/æ/ - CAT (C-A-T)",
+            "/æ/ - CAP (C-A-P)",
+            "/æ/ - MAP (M-A-P)",
+            "/æ/ - HAT (H-A-T)"
+        ];
+
+        function nextPhonicsWord() {
+            let word = phonicsWords[Math.floor(Math.random() * phonicsWords.length)];
+            document.getElementById('phonics-display').innerText = word;
+            playAudioTone(700, 100);
+        }
+    </script>
+</body>
+</html>
