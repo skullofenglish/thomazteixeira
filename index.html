@@ -952,7 +952,7 @@
         // =========================================================================
         // NOME DO ALUNO NO FIREBASE
         // =========================================================================
-        const STUDENT_DOCUMENT_NAME = "thomaz_teixeira"; 
+        const STUDENT_DOCUMENT_NAME = "aluno_nome"; 
 
         const firebaseConfig = {
             apiKey: "AIzaSyC2pSWdBIREaPmpOvaiNzWGUuCEupxp1c",
@@ -1509,6 +1509,17 @@
             return topics;
         }
 
+        function formatTopicTextHtml(text) {
+            const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9][-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
+            return text.replace(urlRegex, (url) => {
+                let href = url;
+                if (!href.startsWith('http://') && !href.startsWith('https://')) {
+                    href = 'https://' + href;
+                }
+                return `<a href="${href}" target="_blank">${url}</a>`;
+            });
+        }
+
         function renderTopics(topics = []) {
             const activeList = document.getElementById('topics-list');
             const completedList = document.getElementById('completed-topics-list');
@@ -1524,16 +1535,7 @@
                     div.className = `topic-item ${t.completed ? 'completed' : ''}`;
                     div.setAttribute('data-raw-text', t.text);
 
-                    let formattedTextHtml = t.text;
-                    const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9][-a-zA-Z0-90-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
-                    
-                    formattedTextHtml = t.text.replace(urlRegex, (url) => {
-                        let href = url;
-                        if (!href.startsWith('http://') && !href.startsWith('https://')) {
-                            href = 'https://' + href;
-                        }
-                        return `<a href="${href}" target="_blank">${url}</a>`;
-                    });
+                    const formattedTextHtml = formatTopicTextHtml(t.text);
 
                     div.innerHTML = `
                         <div class="topic-content">
@@ -1573,16 +1575,7 @@
             div.className = 'topic-item';
             div.setAttribute('data-raw-text', val);
 
-            let formattedTextHtml = val;
-            const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9][-a-zA-Z0-90-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
-            
-            formattedTextHtml = val.replace(urlRegex, (url) => {
-                let href = url;
-                if (!href.startsWith('http://') && !href.startsWith('https://')) {
-                    href = 'https://' + href;
-                }
-                return `<a href="${href}" target="_blank">${url}</a>`;
-            });
+            const formattedTextHtml = formatTopicTextHtml(val);
 
             div.innerHTML = `
                 <div class="topic-content">
@@ -1749,19 +1742,19 @@
                 if (activeEl !== document.getElementById('chat-works')) document.getElementById('chat-works').innerHTML = data.chatWorks || '';
                 if (activeEl !== document.getElementById('chat-observations')) document.getElementById('chat-observations').innerHTML = data.chatObservations || '';
 
-                if (!activeEl.closest('#planTabsContainer')) {
+                if (!activeEl || !activeEl.closest('#planTabsContainer')) {
                     renderPlans(data.plans || []);
                 }
 
-                if (!activeEl.closest('#sessionTabsContainer')) {
+                if (!activeEl || !activeEl.closest('#sessionTabsContainer')) {
                     renderSessionMonths(data.sessionMonths || []);
                 }
                 
-                if (!document.activeElement.closest('.post-it')) {
+                if (!activeEl || !activeEl.closest('.post-it')) {
                     renderTopics(data.topics || []);
                 }
 
-                if (!document.activeElement.closest('#usefulLinksCard')) {
+                if (!activeEl || !activeEl.closest('#usefulLinksCard')) {
                     renderUsefulLinks(data.usefulLinks || []);
                 }
                 
