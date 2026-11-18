@@ -73,7 +73,7 @@
                 <div>
                     <span class="text-xs font-bold uppercase bg-indigo-950 text-cyan-300 px-2 py-0.5 rounded">Mission 3</span>
                     <h2 class="font-bold text-xl mt-1">Brawl Mini-Reading</h2>
-                    <p class="text-xs font-medium text-indigo-900 mt-1">Read Colt & Leon's short story and answer questions.</p>
+                    <p class="text-xs font-medium text-indigo-900 mt-1">Read Colt & Spike's short story and answer questions.</p>
                     <span id="badge-m3" class="inline-block mt-2 text-xs font-bold text-indigo-950">⬜ Not completed</span>
                 </div>
             </div>
@@ -83,8 +83,8 @@
                 <img src="images/leon.png" alt="Leon" class="w-20 h-20 object-cover rounded-xl border-2 border-indigo-950 bg-purple-900 shrink-0">
                 <div>
                     <span class="text-xs font-bold uppercase bg-indigo-950 text-rose-300 px-2 py-0.5 rounded">Mission 4</span>
-                    <h2 class="font-bold text-xl mt-1">Short 'A' Phonics Check</h2>
-                    <p class="text-xs font-medium text-indigo-900 mt-1">Spot words with the short /æ/ sound (bag, cat, map).</p>
+                    <h2 class="font-bold text-xl mt-1">School Odd One Out</h2>
+                    <p class="text-xs font-medium text-indigo-900 mt-1">Spot the item or word that does not fit the school group.</p>
                     <span id="badge-m4" class="inline-block mt-2 text-xs font-bold text-indigo-950">⬜ Not completed</span>
                 </div>
             </div>
@@ -158,22 +158,20 @@
             </div>
         </div>
 
-        <!-- ================= MISSION 4: SHORT 'A' PHONICS ================= -->
+        <!-- ================= MISSION 4: ODD ONE OUT ================= -->
         <div id="mission-m4" class="hidden bg-purple-900 p-6 rounded-2xl brawl-card max-w-3xl mx-auto">
             <div class="flex justify-between items-center mb-6">
                 <button onclick="openMission('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold brawl-btn">⬅️ Menu</button>
-                <h2 class="brawl-title text-xl text-rose-300">🔤 Mission 4: Short 'A' Sound (/æ/)</h2>
-                <span class="text-sm font-bold text-yellow-300">Phonics</span>
+                <h2 class="brawl-title text-xl text-rose-300">🎯 Mission 4: School Odd One Out</h2>
+                <span id="m4-counter" class="text-sm font-bold text-yellow-300">1 / 3</span>
             </div>
 
             <div class="bg-indigo-950 p-6 rounded-xl border-2 border-rose-400 text-center">
                 <img src="images/spike.png" alt="Spike" class="w-20 h-20 rounded-full border-2 border-rose-300 bg-purple-900 mx-auto mb-3 object-cover">
-                <p class="text-lg font-bold text-white mb-2">Tap the words with the <span class="text-yellow-300">short 'a' sound (/æ/)</span> like in <span class="underline">bag</span>!</p>
-                <p class="text-xs text-purple-300 mb-5">Tip: Say each word out loud before tapping.</p>
-
-                <div id="m4-words" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-xl mx-auto mb-5"></div>
-                <button onclick="checkPhonicsSelection()" class="bg-rose-500 hover:bg-rose-400 text-white px-6 py-2 rounded-xl font-bold brawl-btn">Check My Words ✅</button>
+                <p id="m4-prompt" class="text-lg font-bold text-white mb-4"></p>
+                <div id="m4-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto"></div>
                 <p id="m4-feedback" class="mt-4 font-bold text-base min-h-[24px]"></p>
+                <button id="m4-next" onclick="nextM4()" class="hidden mt-4 bg-rose-400 hover:bg-rose-300 text-indigo-950 px-6 py-2 rounded-xl font-bold brawl-btn">Next ➡️</button>
             </div>
         </div>
 
@@ -432,56 +430,61 @@
             }
         }
 
-        // --- MISSION 4 (PHONICS) ---
-        const phonicsPool = [
-            { word: "BAG", shortA: true },
-            { word: "PEN", shortA: false },
-            { word: "CAT", shortA: true },
-            { word: "BOOK", shortA: false },
-            { word: "MAP", shortA: true },
-            { word: "RULER", shortA: false }
+        // --- MISSION 4 (ODD ONE OUT) ---
+        const m4Data = [
+            { prompt: "Which one is NOT a school object?", options: ["Pencil", "Eraser", "Pizza", "Ruler"], answer: "Pizza" },
+            { prompt: "Which one does NOT belong with the others?", options: ["Pen", "Book", "Banana", "School bag"], answer: "Banana" },
+            { prompt: "Which one is NOT a school item?", options: ["Pencil case", "Dragon", "Red pencil", "Blue eraser"], answer: "Dragon" }
         ];
-        let selectedPhonics = new Set();
+        let m4Idx = 0;
+        let m4Answered = false;
 
         function startM4() {
-            selectedPhonics.clear();
-            document.getElementById('m4-feedback').innerText = "";
-            const container = document.getElementById('m4-words');
-            container.innerHTML = "";
+            m4Idx = 0;
+            renderM4();
+        }
 
-            phonicsPool.forEach(item => {
+        function renderM4() {
+            m4Answered = false;
+            const item = m4Data[m4Idx];
+            document.getElementById('m4-counter').innerText = `${m4Idx + 1} / ${m4Data.length}`;
+            document.getElementById('m4-prompt').innerText = item.prompt;
+            document.getElementById('m4-feedback').innerText = "";
+            document.getElementById('m4-next').classList.add('hidden');
+
+            const box = document.getElementById('m4-options');
+            box.innerHTML = "";
+            item.options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = "bg-purple-800 hover:bg-purple-700 text-white py-3 px-4 rounded-xl font-bold brawl-btn text-base";
-                btn.innerText = item.word;
+                btn.className = "bg-purple-800 hover:bg-purple-700 text-white py-3 px-4 rounded-xl font-bold brawl-btn text-sm";
+                btn.innerText = opt;
                 btn.onclick = () => {
-                    if (selectedPhonics.has(item.word)) {
-                        selectedPhonics.delete(item.word);
-                        btn.classList.remove('ring-4', 'ring-yellow-300', 'bg-rose-600');
-                        btn.classList.add('bg-purple-800');
+                    const fb = document.getElementById('m4-feedback');
+                    if (opt === item.answer) {
+                        fb.className = "mt-4 font-bold text-base text-green-400";
+                        fb.innerText = "✅ Awesome catch! +5 💎";
+                        if (!m4Answered) {
+                            m4Answered = true;
+                            addGems(5);
+                        }
+                        document.getElementById('m4-next').classList.remove('hidden');
                     } else {
-                        selectedPhonics.add(item.word);
-                        btn.classList.remove('bg-purple-800');
-                        btn.classList.add('ring-4', 'ring-yellow-300', 'bg-rose-600');
+                        fb.className = "mt-4 font-bold text-base text-rose-400";
+                        fb.innerText = "❌ That one is from school! Try another.";
+                        playTone(220, 180);
                     }
-                    playTone(520, 90);
                 };
-                container.appendChild(btn);
+                box.appendChild(btn);
             });
         }
 
-        function checkPhonicsSelection() {
-            const expected = phonicsPool.filter(w => w.shortA).map(w => w.word).sort().join(',');
-            const chosen = Array.from(selectedPhonics).sort().join(',');
-            const fb = document.getElementById('m4-feedback');
-
-            if (expected === chosen) {
-                fb.className = "mt-4 font-bold text-base text-green-400";
-                fb.innerText = "🎉 Awesome! BAG, CAT, and MAP all have the short 'a' sound!";
-                markCompleted('m4');
+        function nextM4() {
+            if (m4Idx + 1 < m4Data.length) {
+                m4Idx++;
+                renderM4();
             } else {
-                fb.className = "mt-4 font-bold text-base text-rose-400";
-                fb.innerText = "❌ Not quite! Select ONLY the short 'a' words (BAG, CAT, MAP).";
-                playTone(220, 180);
+                markCompleted('m4');
+                openMission('hub');
             }
         }
 
