@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brawl Homework Quest - Thomaz (A1)</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .brawl-title { font-family: 'Fredoka One', cursive; text-shadow: 2px 2px 0px #000; }
+        .brawl-card { border: 4px solid #1e1b4b; box-shadow: 0 8px 0px #1e1b4b; }
+        .brawl-btn { border: 3px solid #000; box-shadow: 0 4px 0px #000; transition: all 0.1s ease; }
+        .brawl-btn:active { transform: translateY(4px); box-shadow: 0 0px 0px #000; }
+    </style>
+</head>
+<body class="bg-indigo-950 text-white min-h-screen flex flex-col justify-between p-4 md:p-6">
+
+    <!-- TOP HEADER -->
+    <header class="max-w-5xl mx-auto w-full flex flex-col md:flex-row justify-between items-center bg-purple-900 p-4 rounded-2xl brawl-card mb-6 gap-4">
+        <div class="flex items-center gap-3">
+            <img src="images/shelly.png" alt="Shelly" class="w-14 h-14 rounded-full border-2 border-yellow-400 bg-purple-800 object-cover">
+            <div>
+                <h1 class="brawl-title text-xl md:text-2xl text-yellow-400 tracking-wider">BRAWL HOMEWORK QUEST</h1>
+                <p class="text-xs text-purple-200">Solo Mission for Thomaz • Unit 1: At School</p>
+            </div>
+        </div>
+
+        <!-- GEMS & PROGRESS -->
+        <div class="flex items-center gap-4 bg-indigo-900 px-4 py-2 rounded-xl border-2 border-yellow-400">
+            <div class="text-center">
+                <span class="block text-[10px] text-yellow-300 font-bold uppercase">Homework Gems</span>
+                <span id="gems-count" class="brawl-title text-2xl text-green-400">0 💎</span>
+            </div>
+            <div class="h-8 w-px bg-purple-700"></div>
+            <div class="text-center">
+                <span class="block text-[10px] text-cyan-300 font-bold uppercase">Missions Done</span>
+                <span id="missions-done" class="font-bold text-lg text-white">0 / 4</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-5xl mx-auto w-full flex-grow">
+
+        <!-- HUB SCREEN -->
+        <div id="screen-hub" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Mission 1 -->
+            <div onclick="openMission('m1')" class="bg-amber-400 hover:bg-amber-300 cursor-pointer p-6 rounded-2xl brawl-card text-indigo-950 flex items-center gap-4 transition transform hover:-translate-y-1">
+                <img src="images/schoolbag.jpg" alt="Backpack" class="w-20 h-20 object-cover rounded-xl border-2 border-indigo-950 bg-white shrink-0">
+                <div>
+                    <span class="text-xs font-bold uppercase bg-indigo-950 text-amber-300 px-2 py-0.5 rounded">Mission 1</span>
+                    <h2 class="font-bold text-xl mt-1">Backpack & Colours</h2>
+                    <p class="text-xs font-medium text-indigo-900 mt-1">Match school objects & colours from Unit 1.</p>
+                    <span id="badge-m1" class="inline-block mt-2 text-xs font-bold text-indigo-950">⬜ Not completed</span>
+                </div>
+            </div>
+
+            <!-- Mission 2 -->
+            <div onclick="openMission('m2')" class="bg-emerald-400 hover:bg-emerald-300 cursor-pointer p-6 rounded-2xl brawl-card text-indigo-950 flex items-center gap-4 transition transform hover:-translate-y-1">
+                <img src="images/pencilcase.jpg" alt="Pencil Case" class="w-20 h-20 object-cover rounded-xl border-2 border-indigo-950 bg-white shrink-0">
+                <div>
+                    <span class="text-xs font-bold uppercase bg-indigo-950 text-emerald-300 px-2 py-0.5 rounded">Mission 2</span>
+                    <h2 class="font-bold text-xl mt-1">What's This? & Is It...?</h2>
+                    <p class="text-xs font-medium text-indigo-900 mt-1">Practice answers: "It's a...", "Yes, it is." / "No, it isn't."</p>
+                    <span id="badge-m2" class="inline-block mt-2 text-xs font-bold text-indigo-950">⬜ Not completed</span>
+                </div>
+            </div>
+
+            <!-- Mission 3 -->
+            <div onclick="openMission('m3')" class="bg-cyan-400 hover:bg-cyan-300 cursor-pointer p-6 rounded-2xl brawl-card text-indigo-950 flex items-center gap-4 transition transform hover:-translate-y-1">
+                <img src="images/book.jpg" alt="Book" class="w-20 h-20 object-cover rounded-xl border-2 border-indigo-950 bg-white shrink-0">
+                <div>
+                    <span class="text-xs font-bold uppercase bg-indigo-950 text-cyan-300 px-2 py-0.5 rounded">Mission 3</span>
+                    <h2 class="font-bold text-xl mt-1">Brawl Mini-Reading</h2>
+                    <p class="text-xs font-medium text-indigo-900 mt-1">Read Colt & Leon's short story and answer questions.</p>
+                    <span id="badge-m3" class="inline-block mt-2 text-xs font-bold text-indigo-950">⬜ Not completed</span>
+                </div>
+            </div>
+
+            <!-- Mission 4 -->
+            <div onclick="openMission('m4')" class="bg-rose-400 hover:bg-rose-300 cursor-pointer p-6 rounded-2xl brawl-card text-indigo-950 flex items-center gap-4 transition transform hover:-translate-y-1">
+                <img src="images/leon.png" alt="Leon" class="w-20 h-20 object-cover rounded-xl border-2 border-indigo-950 bg-purple-900 shrink-0">
+                <div>
+                    <span class="text-xs font-bold uppercase bg-indigo-950 text-rose-300 px-2 py-0.5 rounded">Mission 4</span>
+                    <h2 class="font-bold text-xl mt-1">Short 'A' Phonics Check</h2>
+                    <p class="text-xs font-medium text-indigo-900 mt-1">Spot words with the short /æ/ sound (bag, cat, map).</p>
+                    <span id="badge-m4" class="inline-block mt-2 text-xs font-bold text-indigo-950">⬜ Not completed</span>
+                </div>
+            </div>
+
+            <!-- Finish Summary Button -->
+            <div class="md:col-span-2 text-center mt-2">
+                <button onclick="openMission('summary')" class="bg-yellow-400 hover:bg-yellow-300 text-indigo-950 px-8 py-3 rounded-2xl font-bold brawl-btn text-base">
+                    🏆 View Homework Report
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= MISSION 1: VOCABULARY & COLOURS ================= -->
+        <div id="mission-m1" class="hidden bg-purple-900 p-6 rounded-2xl brawl-card max-w-3xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="openMission('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold brawl-btn">⬅️ Menu</button>
+                <h2 class="brawl-title text-xl text-amber-300">🎒 Mission 1: Backpack & Colours</h2>
+                <span id="m1-counter" class="text-sm font-bold text-yellow-300">1 / 4</span>
+            </div>
+
+            <div class="bg-indigo-950 p-6 rounded-xl border-2 border-amber-400 text-center">
+                <img id="m1-img" src="" alt="Item" class="w-36 h-36 object-cover rounded-xl border-4 border-yellow-400 mx-auto mb-4 bg-white">
+                <p id="m1-prompt" class="text-lg font-bold text-white mb-4"></p>
+                <div id="m1-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto"></div>
+                <p id="m1-feedback" class="mt-4 font-bold text-base min-h-[24px]"></p>
+                <button id="m1-next" onclick="nextM1()" class="hidden mt-4 bg-yellow-400 hover:bg-yellow-300 text-indigo-950 px-6 py-2 rounded-xl font-bold brawl-btn">Next ➡️</button>
+            </div>
+        </div>
+
+        <!-- ================= MISSION 2: GRAMMAR CHECK ================= -->
+        <div id="mission-m2" class="hidden bg-purple-900 p-6 rounded-2xl brawl-card max-w-3xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="openMission('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold brawl-btn">⬅️ Menu</button>
+                <h2 class="brawl-title text-xl text-emerald-300">📦 Mission 2: What's This? & Is It...?</h2>
+                <span id="m2-counter" class="text-sm font-bold text-yellow-300">1 / 3</span>
+            </div>
+
+            <div class="bg-indigo-950 p-6 rounded-xl border-2 border-emerald-400 text-center">
+                <img id="m2-img" src="" alt="Grammar Item" class="w-36 h-36 object-cover rounded-xl border-4 border-emerald-400 mx-auto mb-4 bg-white">
+                <p id="m2-question" class="text-xl font-bold text-yellow-300 mb-4"></p>
+                <div id="m2-options" class="flex flex-col sm:flex-row justify-center gap-3 max-w-xl mx-auto"></div>
+                <p id="m2-feedback" class="mt-4 font-bold text-base min-h-[24px]"></p>
+                <button id="m2-next" onclick="nextM2()" class="hidden mt-4 bg-emerald-400 hover:bg-emerald-300 text-indigo-950 px-6 py-2 rounded-xl font-bold brawl-btn">Next ➡️</button>
+            </div>
+        </div>
+
+        <!-- ================= MISSION 3: MINI-READING ================= -->
+        <div id="mission-m3" class="hidden bg-purple-900 p-6 rounded-2xl brawl-card max-w-3xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="openMission('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold brawl-btn">⬅️ Menu</button>
+                <h2 class="brawl-title text-xl text-cyan-300">📖 Mission 3: Brawl Mini-Reading</h2>
+                <span class="text-sm font-bold text-yellow-300">Reading A1</span>
+            </div>
+
+            <div class="bg-indigo-950 p-6 rounded-xl border-2 border-cyan-400 space-y-5">
+                <div class="flex flex-col sm:flex-row items-center gap-4 bg-indigo-900 p-4 rounded-xl border border-cyan-700">
+                    <img src="images/colt.png" alt="Colt" class="w-20 h-20 rounded-full border-2 border-cyan-300 bg-purple-950 object-cover shrink-0">
+                    <p class="text-base text-purple-100 leading-relaxed">
+                        "Colt is at school. He has a <strong>school bag</strong> and a <strong>pencil case</strong>.
+                        Inside his bag, there is a <strong>red pencil</strong>, a <strong>blue eraser</strong>, and a <strong>ruler</strong>.
+                        Spike says: 'Is it a book?' Colt says: 'No, it isn't! It's a ruler!'"
+                    </p>
+                </div>
+
+                <div>
+                    <p id="m3-q-label" class="font-bold text-yellow-300 mb-3"></p>
+                    <div id="m3-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                    <p id="m3-feedback" class="mt-3 font-bold min-h-[24px]"></p>
+                    <button id="m3-next" onclick="nextM3()" class="hidden mt-3 bg-cyan-400 hover:bg-cyan-300 text-indigo-950 px-6 py-2 rounded-xl font-bold brawl-btn">Next Question ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MISSION 4: SHORT 'A' PHONICS ================= -->
+        <div id="mission-m4" class="hidden bg-purple-900 p-6 rounded-2xl brawl-card max-w-3xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="openMission('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded-xl text-sm font-bold brawl-btn">⬅️ Menu</button>
+                <h2 class="brawl-title text-xl text-rose-300">🔤 Mission 4: Short 'A' Sound (/æ/)</h2>
+                <span class="text-sm font-bold text-yellow-300">Phonics</span>
+            </div>
+
+            <div class="bg-indigo-950 p-6 rounded-xl border-2 border-rose-400 text-center">
+                <img src="images/spike.png" alt="Spike" class="w-20 h-20 rounded-full border-2 border-rose-300 bg-purple-900 mx-auto mb-3 object-cover">
+                <p class="text-lg font-bold text-white mb-2">Tap the words with the <span class="text-yellow-300">short 'a' sound (/æ/)</span> like in <span class="underline">bag</span>!</p>
+                <p class="text-xs text-purple-300 mb-5">Tip: Say each word out loud before tapping.</p>
+
+                <div id="m4-words" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-xl mx-auto mb-5"></div>
+                <button onclick="checkPhonicsSelection()" class="bg-rose-500 hover:bg-rose-400 text-white px-6 py-2 rounded-xl font-bold brawl-btn">Check My Words ✅</button>
+                <p id="m4-feedback" class="mt-4 font-bold text-base min-h-[24px]"></p>
+            </div>
+        </div>
+
+        <!-- ================= SUMMARY REPORT ================= -->
+        <div id="mission-summary" class="hidden bg-purple-900 p-8 rounded-2xl brawl-card max-w-2xl mx-auto text-center">
+            <span class="text-6xl">🏆</span>
+            <h2 class="brawl-title text-3xl text-yellow-400 mt-3">HOMEWORK REPORT</h2>
+            <p class="text-purple-200 text-sm mt-1">Show this screen to your teacher in the next class!</p>
+
+            <div class="bg-indigo-950 p-6 rounded-xl border-2 border-yellow-400 my-6 space-y-3 text-left">
+                <p class="flex justify-between"><span>Student:</span> <strong class="text-yellow-300">Thomaz (A1)</strong></p>
+                <p class="flex justify-between"><span>Total Gems Earned:</span> <strong id="summary-gems" class="text-green-400">0 💎</strong></p>
+                <p class="flex justify-between"><span>Missions Completed:</span> <strong id="summary-missions" class="text-cyan-300">0 / 4</strong></p>
+            </div>
+
+            <div class="flex justify-center gap-4">
+                <button onclick="openMission('hub')" class="bg-indigo-700 hover:bg-indigo-600 px-6 py-2 rounded-xl font-bold brawl-btn">⬅️ Back to Missions</button>
+                <button onclick="resetHomework()" class="bg-rose-600 hover:bg-rose-500 px-6 py-2 rounded-xl font-bold brawl-btn">Reset Homework 🔄</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center text-xs text-purple-300 py-4 mt-6">
+        Brawl Homework Quest • Unit 1: At School • Good job, Thomaz! ⭐
+    </footer>
+
+    <script>
+        let gems = 0;
+        let completed = { m1: false, m2: false, m3: false, m4: false };
+
+        function addGems(amount) {
+            gems += amount;
+            document.getElementById('gems-count').innerText = `${gems} 💎`;
+            playTone(760, 160);
+        }
+
+        function markCompleted(key) {
+            if (!completed[key]) {
+                completed[key] = true;
+                addGems(20);
+                const badge = document.getElementById(`badge-${key}`);
+                if (badge) badge.innerText = "✅ Completed (+20 💎)";
+                const doneCount = Object.values(completed).filter(Boolean).length;
+                document.getElementById('missions-done').innerText = `${doneCount} / 4`;
+            }
+        }
+
+        function openMission(target) {
+            ['screen-hub', 'mission-m1', 'mission-m2', 'mission-m3', 'mission-m4', 'mission-summary'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            if (target === 'hub') {
+                document.getElementById('screen-hub').classList.remove('hidden');
+            } else if (target === 'summary') {
+                document.getElementById('summary-gems').innerText = `${gems} 💎`;
+                const doneCount = Object.values(completed).filter(Boolean).length;
+                document.getElementById('summary-missions').innerText = `${doneCount} / 4`;
+                document.getElementById('mission-summary').classList.remove('hidden');
+            } else {
+                document.getElementById(`mission-${target}`).classList.remove('hidden');
+                if (target === 'm1') startM1();
+                if (target === 'm2') startM2();
+                if (target === 'm3') startM3();
+                if (target === 'm4') startM4();
+            }
+        }
+
+        function playTone(freq, ms) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + ms / 1000);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + ms / 1000);
+            } catch (e) {}
+        }
+
+        // --- MISSION 1 ---
+        const m1Data = [
+            { img: "images/red_pencil.jpg", prompt: "Look at the picture. What is it?", options: ["A red pencil", "A blue eraser", "A ruler", "A book"], answer: "A red pencil" },
+            { img: "images/blue_eraser.jpg", prompt: "Look at the picture. What is it?", options: ["A pen", "A blue eraser", "A school bag", "A pencil case"], answer: "A blue eraser" },
+            { img: "images/ruler.jpg", prompt: "Which school object is this?", options: ["Ruler", "Pencil", "Book", "Eraser"], answer: "Ruler" },
+            { img: "images/pencilcase.jpg", prompt: "Which school object is this?", options: ["School bag", "Pen", "Pencil case", "Red pencil"], answer: "Pencil case" }
+        ];
+        let m1Idx = 0;
+        let m1Answered = false;
+
+        function startM1() {
+            m1Idx = 0;
+            renderM1();
+        }
+
+        function renderM1() {
+            m1Answered = false;
+            const item = m1Data[m1Idx];
+            document.getElementById('m1-counter').innerText = `${m1Idx + 1} / ${m1Data.length}`;
+            document.getElementById('m1-img').src = item.img;
+            document.getElementById('m1-prompt').innerText = item.prompt;
+            document.getElementById('m1-feedback').innerText = "";
+            document.getElementById('m1-next').classList.add('hidden');
+
+            const box = document.getElementById('m1-options');
+            box.innerHTML = "";
+            item.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-purple-800 hover:bg-purple-700 text-white py-3 px-4 rounded-xl font-bold brawl-btn text-sm";
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    const fb = document.getElementById('m1-feedback');
+                    if (opt === item.answer) {
+                        fb.className = "mt-4 font-bold text-base text-green-400";
+                        fb.innerText = "✅ Great job! +5 💎";
+                        if (!m1Answered) {
+                            m1Answered = true;
+                            addGems(5);
+                        }
+                        document.getElementById('m1-next').classList.remove('hidden');
+                    } else {
+                        fb.className = "mt-4 font-bold text-base text-rose-400";
+                        fb.innerText = "❌ Try again!";
+                        playTone(220, 180);
+                    }
+                };
+                box.appendChild(btn);
+            });
+        }
+
+        function nextM1() {
+            if (m1Idx + 1 < m1Data.length) {
+                m1Idx++;
+                renderM1();
+            } else {
+                markCompleted('m1');
+                openMission('hub');
+            }
+        }
+
+        // --- MISSION 2 ---
+        const m2Data = [
+            { img: "images/book.jpg", q: "What's this?", options: ["It's a book.", "It's a ruler."], answer: "It's a book." },
+            { img: "images/pen.jpg", q: "Is it a pencil?", options: ["Yes, it is.", "No, it isn't. It's a pen."], answer: "No, it isn't. It's a pen." },
+            { img: "images/eraser.jpg", q: "Is it an eraser?", options: ["Yes, it is.", "No, it isn't."], answer: "Yes, it is." }
+        ];
+        let m2Idx = 0;
+        let m2Answered = false;
+
+        function startM2() {
+            m2Idx = 0;
+            renderM2();
+        }
+
+        function renderM2() {
+            m2Answered = false;
+            const item = m2Data[m2Idx];
+            document.getElementById('m2-counter').innerText = `${m2Idx + 1} / ${m2Data.length}`;
+            document.getElementById('m2-img').src = item.img;
+            document.getElementById('m2-question').innerText = item.q;
+            document.getElementById('m2-feedback').innerText = "";
+            document.getElementById('m2-next').classList.add('hidden');
+
+            const box = document.getElementById('m2-options');
+            box.innerHTML = "";
+            item.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-purple-800 hover:bg-purple-700 text-white py-3 px-5 rounded-xl font-bold brawl-btn text-sm flex-1";
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    const fb = document.getElementById('m2-feedback');
+                    if (opt === item.answer) {
+                        fb.className = "mt-4 font-bold text-base text-green-400";
+                        fb.innerText = "✅ Spot on! +5 💎";
+                        if (!m2Answered) {
+                            m2Answered = true;
+                            addGems(5);
+                        }
+                        document.getElementById('m2-next').classList.remove('hidden');
+                    } else {
+                        fb.className = "mt-4 font-bold text-base text-rose-400";
+                        fb.innerText = "❌ Check the picture and try again!";
+                        playTone(220, 180);
+                    }
+                };
+                box.appendChild(btn);
+            });
+        }
+
+        function nextM2() {
+            if (m2Idx + 1 < m2Data.length) {
+                m2Idx++;
+                renderM2();
+            } else {
+                markCompleted('m2');
+                openMission('hub');
+            }
+        }
+
+        // --- MISSION 3 (MINI-READING) ---
+        const m3Data = [
+            { q: "Question 1: What colour is Colt's pencil?", options: ["Red", "Blue"], answer: "Red" },
+            { q: "Question 2: Is it a book when Spike asks?", options: ["Yes, it is.", "No, it isn't. It's a ruler."], answer: "No, it isn't. It's a ruler." }
+        ];
+        let m3Idx = 0;
+        let m3Answered = false;
+
+        function startM3() {
+            m3Idx = 0;
+            renderM3();
+        }
+
+        function renderM3() {
+            m3Answered = false;
+            const item = m3Data[m3Idx];
+            document.getElementById('m3-q-label').innerText = item.q;
+            document.getElementById('m3-feedback').innerText = "";
+            document.getElementById('m3-next').classList.add('hidden');
+
+            const box = document.getElementById('m3-options');
+            box.innerHTML = "";
+            item.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-purple-800 hover:bg-purple-700 text-white py-3 px-4 rounded-xl font-bold brawl-btn text-sm";
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    const fb = document.getElementById('m3-feedback');
+                    if (opt === item.answer) {
+                        fb.className = "mt-3 font-bold text-green-400";
+                        fb.innerText = "✅ Nice reading! +5 💎";
+                        if (!m3Answered) {
+                            m3Answered = true;
+                            addGems(5);
+                        }
+                        document.getElementById('m3-next').classList.remove('hidden');
+                    } else {
+                        fb.className = "mt-3 font-bold text-rose-400";
+                        fb.innerText = "❌ Read the story again!";
+                        playTone(220, 180);
+                    }
+                };
+                box.appendChild(btn);
+            });
+        }
+
+        function nextM3() {
+            if (m3Idx + 1 < m3Data.length) {
+                m3Idx++;
+                renderM3();
+            } else {
+                markCompleted('m3');
+                openMission('hub');
+            }
+        }
+
+        // --- MISSION 4 (PHONICS) ---
+        const phonicsPool = [
+            { word: "BAG", shortA: true },
+            { word: "PEN", shortA: false },
+            { word: "CAT", shortA: true },
+            { word: "BOOK", shortA: false },
+            { word: "MAP", shortA: true },
+            { word: "RULER", shortA: false }
+        ];
+        let selectedPhonics = new Set();
+
+        function startM4() {
+            selectedPhonics.clear();
+            document.getElementById('m4-feedback').innerText = "";
+            const container = document.getElementById('m4-words');
+            container.innerHTML = "";
+
+            phonicsPool.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "bg-purple-800 hover:bg-purple-700 text-white py-3 px-4 rounded-xl font-bold brawl-btn text-base";
+                btn.innerText = item.word;
+                btn.onclick = () => {
+                    if (selectedPhonics.has(item.word)) {
+                        selectedPhonics.delete(item.word);
+                        btn.classList.remove('ring-4', 'ring-yellow-300', 'bg-rose-600');
+                        btn.classList.add('bg-purple-800');
+                    } else {
+                        selectedPhonics.add(item.word);
+                        btn.classList.remove('bg-purple-800');
+                        btn.classList.add('ring-4', 'ring-yellow-300', 'bg-rose-600');
+                    }
+                    playTone(520, 90);
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function checkPhonicsSelection() {
+            const expected = phonicsPool.filter(w => w.shortA).map(w => w.word).sort().join(',');
+            const chosen = Array.from(selectedPhonics).sort().join(',');
+            const fb = document.getElementById('m4-feedback');
+
+            if (expected === chosen) {
+                fb.className = "mt-4 font-bold text-base text-green-400";
+                fb.innerText = "🎉 Awesome! BAG, CAT, and MAP all have the short 'a' sound!";
+                markCompleted('m4');
+            } else {
+                fb.className = "mt-4 font-bold text-base text-rose-400";
+                fb.innerText = "❌ Not quite! Select ONLY the short 'a' words (BAG, CAT, MAP).";
+                playTone(220, 180);
+            }
+        }
+
+        function resetHomework() {
+            gems = 0;
+            completed = { m1: false, m2: false, m3: false, m4: false };
+            document.getElementById('gems-count').innerText = "0 💎";
+            document.getElementById('missions-done').innerText = "0 / 4";
+            ['m1', 'm2', 'm3', 'm4'].forEach(k => {
+                document.getElementById(`badge-${k}`).innerText = "⬜ Not completed";
+            });
+            openMission('hub');
+        }
+    </script>
+</body>
+</html>
