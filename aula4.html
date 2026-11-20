@@ -105,10 +105,11 @@
       background: var(--card);
       color: var(--text);
       border: 1px solid rgba(255, 255, 255, 0.14);
-      padding: 10px 16px;
+      padding: 10px 14px;
       border-radius: 12px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 0.9rem;
       transition: 0.2s ease;
     }
 
@@ -339,16 +340,41 @@
 
     <!-- CELTA Stages Navigation -->
     <nav class="tabs">
-      <button class="tab-btn active" onclick="openTab('pre-watch', this)">1. Context & Characters (Pre-Video)</button>
+      <button class="tab-btn active" onclick="openTab('review-stage', this)">0. Review: Brawl Stars & One Piece</button>
+      <button class="tab-btn" onclick="openTab('pre-watch', this)">1. Context & Characters (Pre-Video)</button>
       <button class="tab-btn" onclick="openTab('video-stage', this)">2. Dinner Scene (00:00–02:10)</button>
       <button class="tab-btn" onclick="openTab('game-this-is', this)">3. Game: Who's Who? (This is my...)</button>
       <button class="tab-btn" onclick="openTab('game-have-got', this)">4. Game: I've Got / Haven't Got</button>
       <button class="tab-btn" onclick="openTab('game-questions', this)">5. Game: Have You Got...?</button>
     </nav>
 
+    <!-- STAGE 0: GAMIFIED REVIEW (BRAWL STARS & ONE PIECE) -->
+    <section id="review-stage" class="panel active">
+      <h2 class="section-title">Warm-Up Review: Brawl Stars & One Piece</h2>
+      <p class="section-desc">
+        Quick review before starting Unit 2: recall school items &amp; questions from <em>Brawl Stars</em> (<em>What's this? / Is it a...?</em>)
+        and characters from <em>One Piece</em>, ending with a bridge to <em>My Family</em>.
+      </p>
+      <div class="game-box">
+        <div class="prompt-row">
+          <img id="rev-img" src="images/schoolbag.jpg" alt="Review prompt" />
+          <div class="prompt-text">
+            <h3 id="rev-title">Review Round 1 of 6</h3>
+            <p id="rev-prompt">Look at the picture and pick the best answer:</p>
+          </div>
+        </div>
+        <div class="options" id="rev-options"></div>
+        <div class="feedback" id="rev-feedback"></div>
+        <div class="controls-bar">
+          <button class="action-btn" onclick="prevRev()">Previous</button>
+          <button class="action-btn primary" onclick="nextRev()">Next Review Card</button>
+        </div>
+      </div>
+    </section>
+
     <!-- STAGE 1: PRE-TEACHING VOCABULARY & CHARACTERS IN CONTEXT -->
-    <section id="pre-watch" class="panel active">
-      <h2 class="section-title">Pre-Teaching in Context: The Parr Family & Family Members</h2>
+    <section id="pre-watch" class="panel">
+      <h2 class="section-title">Pre-Teaching in Context: The Parr Family &amp; Family Members</h2>
       <p class="section-desc">
         Before watching the dinner scene, introduce the family in context: <em>"This is the Parr family. Let's meet them!"</em>
         Use full context sentences instead of isolated words.
@@ -439,7 +465,7 @@
         <img src="images/incredibles_dinner.jpg" alt="The Incredibles dinner scene" />
         <div>
           <ul class="video-tasks">
-            <li><strong>Watch & Spot:</strong> Who is at the table? (<em>mum, dad, brother, sister</em>)</li>
+            <li><strong>Watch &amp; Spot:</strong> Who is at the table? (<em>mum, dad, brother, sister</em>)</li>
             <li><strong>School talk:</strong> Who talks about school and a tack on a chair? (<em>Dash — the brother</em>)</li>
             <li><strong>Mood check:</strong> Is dinner calm or noisy/funny?</li>
             <li><strong>Link to YouTube:</strong> <a href="https://www.youtube.com/watch?v=reTz59nkhBw" target="_blank" style="color: var(--accent-2);">Open The Incredibles dinner scene (stop at 02:10)</a></li>
@@ -494,7 +520,7 @@
 
     <!-- STAGE 5: GAME 3 - HAVE YOU GOT...? -->
     <section id="game-questions" class="panel">
-      <h2 class="section-title">Game 3: Have You Got...? Speaking & Choice</h2>
+      <h2 class="section-title">Game 3: Have You Got...? Speaking &amp; Choice</h2>
       <p class="section-desc">Practice asking and answering <em>Have you got a...?</em> with Thomaz.</p>
       <div class="game-box">
         <div class="prompt-row">
@@ -568,6 +594,87 @@
       remainingSec = sec;
       renderTimer();
     }
+
+    /* Stage 0: Review Data (Brawl Stars + One Piece + Family Bridge) */
+    const revData = [
+      {
+        id: "rev-0",
+        img: "images/schoolbag.jpg",
+        prompt: "Brawl Stars Recall — What's this?",
+        options: ["It's a school bag.", "It's a ruler.", "No, it isn't."],
+        correct: 0
+      },
+      {
+        id: "rev-1",
+        img: "images/pencilcase.jpg",
+        prompt: "Brawl Stars Recall — Is it a pencil case?",
+        options: ["No, it isn't.", "Yes, it is.", "It's a book."],
+        correct: 1
+      },
+      {
+        id: "rev-2",
+        img: "images/luffy.png",
+        prompt: "One Piece Character Check — Who is this?",
+        options: ["Luffy", "Shelly", "Colt"],
+        correct: 0
+      },
+      {
+        id: "rev-3",
+        img: "images/sabo.png",
+        prompt: "One Piece Character Check — Who is this?",
+        options: ["Spike", "Sabo", "Leon"],
+        correct: 1
+      },
+      {
+        id: "rev-4",
+        img: "images/shanks.png",
+        prompt: "One Piece Character Check — Who is this?",
+        options: ["Shanks", "Kaido", "Dash"],
+        correct: 0
+      },
+      {
+        id: "rev-5",
+        img: "images/incredibles_family.jpg",
+        prompt: "Bridge to Unit 2 — Say out loud & pick the family question for Thomaz:",
+        options: ["Have you got a brother or sister?", "Is it a pencil case?", "It's a blue eraser."],
+        correct: 0
+      }
+    ];
+    let revIdx = 0;
+
+    function renderRev() {
+      const item = revData[revIdx];
+      document.getElementById("rev-img").src = item.img;
+      document.getElementById("rev-title").textContent = `Review Round ${revIdx + 1} of ${revData.length}`;
+      document.getElementById("rev-prompt").textContent = item.prompt;
+      document.getElementById("rev-feedback").textContent = "";
+      const box = document.getElementById("rev-options");
+      box.innerHTML = "";
+      item.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.textContent = opt;
+        btn.onclick = () => {
+          const fb = document.getElementById("rev-feedback");
+          if (i === item.correct) {
+            const firstTime = !answered.has(item.id);
+            if (firstTime) {
+              answered.add(item.id);
+              addPoints(10);
+            }
+            fb.textContent = firstTime ? "Nice recall! +10 pts" : "Correct!";
+            fb.className = "feedback ok";
+          } else {
+            fb.textContent = "Try again!";
+            fb.className = "feedback bad";
+          }
+        };
+        box.appendChild(btn);
+      });
+    }
+
+    function nextRev() { revIdx = (revIdx + 1) % revData.length; renderRev(); }
+    function prevRev() { revIdx = (revIdx - 1 + revData.length) % revData.length; renderRev(); }
 
     /* Game 1 Data */
     const g1Data = [
@@ -788,6 +895,7 @@
     function prevG3() { g3Idx = (g3Idx - 1 + g3Data.length) % g3Data.length; renderG3(); }
 
     renderTimer();
+    renderRev();
     renderG1();
     renderG2();
     renderG3();
