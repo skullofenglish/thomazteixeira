@@ -356,7 +356,7 @@
 
       <div class="grid-cards">
         <div class="char-card">
-          <img src="incredibles_family.jpg" alt="The Parr family" />
+          <img src="images/incredibles_family.jpg" alt="The Parr family" />
           <div class="char-body">
             <div class="char-name">The Parr Family</div>
             <div class="char-role">Family context</div>
@@ -365,7 +365,7 @@
         </div>
 
         <div class="char-card">
-          <img src="bob.jpeg" alt="Bob - Dad" />
+          <img src="images/bob.jpeg" alt="Bob - Dad" />
           <div class="char-body">
             <div class="char-name">Bob</div>
             <div class="char-role">dad</div>
@@ -374,7 +374,7 @@
         </div>
 
         <div class="char-card">
-          <img src="helen.jpg" alt="Helen - Mum" />
+          <img src="images/helen.jpg" alt="Helen - Mum" />
           <div class="char-body">
             <div class="char-name">Helen</div>
             <div class="char-role">mum</div>
@@ -383,7 +383,7 @@
         </div>
 
         <div class="char-card">
-          <img src="violet.jpg" alt="Violet - Big sister" />
+          <img src="images/violet.jpg" alt="Violet - Big sister" />
           <div class="char-body">
             <div class="char-name">Violet</div>
             <div class="char-role">sister / big sister</div>
@@ -392,7 +392,7 @@
         </div>
 
         <div class="char-card">
-          <img src="dash.jpg" alt="Dash - Brother" />
+          <img src="images/dash.jpg" alt="Dash - Brother" />
           <div class="char-body">
             <div class="char-name">Dash</div>
             <div class="char-role">brother</div>
@@ -401,7 +401,7 @@
         </div>
 
         <div class="char-card">
-          <img src="jack_jack.jpg" alt="Jack-Jack - Baby brother" />
+          <img src="images/jack_jack.jpg" alt="Jack-Jack - Baby brother" />
           <div class="char-body">
             <div class="char-name">Jack-Jack</div>
             <div class="char-role">baby brother</div>
@@ -410,7 +410,7 @@
         </div>
 
         <div class="char-card">
-          <img src="gradnma.jpg" alt="Grandma reference" />
+          <img src="images/gradnma.jpg" alt="Grandma reference" />
           <div class="char-body">
             <div class="char-name">Grandma</div>
             <div class="char-role">grandma</div>
@@ -419,7 +419,7 @@
         </div>
 
         <div class="char-card">
-          <img src="grandad.jpg" alt="Granddad reference" />
+          <img src="images/grandad.jpg" alt="Granddad reference" />
           <div class="char-body">
             <div class="char-name">Granddad</div>
             <div class="char-role">granddad</div>
@@ -436,7 +436,7 @@
         Play the clip up to <strong>02:10</strong>. Keep comprehension light and visual for A1 level.
       </p>
       <div class="video-box">
-        <img src="incredibles_dinner.jpg" alt="The Incredibles dinner scene" />
+        <img src="images/incredibles_dinner.jpg" alt="The Incredibles dinner scene" />
         <div>
           <ul class="video-tasks">
             <li><strong>Watch & Spot:</strong> Who is at the table? (<em>mum, dad, brother, sister</em>)</li>
@@ -444,7 +444,7 @@
             <li><strong>Mood check:</strong> Is dinner calm or noisy/funny?</li>
             <li><strong>Link to YouTube:</strong> <a href="https://www.youtube.com/watch?v=reTz59nkhBw" target="_blank" style="color: var(--accent-2);">Open The Incredibles dinner scene (stop at 02:10)</a></li>
           </ul>
-          <button class="action-btn primary" onclick="addPoints(10, 'Video observation complete! +10 pts')">Award +10 pts for Video Watch</button>
+          <button class="action-btn primary" onclick="addPoints(10, 'Video observation complete! +10 pts', 'video-feedback')">Award +10 pts for Video Watch</button>
           <div class="feedback" id="video-feedback"></div>
         </div>
       </div>
@@ -456,7 +456,7 @@
       <p class="section-desc">Choose the right family sentence for each character card.</p>
       <div class="game-box">
         <div class="prompt-row">
-          <img id="g1-img" src="dash.jpg" alt="Character prompt" />
+          <img id="g1-img" src="images/dash.jpg" alt="Character prompt" />
           <div class="prompt-text">
             <h3 id="g1-title">Round 1 of 5</h3>
             <p>Look at the character and select the best sentence:</p>
@@ -477,7 +477,7 @@
       <p class="section-desc">Look at the family group picture and pick the accurate statement.</p>
       <div class="game-box">
         <div class="prompt-row">
-          <img id="g2-img" src="family_group_1.jpg" alt="Family group" />
+          <img id="g2-img" src="images/family_group_1.jpg" alt="Family group" />
           <div class="prompt-text">
             <h3 id="g2-title">Group Challenge 1 of 4</h3>
             <p id="g2-clue">Check the family group and choose the right sentence:</p>
@@ -498,7 +498,7 @@
       <p class="section-desc">Practice asking and answering <em>Have you got a...?</em> with Thomaz.</p>
       <div class="game-box">
         <div class="prompt-row">
-          <img id="g3-img" src="violet.jpg" alt="Question prompt" />
+          <img id="g3-img" src="images/violet.jpg" alt="Question prompt" />
           <div class="prompt-text">
             <h3 id="g3-title">Question 1 of 4</h3>
             <p id="g3-prompt">Complete the question for your partner:</p>
@@ -573,31 +573,31 @@
     const g1Data = [
       {
         id: "g1-0",
-        img: "dash.jpg",
+        img: "images/dash.jpg",
         options: ["This is my brother.", "This is my mum.", "This is my grandma."],
         correct: 0
       },
       {
         id: "g1-1",
-        img: "helen.jpg",
+        img: "images/helen.jpg",
         options: ["This is my dad.", "This is my mum.", "This is my baby brother."],
         correct: 1
       },
       {
         id: "g1-2",
-        img: "bob.jpeg",
+        img: "images/bob.jpeg",
         options: ["This is my sister.", "This is my granddad.", "This is my dad."],
         correct: 2
       },
       {
         id: "g1-3",
-        img: "violet.jpg",
+        img: "images/violet.jpg",
         options: ["This is my big sister.", "This is my dad.", "This is my granddad."],
         correct: 0
       },
       {
         id: "g1-4",
-        img: "jack_jack.jpg",
+        img: "images/jack_jack.jpg",
         options: ["This is my mum.", "This is my baby brother.", "This is my grandma."],
         correct: 1
       }
@@ -641,7 +641,7 @@
     const g2Data = [
       {
         id: "g2-0",
-        img: "family_group_1.jpg",
+        img: "images/family_group_1.jpg",
         clue: "Look at Family Group 1 and choose the matching sentence:",
         options: [
           "I've got a family group here.",
@@ -652,7 +652,7 @@
       },
       {
         id: "g2-1",
-        img: "family_group_2.jpg",
+        img: "images/family_group_2.jpg",
         clue: "Look at Family Group 2 and choose the matching sentence:",
         options: [
           "I haven't got a video.",
@@ -663,7 +663,7 @@
       },
       {
         id: "g2-2",
-        img: "gradnma.jpg",
+        img: "images/gradnma.jpg",
         clue: "Talking about grandma:",
         options: [
           "I've got a grandma.",
@@ -674,7 +674,7 @@
       },
       {
         id: "g2-3",
-        img: "grandad.jpg",
+        img: "images/grandad.jpg",
         clue: "Talking about granddad:",
         options: [
           "I've got a sister.",
@@ -724,28 +724,28 @@
     const g3Data = [
       {
         id: "g3-0",
-        img: "violet.jpg",
+        img: "images/violet.jpg",
         prompt: "Ask Thomaz about a sister:",
         options: ["Have you got a sister?", "This is my sister?", "I haven't got sister?"],
         correct: 0
       },
       {
         id: "g3-1",
-        img: "dash.jpg",
+        img: "images/dash.jpg",
         prompt: "Ask about a brother:",
         options: ["I've got a brother?", "Have you got a brother?", "This is got a brother?"],
         correct: 1
       },
       {
         id: "g3-2",
-        img: "gradnma.jpg",
+        img: "images/gradnma.jpg",
         prompt: "Ask about a grandma:",
         options: ["Have you got a dad?", "Have you got a grandma?", "I haven't got a grandma?"],
         correct: 1
       },
       {
         id: "g3-3",
-        img: "grandad.jpg",
+        img: "images/grandad.jpg",
         prompt: "Ask about a granddad:",
         options: ["Have you got a granddad?", "This is my granddad?", "I've got granddad?"],
         correct: 0
