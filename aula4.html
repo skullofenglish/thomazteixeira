@@ -229,6 +229,69 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
+    .badge-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--accent-2);
+      margin-bottom: 8px;
+    }
+
+    .trap-quote {
+      background: rgba(239, 68, 68, 0.14);
+      border-left: 4px solid var(--bad);
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-top: 8px;
+      font-size: 0.95rem;
+      color: #fecaca;
+    }
+
+    .builder-tray {
+      min-height: 52px;
+      background: var(--card);
+      border: 2px dashed rgba(250, 204, 21, 0.45);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .chip-btn {
+      background: #334155;
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 8px 13px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .chip-btn:hover {
+      border-color: var(--gold);
+    }
+
+    .chip-btn.used {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
     .prompt-row {
       display: flex;
       flex-wrap: wrap;
@@ -281,6 +344,13 @@
 
     button.action-btn.primary {
       background: var(--accent-2);
+      color: #0f172a;
+      border: none;
+      text-align: center;
+    }
+
+    button.action-btn.gold {
+      background: var(--gold);
       color: #0f172a;
       border: none;
       text-align: center;
@@ -340,34 +410,55 @@
 
     <!-- CELTA Stages Navigation -->
     <nav class="tabs">
-      <button class="tab-btn active" onclick="openTab('review-stage', this)">0. Review: Brawl Stars & One Piece</button>
-      <button class="tab-btn" onclick="openTab('pre-watch', this)">1. Context & Characters (Pre-Video)</button>
+      <button class="tab-btn active" onclick="openTab('review-stage', this)">0. Review: Brawl Stars &amp; One Piece</button>
+      <button class="tab-btn" onclick="openTab('pre-watch', this)">1. Context &amp; Characters (Pre-Video)</button>
       <button class="tab-btn" onclick="openTab('video-stage', this)">2. Dinner Scene (00:00–02:10)</button>
       <button class="tab-btn" onclick="openTab('game-this-is', this)">3. Game: Who's Who? (This is my...)</button>
       <button class="tab-btn" onclick="openTab('game-have-got', this)">4. Game: I've Got / Haven't Got</button>
       <button class="tab-btn" onclick="openTab('game-questions', this)">5. Game: Have You Got...?</button>
     </nav>
 
-    <!-- STAGE 0: GAMIFIED REVIEW (BRAWL STARS & ONE PIECE) -->
+    <!-- STAGE 0: ACTIVE GAMIFIED REVIEW -->
     <section id="review-stage" class="panel active">
-      <h2 class="section-title">Warm-Up Review: Brawl Stars & One Piece</h2>
+      <h2 class="section-title">Active Review: Fix the Boss Trap, Build Phrases &amp; Speak</h2>
       <p class="section-desc">
-        Quick review before starting Unit 2: recall school items &amp; questions from <em>Brawl Stars</em> (<em>What's this? / Is it a...?</em>)
-        and characters from <em>One Piece</em>, ending with a bridge to <em>My Family</em>.
+        No passive guessing: Thomaz catches the Boss's wrong answers, builds sentences piece by piece,
+        identifies <em>One Piece</em> &amp; <em>Brawl Stars</em> characters, and earns speaking points out loud.
       </p>
       <div class="game-box">
         <div class="prompt-row">
-          <img id="rev-img" src="images/schoolbag.jpg" alt="Review prompt" />
-          <div class="prompt-text">
-            <h3 id="rev-title">Review Round 1 of 6</h3>
-            <p id="rev-prompt">Look at the picture and pick the best answer:</p>
+          <img id="rev-img" src="images/red_pencil.jpg" alt="Review challenge" />
+          <div class="prompt-text" style="flex: 1; min-width: 240px;">
+            <span class="badge-tag" id="rev-badge">BOSS TRAP</span>
+            <h3 id="rev-title">Challenge 1 of 6</h3>
+            <p id="rev-prompt"></p>
+            <div class="trap-quote" id="rev-trap" style="display: none;"></div>
           </div>
         </div>
+
+        <!-- Used for choice / trap rounds -->
         <div class="options" id="rev-options"></div>
+
+        <!-- Used for phrase-builder rounds -->
+        <div id="rev-builder-area" style="display: none;">
+          <div class="builder-tray" id="rev-tray"></div>
+          <div class="word-bank" id="rev-bank"></div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="action-btn primary" onclick="checkRevBuilder()">Check Phrase</button>
+            <button class="action-btn" onclick="renderRev()">Clear / Retry</button>
+          </div>
+        </div>
+
         <div class="feedback" id="rev-feedback"></div>
+
         <div class="controls-bar">
-          <button class="action-btn" onclick="prevRev()">Previous</button>
-          <button class="action-btn primary" onclick="nextRev()">Next Review Card</button>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="action-btn" onclick="prevRev()">Previous</button>
+            <button class="action-btn primary" onclick="nextRev()">Next Challenge</button>
+          </div>
+          <button class="action-btn gold" onclick="addPoints(10, 'Speaking bonus awarded! +10 pts', 'rev-feedback')">
+            +10 Speaking Bonus (Said Out Loud)
+          </button>
         </div>
       </div>
     </section>
@@ -595,82 +686,183 @@
       renderTimer();
     }
 
-    /* Stage 0: Review Data (Brawl Stars + One Piece + Family Bridge) */
+    /* Stage 0: Active Review Data */
     const revData = [
       {
         id: "rev-0",
-        img: "images/schoolbag.jpg",
-        prompt: "Brawl Stars Recall — What's this?",
-        options: ["It's a school bag.", "It's a ruler.", "No, it isn't."],
+        type: "trap",
+        badge: "BOSS TRAP — FIX THE LIE",
+        img: "images/red_pencil.jpg",
+        prompt: "The Boss says something wrong about the picture. Pick the real correction and say it out loud!",
+        trapText: 'Brawl Boss: "Yes, it is a blue eraser!"',
+        options: [
+          "No, it isn't! It's a red pencil.",
+          "Yes, it is a blue eraser.",
+          "It's a school bag."
+        ],
         correct: 0
       },
       {
         id: "rev-1",
-        img: "images/pencilcase.jpg",
-        prompt: "Brawl Stars Recall — Is it a pencil case?",
-        options: ["No, it isn't.", "Yes, it is.", "It's a book."],
-        correct: 1
+        type: "builder",
+        badge: "PHRASE BUILDER",
+        img: "images/blue_eraser.jpg",
+        prompt: "Build the full sentence for this school item:",
+        pieces: ["It's", "a", "blue", "eraser.", "red", "pen."],
+        target: ["It's", "a", "blue", "eraser."]
       },
       {
         id: "rev-2",
-        img: "images/luffy.png",
-        prompt: "One Piece Character Check — Who is this?",
-        options: ["Luffy", "Shelly", "Colt"],
+        type: "trap",
+        badge: "BOSS TRAP — IS IT...?",
+        img: "images/pencilcase.jpg",
+        prompt: "Colt asks: 'Is it a ruler?' The Boss gives a bad answer. Fix it!",
+        trapText: 'Brawl Boss: "Yes, it is a ruler!"',
+        options: [
+          "No, it isn't. It's a pencil case.",
+          "Yes, it is a ruler.",
+          "It's a red pencil."
+        ],
         correct: 0
       },
       {
         id: "rev-3",
-        img: "images/sabo.png",
-        prompt: "One Piece Character Check — Who is this?",
-        options: ["Spike", "Sabo", "Leon"],
-        correct: 1
+        type: "builder",
+        badge: "PHRASE BUILDER — NEGATIVE CHECK",
+        img: "images/book.jpg",
+        prompt: "Spike asks: 'Is it a school bag?' Build the negative answer:",
+        pieces: ["No,", "it", "isn't.", "It's", "a", "book."],
+        target: ["No,", "it", "isn't.", "It's", "a", "book."]
       },
       {
         id: "rev-4",
-        img: "images/shanks.png",
-        prompt: "One Piece Character Check — Who is this?",
-        options: ["Shanks", "Kaido", "Dash"],
+        type: "choice",
+        badge: "ONE PIECE & BRAWL STARS BLITZ",
+        img: "images/sabo.png",
+        prompt: "Name this One Piece character and answer: Is it Luffy?",
+        options: [
+          "No, it isn't. It's Sabo!",
+          "Yes, it is Luffy.",
+          "No, it isn't. It's Spike!"
+        ],
         correct: 0
       },
       {
         id: "rev-5",
+        type: "builder",
+        badge: "BRIDGE TO UNIT 2 (MY FAMILY)",
         img: "images/incredibles_family.jpg",
-        prompt: "Bridge to Unit 2 — Say out loud & pick the family question for Thomaz:",
-        options: ["Have you got a brother or sister?", "Is it a pencil case?", "It's a blue eraser."],
-        correct: 0
+        prompt: "Assemble the question to ask about family members:",
+        pieces: ["Have", "you", "got", "a", "brother?", "this"],
+        target: ["Have", "you", "got", "a", "brother?"]
       }
     ];
     let revIdx = 0;
+    let builtWords = [];
 
     function renderRev() {
       const item = revData[revIdx];
+      builtWords = [];
       document.getElementById("rev-img").src = item.img;
-      document.getElementById("rev-title").textContent = `Review Round ${revIdx + 1} of ${revData.length}`;
+      document.getElementById("rev-badge").textContent = item.badge;
+      document.getElementById("rev-title").textContent = `Challenge ${revIdx + 1} of ${revData.length}`;
       document.getElementById("rev-prompt").textContent = item.prompt;
       document.getElementById("rev-feedback").textContent = "";
-      const box = document.getElementById("rev-options");
-      box.innerHTML = "";
-      item.options.forEach((opt, i) => {
-        const btn = document.createElement("button");
-        btn.className = "opt-btn";
-        btn.textContent = opt;
-        btn.onclick = () => {
-          const fb = document.getElementById("rev-feedback");
-          if (i === item.correct) {
-            const firstTime = !answered.has(item.id);
-            if (firstTime) {
-              answered.add(item.id);
-              addPoints(10);
+
+      const trapEl = document.getElementById("rev-trap");
+      if (item.trapText) {
+        trapEl.style.display = "block";
+        trapEl.textContent = item.trapText;
+      } else {
+        trapEl.style.display = "none";
+      }
+
+      const optBox = document.getElementById("rev-options");
+      const builderArea = document.getElementById("rev-builder-area");
+
+      if (item.type === "builder") {
+        optBox.style.display = "none";
+        builderArea.style.display = "block";
+        renderBuilderTrayAndBank(item);
+      } else {
+        optBox.style.display = "grid";
+        builderArea.style.display = "none";
+        optBox.innerHTML = "";
+        item.options.forEach((opt, i) => {
+          const btn = document.createElement("button");
+          btn.className = "opt-btn";
+          btn.textContent = opt;
+          btn.onclick = () => {
+            const fb = document.getElementById("rev-feedback");
+            if (i === item.correct) {
+              const firstTime = !answered.has(item.id);
+              if (firstTime) {
+                answered.add(item.id);
+                addPoints(15);
+              }
+              fb.textContent = firstTime
+                ? "Boss defeated on this round! +15 pts (Say it out loud for +10 more!)"
+                : "Correct!";
+              fb.className = "feedback ok";
+            } else {
+              fb.textContent = "Trap got you! Look at the image and try again.";
+              fb.className = "feedback bad";
             }
-            fb.textContent = firstTime ? "Nice recall! +10 pts" : "Correct!";
-            fb.className = "feedback ok";
-          } else {
-            fb.textContent = "Try again!";
-            fb.className = "feedback bad";
-          }
+          };
+          optBox.appendChild(btn);
+        });
+      }
+    }
+
+    function renderBuilderTrayAndBank(item) {
+      const tray = document.getElementById("rev-tray");
+      const bank = document.getElementById("rev-bank");
+      tray.innerHTML = "";
+      bank.innerHTML = "";
+
+      builtWords.forEach((entry, idx) => {
+        const chip = document.createElement("button");
+        chip.className = "chip-btn";
+        chip.textContent = entry.word;
+        chip.onclick = () => {
+          builtWords.splice(idx, 1);
+          renderBuilderTrayAndBank(item);
         };
-        box.appendChild(btn);
+        tray.appendChild(chip);
       });
+
+      const usedIndices = new Set(builtWords.map(w => w.bankIdx));
+      item.pieces.forEach((word, bIdx) => {
+        const chip = document.createElement("button");
+        chip.className = "chip-btn" + (usedIndices.has(bIdx) ? " used" : "");
+        chip.textContent = word;
+        chip.onclick = () => {
+          builtWords.push({ word, bankIdx: bIdx });
+          renderBuilderTrayAndBank(item);
+        };
+        bank.appendChild(chip);
+      });
+    }
+
+    function checkRevBuilder() {
+      const item = revData[revIdx];
+      const attempt = builtWords.map(w => w.word).join(" ");
+      const expected = item.target.join(" ");
+      const fb = document.getElementById("rev-feedback");
+      if (attempt === expected) {
+        const firstTime = !answered.has(item.id);
+        if (firstTime) {
+          answered.add(item.id);
+          addPoints(20);
+        }
+        fb.textContent = firstTime
+          ? `Phrase built: "${expected}" (+20 pts)`
+          : `Phrase built: "${expected}"`;
+        fb.className = "feedback ok";
+      } else {
+        fb.textContent = `Current: "${attempt || "(empty)"}" — check the word order and try again.`;
+        fb.className = "feedback bad";
+      }
     }
 
     function nextRev() { revIdx = (revIdx + 1) % revData.length; renderRev(); }
