@@ -31,6 +31,7 @@
       color: var(--text);
       min-height: 100vh;
       padding: 20px;
+      position: relative;
     }
 
     .wrap {
@@ -64,12 +65,12 @@
     .sync-pill {
       display: inline-block;
       margin-top: 6px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 999px;
-      background: rgba(56, 189, 248, 0.16);
-      color: var(--accent-2);
+      background: rgba(56, 189, 248, 0.12);
+      color: rgba(148, 163, 184, 0.65);
     }
 
     .box-stat {
@@ -167,8 +168,8 @@
 
     .img-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(3, minmax(190px, 1fr));
+      gap: 16px;
       margin-bottom: 14px;
     }
 
@@ -176,11 +177,15 @@
       background: var(--card);
       border: 2px solid rgba(255, 255, 255, 0.14);
       border-radius: 12px;
-      padding: 10px;
+      padding: 12px;
       cursor: pointer;
       text-align: center;
       color: var(--text);
       transition: 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .img-choice:hover {
@@ -190,11 +195,13 @@
 
     .img-choice img {
       width: 100%;
-      height: 130px;
-      object-fit: cover;
+      height: 220px;
+      object-fit: contain;
+      object-position: center top;
       border-radius: 8px;
-      margin-bottom: 8px;
-      background: #090d16;
+      margin-bottom: 10px;
+      background: #0c1322;
+      padding: 4px;
     }
 
     .options {
@@ -321,25 +328,98 @@
       margin-top: 14px;
     }
 
+    /* Discrete, tiny, nearly invisible teacher trigger & drawer in bottom-right corner */
+    .stealth-anchor {
+      position: fixed;
+      right: 8px;
+      bottom: 6px;
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .stealth-dot-btn {
+      background: transparent;
+      border: none;
+      color: rgba(148, 163, 184, 0.14);
+      font-size: 10px;
+      line-height: 1;
+      padding: 2px 4px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      user-select: none;
+    }
+
+    .stealth-dot-btn:hover {
+      color: rgba(148, 163, 184, 0.45);
+    }
+
+    .stealth-drawer {
+      display: none;
+      width: 340px;
+      max-width: calc(100vw - 24px);
+      background: rgba(9, 13, 22, 0.97);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 4px;
+      font-size: 0.72rem;
+      color: rgba(203, 213, 225, 0.78);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .stealth-drawer.open {
+      display: block;
+    }
+
+    .stealth-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stealth-mini-btn {
+      background: rgba(30, 41, 59, 0.85);
+      color: rgba(226, 232, 240, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.68rem;
+      cursor: pointer;
+    }
+
+    .stealth-profile {
+      margin-top: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      font-size: 0.7rem;
+      line-height: 1.35;
+    }
+
     .log-list {
-      margin-top: 12px;
+      margin-top: 8px;
       display: grid;
-      gap: 8px;
-      max-height: 280px;
+      gap: 5px;
+      max-height: 150px;
       overflow-y: auto;
     }
 
     .log-item {
-      background: var(--card);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 0.88rem;
-      color: var(--muted);
+      background: rgba(19, 27, 46, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      padding: 5px 7px;
+      font-size: 0.68rem;
+      color: rgba(148, 163, 184, 0.8);
     }
 
-    @media (max-width: 780px) {
+    @media (max-width: 820px) {
       .topbar { grid-template-columns: 1fr; }
+      .img-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -349,7 +429,7 @@
       <div>
         <h1>Thomaz Creative Homework Quest (Units 1 &amp; 2 · A1)</h1>
         <p>Session ID: <strong id="session-label">loading...</strong></p>
-        <span class="sync-pill" id="sync-status">Local mode (add Firebase config to sync)</span>
+        <span class="sync-pill" id="sync-status">local cache</span>
       </div>
       <div class="box-stat">
         <div class="stat-lbl">Homework Gems</div>
@@ -366,7 +446,6 @@
       <button class="nav-btn" onclick="showPanel('m2', this)">2. Character &amp; Family Twists</button>
       <button class="nav-btn" onclick="showPanel('m3', this)">3. Grammar Glitch Hunter</button>
       <button class="nav-btn" onclick="showPanel('m4', this)">4. My Real Profile (Personal)</button>
-      <button class="nav-btn" onclick="showPanel('teacher-view', this)">5. Teacher Cloud Log</button>
     </nav>
 
     <!-- MISSION 1: BACKPACK X-RAY CLUES -->
@@ -462,30 +541,25 @@
 
         <button class="btn gold" onclick="saveProfileCard()">Save My Profile Card (+30 Gems)</button>
         <div class="preview-card" id="profile-preview">
-          Your saved English card will appear here and sync to the teacher's device.
+          Your saved English card will appear here.
         </div>
         <div class="feedback" id="m4-feedback"></div>
       </div>
     </section>
+  </div>
 
-    <!-- TEACHER CLOUD LOG -->
-    <section id="teacher-view" class="panel">
-      <div class="mission-card">
-        <span class="tag">TEACHER MONITOR</span>
-        <h2>Thomaz Progress &amp; Cloud Sync</h2>
-        <p style="color: var(--muted); margin-top: 6px;">
-          Open with <code>?session=thomaz-aula1</code> on both devices using your Firebase project to view live results.
-        </p>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px;">
-          <button class="btn gold" onclick="refreshFromCloud()">Refresh From Cloud</button>
-          <button class="btn" onclick="resetProgress()">Reset Homework</button>
-        </div>
-        <div class="preview-card" id="teacher-profile-box" style="margin-top: 14px;">
-          No personal profile card submitted yet.
-        </div>
-        <div class="log-list" id="activity-log"></div>
+  <!-- Tiny nearly invisible corner trigger for teacher log -->
+  <div class="stealth-anchor" aria-label="sync diagnostics">
+    <div class="stealth-drawer" id="stealth-drawer">
+      <div><strong>sync log</strong> · <span id="stealth-updated">-</span></div>
+      <div class="stealth-actions">
+        <button class="stealth-mini-btn" onclick="refreshFromCloud()">pull</button>
+        <button class="stealth-mini-btn" onclick="resetProgress()">reset</button>
       </div>
-    </section>
+      <div class="stealth-profile" id="teacher-profile-box">No profile saved.</div>
+      <div class="log-list" id="activity-log"></div>
+    </div>
+    <button class="stealth-dot-btn" type="button" onclick="toggleStealthDrawer()" title="sync">· · ·</button>
   </div>
 
   <!-- Firebase Modular SDK (v10) -->
@@ -554,7 +628,7 @@
         try {
           await setDoc(docRef, state, { merge: true });
         } catch (err) {
-          document.getElementById("sync-status").textContent = "Cloud write error (saved locally)";
+          document.getElementById("sync-status").textContent = "local fallback";
         }
       }
     }
@@ -562,19 +636,25 @@
     function renderHUD() {
       document.getElementById("gems").textContent = state.gems;
       document.getElementById("solved-count").textContent = `${state.solved.length} / 12`;
+      document.getElementById("stealth-updated").textContent =
+        new Date(state.updatedAt).toLocaleTimeString();
 
       if (state.profileText) {
         document.getElementById("profile-preview").textContent = state.profileText;
-        document.getElementById("teacher-profile-box").textContent = `Saved Profile: ${state.profileText}`;
+        document.getElementById("teacher-profile-box").textContent = state.profileText;
       } else {
-        document.getElementById("teacher-profile-box").textContent = "No personal profile card submitted yet.";
+        document.getElementById("teacher-profile-box").textContent = "No profile saved.";
       }
 
       const logEl = document.getElementById("activity-log");
       logEl.innerHTML = state.logs.length
         ? state.logs.map(entry => `<div class="log-item">${entry}</div>`).join("")
-        : `<div class="log-item">No activity recorded yet.</div>`;
+        : `<div class="log-item">No events.</div>`;
     }
+
+    window.toggleStealthDrawer = function() {
+      document.getElementById("stealth-drawer").classList.toggle("open");
+    };
 
     window.showPanel = function(id, btn) {
       document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
@@ -601,7 +681,7 @@
         gems: 0,
         solved: [],
         profileText: "",
-        logs: [`${new Date().toLocaleTimeString()} — Homework reset`],
+        logs: [`${new Date().toLocaleTimeString()} — reset`],
         updatedAt: new Date().toISOString()
       };
       await persistState();
@@ -886,7 +966,7 @@
         const app = initializeApp(FIREBASE_CONFIG);
         db = getFirestore(app);
         docRef = doc(db, "thomaz_homework", sessionId);
-        document.getElementById("sync-status").textContent = "Firebase Firestore connected";
+        document.getElementById("sync-status").textContent = "cloud active";
 
         onSnapshot(docRef, snap => {
           if (snap.exists()) {
@@ -896,7 +976,7 @@
           }
         });
       } catch (err) {
-        document.getElementById("sync-status").textContent = "Firebase init failed (local fallback)";
+        document.getElementById("sync-status").textContent = "local fallback";
       }
     }
   </script>
