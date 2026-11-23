@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thomaz Homework Quest — Units 1 & 2 (Firebase Sync)</title>
+  <title>Thomaz Creative Homework Quest — Units 1 & 2 (Firebase Sync)</title>
   <style>
     :root {
-      --bg: #0b1120;
-      --card: #162033;
-      --card-2: #1f2d47;
+      --bg: #090d16;
+      --card: #131b2e;
+      --card-2: #1c2742;
       --text: #f8fafc;
       --muted: #cbd5e1;
       --accent: #f97316;
@@ -27,22 +27,22 @@
     }
 
     body {
-      background: radial-gradient(circle at top, #1b2942 0%, var(--bg) 65%);
+      background: radial-gradient(circle at top, #18233c 0%, var(--bg) 65%);
       color: var(--text);
       min-height: 100vh;
       padding: 20px;
     }
 
     .wrap {
-      max-width: 1060px;
+      max-width: 1080px;
       margin: 0 auto;
     }
 
     .topbar {
       display: grid;
-      grid-template-columns: 1.5fr 1fr 1fr;
+      grid-template-columns: 1.6fr 1fr 1fr;
       gap: 14px;
-      background: rgba(22, 32, 51, 0.94);
+      background: rgba(19, 27, 46, 0.95);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
       padding: 16px 20px;
@@ -64,9 +64,9 @@
     .sync-pill {
       display: inline-block;
       margin-top: 6px;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      padding: 3px 9px;
+      padding: 3px 10px;
       border-radius: 999px;
       background: rgba(56, 189, 248, 0.16);
       color: var(--accent-2);
@@ -110,11 +110,16 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 0.9rem;
+      transition: 0.15s ease;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent-2);
     }
 
     .nav-btn.active {
       background: var(--accent);
-      color: #0b1120;
+      color: #090d16;
       border-color: var(--accent);
     }
 
@@ -138,42 +143,58 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .prompt-area {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .prompt-area img {
-      width: 230px;
-      height: 170px;
-      object-fit: cover;
-      border-radius: 12px;
-      border: 2px solid rgba(255, 255, 255, 0.14);
-      background: #0b1120;
-    }
-
     .tag {
       display: inline-block;
       font-size: 0.75rem;
       font-weight: 800;
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(168, 85, 247, 0.22);
+      background: rgba(168, 85, 247, 0.24);
       color: #e9d5ff;
       margin-bottom: 8px;
     }
 
-    .trap-box {
-      background: rgba(239, 68, 68, 0.15);
-      border-left: 4px solid var(--bad);
-      padding: 10px 12px;
+    .clue-box {
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 4px solid var(--accent-2);
+      padding: 12px 14px;
       border-radius: 8px;
-      margin-top: 8px;
-      color: #fecaca;
-      font-size: 0.92rem;
+      margin: 12px 0 16px;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #e0f2fe;
+    }
+
+    .img-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .img-choice {
+      background: var(--card);
+      border: 2px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 10px;
+      cursor: pointer;
+      text-align: center;
+      color: var(--text);
+      transition: 0.15s ease;
+    }
+
+    .img-choice:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .img-choice img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: #090d16;
     }
 
     .options {
@@ -200,51 +221,86 @@
 
     .btn.primary {
       background: var(--accent-2);
-      color: #0b1120;
+      color: #090d16;
       border: none;
       text-align: center;
     }
 
     .btn.gold {
       background: var(--gold);
-      color: #0b1120;
+      color: #090d16;
       border: none;
       text-align: center;
     }
 
-    .tray {
-      min-height: 50px;
-      background: var(--card);
-      border: 2px dashed rgba(250, 204, 21, 0.45);
-      border-radius: 12px;
-      padding: 10px;
+    .glitch-sentence {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      align-items: center;
-      margin-bottom: 10px;
+      margin: 14px 0;
     }
 
-    .bank {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .chip {
-      background: #334155;
+    .word-token {
+      background: #2b3a5e;
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      padding: 8px 12px;
-      border-radius: 9px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 14px;
+      border-radius: 10px;
       cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .word-token:hover {
+      border-color: var(--accent);
+    }
+
+    .word-token.bug {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: var(--bad);
+      color: #fecaca;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+
+    .profile-field {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .profile-field label {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 6px;
       font-weight: 700;
     }
 
-    .chip.used {
-      opacity: 0.35;
-      pointer-events: none;
+    .profile-field select, .profile-field input {
+      width: 100%;
+      background: #0f172a;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 9px 10px;
+      font-size: 0.95rem;
+    }
+
+    .preview-card {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+      line-height: 1.6;
+      color: #dcfce7;
     }
 
     .feedback {
@@ -291,7 +347,7 @@
   <div class="wrap">
     <header class="topbar">
       <div>
-        <h1>Thomaz Homework Quest (Units 1 &amp; 2 · A1)</h1>
+        <h1>Thomaz Creative Homework Quest (Units 1 &amp; 2 · A1)</h1>
         <p>Session ID: <strong id="session-label">loading...</strong></p>
         <span class="sync-pill" id="sync-status">Local mode (add Firebase config to sync)</span>
       </div>
@@ -300,95 +356,132 @@
         <div class="stat-val" id="gems">0</div>
       </div>
       <div class="box-stat">
-        <div class="stat-lbl">Solved Items</div>
+        <div class="stat-lbl">Missions Solved</div>
         <div class="stat-val" id="solved-count">0 / 12</div>
       </div>
     </header>
 
     <nav class="nav">
-      <button class="nav-btn active" onclick="showPanel('m1', this)">1. Brawl &amp; One Piece Review</button>
-      <button class="nav-btn" onclick="showPanel('m2', this)">2. The Parr Family (This is my...)</button>
-      <button class="nav-btn" onclick="showPanel('m3', this)">3. Phrase Builder (Have Got)</button>
-      <button class="nav-btn" onclick="showPanel('teacher-view', this)">4. Teacher Cloud Log</button>
+      <button class="nav-btn active" onclick="showPanel('m1', this)">1. Backpack X-Ray Clues</button>
+      <button class="nav-btn" onclick="showPanel('m2', this)">2. Character &amp; Family Twists</button>
+      <button class="nav-btn" onclick="showPanel('m3', this)">3. Grammar Glitch Hunter</button>
+      <button class="nav-btn" onclick="showPanel('m4', this)">4. My Real Profile (Personal)</button>
+      <button class="nav-btn" onclick="showPanel('teacher-view', this)">5. Teacher Cloud Log</button>
     </nav>
 
-    <!-- MISSION 1 -->
+    <!-- MISSION 1: BACKPACK X-RAY CLUES -->
     <section id="m1" class="panel active">
       <div class="mission-card">
-        <div class="prompt-area">
-          <img id="m1-img" src="images/red_pencil.jpg" alt="Review item" />
-          <div style="flex: 1; min-width: 240px;">
-            <span class="tag" id="m1-tag">REVIEW</span>
-            <h2 id="m1-title">Item 1 of 4</h2>
-            <p id="m1-prompt" style="color: var(--muted); margin-top: 4px;"></p>
-            <div class="trap-box" id="m1-trap" style="display: none;"></div>
-          </div>
-        </div>
-        <div class="options" id="m1-options"></div>
+        <span class="tag">MISSION 1 · DEDUCTION CLUES</span>
+        <h2 id="m1-title">Clue 1 of 4</h2>
+        <div class="clue-box" id="m1-clue"></div>
+        <div class="img-grid" id="m1-grid"></div>
         <div class="feedback" id="m1-feedback"></div>
         <div class="footer-bar">
-          <button class="btn" onclick="stepM1(-1)">Previous</button>
-          <button class="btn primary" onclick="stepM1(1)">Next</button>
+          <button class="btn" onclick="stepM1(-1)">Previous Clue</button>
+          <button class="btn primary" onclick="stepM1(1)">Next Clue</button>
         </div>
       </div>
     </section>
 
-    <!-- MISSION 2 -->
+    <!-- MISSION 2: CHARACTER & FAMILY TWISTS -->
     <section id="m2" class="panel">
       <div class="mission-card">
-        <div class="prompt-area">
-          <img id="m2-img" src="images/bob.jpeg" alt="Family member" />
-          <div style="flex: 1; min-width: 240px;">
-            <span class="tag">UNIT 2 · MY FAMILY</span>
-            <h2 id="m2-title">Family Card 1 of 5</h2>
-            <p id="m2-prompt" style="color: var(--muted); margin-top: 4px;">Choose the right sentence for this character:</p>
-          </div>
-        </div>
-        <div class="options" id="m2-options"></div>
+        <span class="tag">MISSION 2 · CROSSOVER TWISTS</span>
+        <h2 id="m2-title">Twist 1 of 4</h2>
+        <div class="clue-box" id="m2-clue"></div>
+        <div class="img-grid" id="m2-grid"></div>
         <div class="feedback" id="m2-feedback"></div>
         <div class="footer-bar">
-          <button class="btn" onclick="stepM2(-1)">Previous</button>
-          <button class="btn primary" onclick="stepM2(1)">Next</button>
+          <button class="btn" onclick="stepM2(-1)">Previous Twist</button>
+          <button class="btn primary" onclick="stepM2(1)">Next Twist</button>
         </div>
       </div>
     </section>
 
-    <!-- MISSION 3 -->
+    <!-- MISSION 3: GRAMMAR GLITCH HUNTER -->
     <section id="m3" class="panel">
       <div class="mission-card">
-        <div class="prompt-area">
-          <img id="m3-img" src="images/family_group_1.jpg" alt="Family group" />
-          <div style="flex: 1; min-width: 240px;">
-            <span class="tag">HAVE GOT / HAVEN'T GOT</span>
-            <h2 id="m3-title">Builder 1 of 3</h2>
-            <p id="m3-prompt" style="color: var(--muted); margin-top: 4px;"></p>
-          </div>
-        </div>
-        <div class="tray" id="m3-tray"></div>
-        <div class="bank" id="m3-bank"></div>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <button class="btn primary" onclick="checkM3()">Check Sentence</button>
-          <button class="btn" onclick="renderM3()">Clear</button>
-        </div>
+        <span class="tag">MISSION 3 · GLITCH HUNTER</span>
+        <h2 id="m3-title">Glitch 1 of 3</h2>
+        <p style="color: var(--muted); margin-top: 6px;">
+          Step 1: Tap the <strong>broken word</strong> in the sentence below. Step 2: Pick the clean fix!
+        </p>
+        <div class="glitch-sentence" id="m3-tokens"></div>
+        <div class="options" id="m3-fixes" style="display: none;"></div>
         <div class="feedback" id="m3-feedback"></div>
         <div class="footer-bar">
-          <button class="btn" onclick="stepM3(-1)">Previous</button>
-          <button class="btn primary" onclick="stepM3(1)">Next</button>
+          <button class="btn" onclick="stepM3(-1)">Previous Glitch</button>
+          <button class="btn primary" onclick="stepM3(1)">Next Glitch</button>
         </div>
       </div>
     </section>
 
-    <!-- TEACHER LOG -->
+    <!-- MISSION 4: THOMAZ'S REAL PROFILE -->
+    <section id="m4" class="panel">
+      <div class="mission-card">
+        <span class="tag">MISSION 4 · ABOUT THOMAZ</span>
+        <h2>Build Your Real English Card</h2>
+        <p style="color: var(--muted); margin-top: 6px;">
+          Choose true facts about your school bag and your family, then save your card for the next class!
+        </p>
+
+        <div class="profile-grid">
+          <div class="profile-field">
+            <label for="pf-item">1. In my school bag, I've got...</label>
+            <select id="pf-item">
+              <option value="a red pencil and a blue eraser">a red pencil and a blue eraser</option>
+              <option value="a pencil case and a ruler">a pencil case and a ruler</option>
+              <option value="a book and a pen">a book and a pen</option>
+            </select>
+          </div>
+
+          <div class="profile-field">
+            <label for="pf-brother">2. Brother status:</label>
+            <select id="pf-brother">
+              <option value="I've got a brother.">I've got a brother.</option>
+              <option value="I've got a baby brother.">I've got a baby brother.</option>
+              <option value="I haven't got a brother.">I haven't got a brother.</option>
+            </select>
+          </div>
+
+          <div class="profile-field">
+            <label for="pf-sister">3. Sister status:</label>
+            <select id="pf-sister">
+              <option value="I've got a sister.">I've got a sister.</option>
+              <option value="I've got a big sister.">I've got a big sister.</option>
+              <option value="I haven't got a sister.">I haven't got a sister.</option>
+            </select>
+          </div>
+
+          <div class="profile-field">
+            <label for="pf-hero">4. My favourite character (One Piece / Brawl Stars):</label>
+            <input id="pf-hero" type="text" placeholder="e.g. Luffy, Sabo, Leon, Spike..." />
+          </div>
+        </div>
+
+        <button class="btn gold" onclick="saveProfileCard()">Save My Profile Card (+30 Gems)</button>
+        <div class="preview-card" id="profile-preview">
+          Your saved English card will appear here and sync to the teacher's device.
+        </div>
+        <div class="feedback" id="m4-feedback"></div>
+      </div>
+    </section>
+
+    <!-- TEACHER CLOUD LOG -->
     <section id="teacher-view" class="panel">
       <div class="mission-card">
         <span class="tag">TEACHER MONITOR</span>
         <h2>Thomaz Progress &amp; Cloud Sync</h2>
         <p style="color: var(--muted); margin-top: 6px;">
-          Open this file with <code>?session=thomaz-aula1</code> on both devices using the same Firebase project to view live progress.
+          Open with <code>?session=thomaz-aula1</code> on both devices using your Firebase project to view live results.
         </p>
         <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px;">
           <button class="btn gold" onclick="refreshFromCloud()">Refresh From Cloud</button>
           <button class="btn" onclick="resetProgress()">Reset Homework</button>
+        </div>
+        <div class="preview-card" id="teacher-profile-box" style="margin-top: 14px;">
+          No personal profile card submitted yet.
         </div>
         <div class="log-list" id="activity-log"></div>
       </div>
@@ -406,7 +499,7 @@
       onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Replace with your Firebase Web App config
+    // Paste your Firebase Web App credentials here
     const FIREBASE_CONFIG = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -420,16 +513,17 @@
       FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith("YOUR_");
 
     const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get("session") || "thomaz-homework-u1-u2";
+    const sessionId = params.get("session") || "thomaz-creative-hw";
     document.getElementById("session-label").textContent = sessionId;
 
-    const LOCAL_KEY = `hw_state_${sessionId}`;
+    const LOCAL_KEY = `creative_hw_${sessionId}`;
     let db = null;
     let docRef = null;
 
     let state = {
       gems: 0,
       solved: [],
+      profileText: "",
       logs: [],
       updatedAt: new Date().toISOString()
     };
@@ -451,7 +545,7 @@
       state.updatedAt = new Date().toISOString();
       if (logText) {
         state.logs.unshift(`${new Date().toLocaleTimeString()} — ${logText}`);
-        state.logs = state.logs.slice(0, 25);
+        state.logs = state.logs.slice(0, 30);
       }
       saveLocal();
       renderHUD();
@@ -468,6 +562,14 @@
     function renderHUD() {
       document.getElementById("gems").textContent = state.gems;
       document.getElementById("solved-count").textContent = `${state.solved.length} / 12`;
+
+      if (state.profileText) {
+        document.getElementById("profile-preview").textContent = state.profileText;
+        document.getElementById("teacher-profile-box").textContent = `Saved Profile: ${state.profileText}`;
+      } else {
+        document.getElementById("teacher-profile-box").textContent = "No personal profile card submitted yet.";
+      }
+
       const logEl = document.getElementById("activity-log");
       logEl.innerHTML = state.logs.length
         ? state.logs.map(entry => `<div class="log-item">${entry}</div>`).join("")
@@ -498,234 +600,279 @@
       state = {
         gems: 0,
         solved: [],
-        logs: [`${new Date().toLocaleTimeString()} — Progress reset`],
+        profileText: "",
+        logs: [`${new Date().toLocaleTimeString()} — Homework reset`],
         updatedAt: new Date().toISOString()
       };
       await persistState();
     };
 
-    /* Data */
-    const m1Items = [
+    /* MISSION 1: BACKPACK X-RAY CLUES */
+    const m1Data = [
       {
         id: "m1-0",
-        tag: "BOSS TRAP",
-        img: "images/red_pencil.jpg",
-        prompt: "Fix the Boss's wrong answer:",
-        trap: 'Boss: "Yes, it is a blue eraser!"',
-        options: ["No, it isn't. It's a red pencil.", "Yes, it is a blue eraser.", "It's a school bag."],
-        correct: 0
+        clue: 'Clue: "It is NOT a pen. It is NOT a book. You use it to clean pencil mistakes, and it is blue!"',
+        choices: [
+          { label: "Option A", img: "images/blue_eraser.jpg", correct: true },
+          { label: "Option B", img: "images/red_pencil.jpg", correct: false },
+          { label: "Option C", img: "images/ruler.jpg", correct: false }
+        ]
       },
       {
         id: "m1-1",
-        tag: "BRAWL STARS",
-        img: "images/pencilcase.jpg",
-        prompt: "Shelly asks: 'Is it a pencil case?'",
-        trap: "",
-        options: ["Yes, it is.", "No, it isn't. It's a ruler.", "It's a book."],
-        correct: 0
+        clue: 'Clue: "Shelly says: No, it isn\'t a pencil case! You write and draw with it, and it is red."',
+        choices: [
+          { label: "Option A", img: "images/pencilcase.jpg", correct: false },
+          { label: "Option B", img: "images/red_pencil.jpg", correct: true },
+          { label: "Option C", img: "images/book.jpg", correct: false }
+        ]
       },
       {
         id: "m1-2",
-        tag: "ONE PIECE",
-        img: "images/luffy.png",
-        prompt: "Who is this One Piece character?",
-        trap: "",
-        options: ["Luffy", "Shelly", "Colt"],
-        correct: 0
+        clue: 'Clue: "All your pens, pencils, and erasers live inside this small zip bag."',
+        choices: [
+          { label: "Option A", img: "images/pencilcase.jpg", correct: true },
+          { label: "Option B", img: "images/eraser.jpg", correct: false },
+          { label: "Option C", img: "images/pen.jpg", correct: false }
+        ]
       },
       {
         id: "m1-3",
-        tag: "BRAWL STARS",
-        img: "images/shelly.png",
-        prompt: "Is it Spike?",
-        trap: "",
-        options: ["No, it isn't. It's Shelly!", "Yes, it is Spike.", "It's a pencil."],
-        correct: 0
+        clue: 'Clue: "You open it to read stories in English class."',
+        choices: [
+          { label: "Option A", img: "images/ruler.jpg", correct: false },
+          { label: "Option B", img: "images/schoolbag.jpg", correct: false },
+          { label: "Option C", img: "images/book.jpg", correct: true }
+        ]
       }
     ];
     let m1Idx = 0;
 
     function renderM1() {
-      const item = m1Items[m1Idx];
-      document.getElementById("m1-img").src = item.img;
-      document.getElementById("m1-tag").textContent = item.tag;
-      document.getElementById("m1-title").textContent = `Item ${m1Idx + 1} of ${m1Items.length}`;
-      document.getElementById("m1-prompt").textContent = item.prompt;
+      const item = m1Data[m1Idx];
+      document.getElementById("m1-title").textContent = `Clue ${m1Idx + 1} of ${m1Data.length}`;
+      document.getElementById("m1-clue").textContent = item.clue;
       document.getElementById("m1-feedback").textContent = "";
+      const grid = document.getElementById("m1-grid");
+      grid.innerHTML = "";
 
-      const trapEl = document.getElementById("m1-trap");
-      if (item.trap) {
-        trapEl.style.display = "block";
-        trapEl.textContent = item.trap;
-      } else {
-        trapEl.style.display = "none";
-      }
-
-      const box = document.getElementById("m1-options");
-      box.innerHTML = "";
-      item.options.forEach((opt, i) => {
-        const btn = document.createElement("button");
-        btn.className = "opt-btn";
-        btn.textContent = opt;
-        btn.onclick = async () => {
+      item.choices.forEach(ch => {
+        const card = document.createElement("button");
+        card.className = "img-choice";
+        card.innerHTML = `<img src="${ch.img}" alt="${ch.label}" /><strong>${ch.label}</strong>`;
+        card.onclick = async () => {
           const fb = document.getElementById("m1-feedback");
-          if (i === item.correct) {
+          if (ch.correct) {
             const first = !state.solved.includes(item.id);
             if (first) {
               state.solved.push(item.id);
               state.gems += 15;
-              await persistState(`M1 (${item.id}): "${opt}" (+15 gems)`);
+              await persistState(`M1 (${item.id}) solved (+15 gems)`);
             }
-            fb.textContent = first ? "Great job! +15 gems" : "Correct!";
+            fb.textContent = first ? "X-Ray match! +15 gems" : "Correct!";
             fb.className = "feedback ok";
           } else {
-            fb.textContent = "Try again!";
+            fb.textContent = "Not that one — read the clue again!";
             fb.className = "feedback bad";
           }
         };
-        box.appendChild(btn);
+        grid.appendChild(card);
       });
     }
 
-    window.stepM1 = function(delta) {
-      m1Idx = (m1Idx + delta + m1Items.length) % m1Items.length;
+    window.stepM1 = function(d) {
+      m1Idx = (m1Idx + d + m1Data.length) % m1Data.length;
       renderM1();
     };
 
-    const m2Items = [
-      { id: "m2-0", img: "images/bob.jpeg", options: ["This is my dad.", "This is my mum.", "This is my grandma."], correct: 0 },
-      { id: "m2-1", img: "images/helen.jpg", options: ["This is my dad.", "This is my mum.", "This is my brother."], correct: 1 },
-      { id: "m2-2", img: "images/violet.jpg", options: ["This is my big sister.", "This is my baby brother.", "This is my granddad."], correct: 0 },
-      { id: "m2-3", img: "images/dash.jpg", options: ["This is my brother.", "This is my mum.", "This is my grandma."], correct: 0 },
-      { id: "m2-4", img: "images/jack_jack.jpg", options: ["This is my dad.", "This is my baby brother.", "This is my sister."], correct: 1 }
+    /* MISSION 2: CHARACTER & FAMILY TWISTS */
+    const m2Data = [
+      {
+        id: "m2-0",
+        clue: 'Twist: "Violet points to this picture and says: This is my baby brother!" — Who is it?',
+        choices: [
+          { label: "Dash", img: "images/dash.jpg", correct: false },
+          { label: "Jack-Jack", img: "images/jack_jack.jpg", correct: true },
+          { label: "Bob", img: "images/bob.jpeg", correct: false }
+        ]
+      },
+      {
+        id: "m2-1",
+        clue: 'Odd One Out: "Two characters are from the Parr family, and ONE is from One Piece. Tap the One Piece character!"',
+        choices: [
+          { label: "Helen", img: "images/helen.jpg", correct: false },
+          { label: "Sabo", img: "images/sabo.png", correct: true },
+          { label: "Violet", img: "images/violet.jpg", correct: false }
+        ]
+      },
+      {
+        id: "m2-2",
+        clue: 'Family Connection: "Dash says: This is my big sister!" — Tap the right card.',
+        choices: [
+          { label: "Violet", img: "images/violet.jpg", correct: true },
+          { label: "Grandma", img: "images/gradnma.jpg", correct: false },
+          { label: "Shelly", img: "images/shelly.png", correct: false }
+        ]
+      },
+      {
+        id: "m2-3",
+        clue: 'Odd One Out: "Two characters are Brawlers, and ONE is Dash and Violet\'s granddad. Tap Granddad!"',
+        choices: [
+          { label: "Colt", img: "images/colt.png", correct: false },
+          { label: "Leon", img: "images/leon.png", correct: false },
+          { label: "Granddad", img: "images/grandad.jpg", correct: true }
+        ]
+      }
     ];
     let m2Idx = 0;
 
     function renderM2() {
-      const item = m2Items[m2Idx];
-      document.getElementById("m2-img").src = item.img;
-      document.getElementById("m2-title").textContent = `Family Card ${m2Idx + 1} of ${m2Items.length}`;
+      const item = m2Data[m2Idx];
+      document.getElementById("m2-title").textContent = `Twist ${m2Idx + 1} of ${m2Data.length}`;
+      document.getElementById("m2-clue").textContent = item.clue;
       document.getElementById("m2-feedback").textContent = "";
-      const box = document.getElementById("m2-options");
-      box.innerHTML = "";
-      item.options.forEach((opt, i) => {
-        const btn = document.createElement("button");
-        btn.className = "opt-btn";
-        btn.textContent = opt;
-        btn.onclick = async () => {
+      const grid = document.getElementById("m2-grid");
+      grid.innerHTML = "";
+
+      item.choices.forEach(ch => {
+        const card = document.createElement("button");
+        card.className = "img-choice";
+        card.innerHTML = `<img src="${ch.img}" alt="${ch.label}" /><strong>${ch.label}</strong>`;
+        card.onclick = async () => {
           const fb = document.getElementById("m2-feedback");
-          if (i === item.correct) {
+          if (ch.correct) {
             const first = !state.solved.includes(item.id);
             if (first) {
               state.solved.push(item.id);
               state.gems += 15;
-              await persistState(`M2 (${item.id}): "${opt}" (+15 gems)`);
+              await persistState(`M2 (${item.id}) solved (+15 gems)`);
             }
-            fb.textContent = first ? "Awesome! +15 gems" : "Correct!";
+            fb.textContent = first ? "Nice catch! +15 gems" : "Correct!";
             fb.className = "feedback ok";
           } else {
-            fb.textContent = "Check the character and try again!";
+            fb.textContent = "Try another character!";
             fb.className = "feedback bad";
           }
         };
-        box.appendChild(btn);
+        grid.appendChild(card);
       });
     }
 
-    window.stepM2 = function(delta) {
-      m2Idx = (m2Idx + delta + m2Items.length) % m2Items.length;
+    window.stepM2 = function(d) {
+      m2Idx = (m2Idx + d + m2Data.length) % m2Data.length;
       renderM2();
     };
 
-    const m3Items = [
+    /* MISSION 3: GRAMMAR GLITCH HUNTER */
+    const m3Data = [
       {
         id: "m3-0",
-        img: "images/family_group_1.jpg",
-        prompt: "Build the sentence: I've got a family group.",
-        pieces: ["I've", "got", "a", "family", "group.", "haven't"],
-        target: ["I've", "got", "a", "family", "group."]
+        tokens: ["This", "are", "my", "dad."],
+        bugIndex: 1,
+        fixes: ["is", "got", "haven't"],
+        correctFix: 0,
+        cleanSentence: "This is my dad."
       },
       {
         id: "m3-1",
-        img: "images/gradnma.jpg",
-        prompt: "Build the question: Have you got a grandma?",
-        pieces: ["Have", "you", "got", "a", "grandma?", "dad?"],
-        target: ["Have", "you", "got", "a", "grandma?"]
+        tokens: ["Have", "got", "you", "a", "sister?"],
+        bugIndex: 1,
+        fixes: ["you got", "my got", "is got"],
+        correctFix: 0,
+        cleanSentence: "Have you got a sister?"
       },
       {
         id: "m3-2",
-        img: "images/grandad.jpg",
-        prompt: "Build the sentence: I've got a granddad.",
-        pieces: ["I've", "got", "a", "granddad.", "haven't", "sister."],
-        target: ["I've", "got", "a", "granddad."]
+        tokens: ["I", "haven't", "get", "a", "baby", "brother."],
+        bugIndex: 2,
+        fixes: ["got", "is", "this"],
+        correctFix: 0,
+        cleanSentence: "I haven't got a baby brother."
       }
     ];
     let m3Idx = 0;
-    let m3Picked = [];
 
-    window.renderM3 = function() {
-      const item = m3Items[m3Idx];
-      m3Picked = [];
-      document.getElementById("m3-img").src = item.img;
-      document.getElementById("m3-title").textContent = `Builder ${m3Idx + 1} of ${m3Items.length}`;
-      document.getElementById("m3-prompt").textContent = item.prompt;
+    function renderM3() {
+      const item = m3Data[m3Idx];
+      document.getElementById("m3-title").textContent = `Glitch ${m3Idx + 1} of ${m3Data.length}`;
       document.getElementById("m3-feedback").textContent = "";
-      drawM3Chips(item);
-    };
+      const tokenBox = document.getElementById("m3-tokens");
+      const fixBox = document.getElementById("m3-fixes");
+      tokenBox.innerHTML = "";
+      fixBox.innerHTML = "";
+      fixBox.style.display = "none";
 
-    function drawM3Chips(item) {
-      const tray = document.getElementById("m3-tray");
-      const bank = document.getElementById("m3-bank");
-      tray.innerHTML = "";
-      bank.innerHTML = "";
-
-      m3Picked.forEach((entry, idx) => {
-        const c = document.createElement("button");
-        c.className = "chip";
-        c.textContent = entry.word;
-        c.onclick = () => {
-          m3Picked.splice(idx, 1);
-          drawM3Chips(item);
+      item.tokens.forEach((word, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "word-token";
+        btn.textContent = word;
+        btn.onclick = () => {
+          const fb = document.getElementById("m3-feedback");
+          if (idx === item.bugIndex) {
+            btn.classList.add("bug");
+            fb.textContent = "Bug found! Now choose the clean replacement:";
+            fb.className = "feedback ok";
+            fixBox.style.display = "grid";
+            fixBox.innerHTML = "";
+            item.fixes.forEach((fx, fIdx) => {
+              const fBtn = document.createElement("button");
+              fBtn.className = "opt-btn";
+              fBtn.textContent = `Replace with: "${fx}"`;
+              fBtn.onclick = async () => {
+                if (fIdx === item.correctFix) {
+                  const first = !state.solved.includes(item.id);
+                  if (first) {
+                    state.solved.push(item.id);
+                    state.gems += 20;
+                    await persistState(`M3 (${item.id}): fixed -> "${item.cleanSentence}" (+20 gems)`);
+                  }
+                  fb.textContent = first
+                    ? `Glitch fixed: "${item.cleanSentence}" (+20 gems)`
+                    : `Glitch fixed: "${item.cleanSentence}"`;
+                  fb.className = "feedback ok";
+                } else {
+                  fb.textContent = "Not quite — try another fix!";
+                  fb.className = "feedback bad";
+                }
+              };
+              fixBox.appendChild(fBtn);
+            });
+          } else {
+            fb.textContent = `"${word}" is okay — look for the broken word!`;
+            fb.className = "feedback bad";
+          }
         };
-        tray.appendChild(c);
-      });
-
-      const used = new Set(m3Picked.map(p => p.idx));
-      item.pieces.forEach((w, idx) => {
-        const c = document.createElement("button");
-        c.className = "chip" + (used.has(idx) ? " used" : "");
-        c.textContent = w;
-        c.onclick = () => {
-          m3Picked.push({ word: w, idx });
-          drawM3Chips(item);
-        };
-        bank.appendChild(c);
+        tokenBox.appendChild(btn);
       });
     }
 
-    window.checkM3 = async function() {
-      const item = m3Items[m3Idx];
-      const built = m3Picked.map(p => p.word).join(" ");
-      const expected = item.target.join(" ");
-      const fb = document.getElementById("m3-feedback");
-      if (built === expected) {
-        const first = !state.solved.includes(item.id);
-        if (first) {
-          state.solved.push(item.id);
-          state.gems += 20;
-          await persistState(`M3 (${item.id}): built "${built}" (+20 gems)`);
-        }
-        fb.textContent = first ? `Spot on! +20 gems` : "Correct!";
-        fb.className = "feedback ok";
-      } else {
-        fb.textContent = `Current: "${built || "(empty)"}" — try again.`;
-        fb.className = "feedback bad";
-      }
+    window.stepM3 = function(d) {
+      m3Idx = (m3Idx + d + m3Data.length) % m3Data.length;
+      renderM3();
     };
 
-    window.stepM3 = function(delta) {
-      m3Idx = (m3Idx + delta + m3Items.length) % m3Items.length;
-      renderM3();
+    /* MISSION 4: PERSONAL PROFILE CARD */
+    window.saveProfileCard = async function() {
+      const item = document.getElementById("pf-item").value;
+      const bro = document.getElementById("pf-brother").value;
+      const sis = document.getElementById("pf-sister").value;
+      const hero = document.getElementById("pf-hero").value.trim() || "Luffy";
+
+      const cardText = `Hi! I'm Thomaz. In my school bag, I've got ${item}. ${bro} ${sis} My favourite character is ${hero}!`;
+      state.profileText = cardText;
+
+      const first = !state.solved.includes("m4-profile");
+      if (first) {
+        state.solved.push("m4-profile");
+        state.gems += 30;
+      }
+
+      await persistState(`M4 Profile saved: "${cardText}"`);
+      const fb = document.getElementById("m4-feedback");
+      fb.textContent = first
+        ? "Profile saved and synced! +30 gems"
+        : "Profile updated and synced!";
+      fb.className = "feedback ok";
     };
 
     loadLocal();
