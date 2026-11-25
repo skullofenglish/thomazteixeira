@@ -151,7 +151,7 @@
     /* Character / Family Cards */
     .grid-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
       gap: 16px;
       margin-top: 14px;
     }
@@ -160,41 +160,170 @@
       background: var(--card-2);
       border-radius: 14px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       display: flex;
       flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      text-align: left;
+      color: var(--text);
     }
 
-    .char-card img {
+    .char-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .char-img-wrap {
       width: 100%;
-      height: 165px;
-      object-fit: cover;
-      background: #0f172a;
+      height: 205px;
+      background: #0b1220;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      position: relative;
+    }
+
+    .char-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center top;
+      border-radius: 8px;
+    }
+
+    .zoom-hint {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      background: rgba(15, 23, 42, 0.82);
+      color: var(--accent-2);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
     }
 
     .char-body {
-      padding: 12px;
+      padding: 13px 14px 15px;
       display: flex;
       flex-direction: column;
       gap: 6px;
       flex: 1;
     }
 
-    .char-name {
-      font-weight: 700;
-      font-size: 1rem;
-    }
-
     .char-role {
-      font-size: 0.85rem;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
       color: var(--gold);
-      font-weight: 600;
+      text-transform: uppercase;
     }
 
     .char-model {
-      font-size: 0.85rem;
-      color: var(--muted);
-      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    /* Full-image Lightbox Overlay */
+    .lightbox-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 9, 18, 0.88);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(6px);
+    }
+
+    .lightbox-backdrop.open {
+      display: flex;
+    }
+
+    .lightbox-modal {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      max-width: 760px;
+      width: 100%;
+      padding: 18px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .lightbox-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lightbox-role {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .lightbox-close {
+      background: var(--card-2);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 7px 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lightbox-close:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .lightbox-img-stage {
+      width: 100%;
+      max-height: 68vh;
+      background: #090e1a;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .lightbox-img-stage img {
+      max-width: 100%;
+      max-height: 64vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .lightbox-sentence {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--card-2);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border-left: 4px solid var(--accent-2);
+    }
+
+    .lightbox-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
     }
 
     /* Video Box */
@@ -302,8 +431,11 @@
 
     .prompt-row img {
       width: 240px;
-      height: 175px;
-      object-fit: cover;
+      height: 195px;
+      object-fit: contain;
+      object-position: center top;
+      background: #0b1220;
+      padding: 6px;
       border-radius: 12px;
       border: 2px solid rgba(255, 255, 255, 0.15);
     }
@@ -436,10 +568,8 @@
           </div>
         </div>
 
-        <!-- Used for choice / trap rounds -->
         <div class="options" id="rev-options"></div>
 
-        <!-- Used for phrase-builder rounds -->
         <div id="rev-builder-area" style="display: none;">
           <div class="builder-tray" id="rev-tray"></div>
           <div class="word-bank" id="rev-bank"></div>
@@ -465,86 +595,31 @@
 
     <!-- STAGE 1: PRE-TEACHING VOCABULARY & CHARACTERS IN CONTEXT -->
     <section id="pre-watch" class="panel">
-      <h2 class="section-title">Pre-Teaching in Context: The Parr Family &amp; Family Members</h2>
+      <h2 class="section-title">Pre-Teaching in Context: The Parr Family</h2>
       <p class="section-desc">
-        Before watching the dinner scene, introduce the family in context: <em>"This is the Parr family. Let's meet them!"</em>
-        Use full context sentences instead of isolated words.
+        Click any card to open the full image larger on screen and practice the family sentence together.
       </p>
 
-      <div class="grid-cards">
-        <div class="char-card">
-          <img src="images/incredibles_family.jpg" alt="The Parr family" />
-          <div class="char-body">
-            <div class="char-name">The Parr Family</div>
-            <div class="char-role">Family context</div>
-            <div class="char-model">"This is the Parr family."</div>
-          </div>
-        </div>
+      <div class="grid-cards" id="pre-watch-grid"></div>
+    </section>
 
-        <div class="char-card">
-          <img src="images/bob.jpeg" alt="Bob - Dad" />
-          <div class="char-body">
-            <div class="char-name">Bob</div>
-            <div class="char-role">dad</div>
-            <div class="char-model">"This is my dad." / "This is Dash's dad."</div>
-          </div>
+    <!-- Lightbox Modal for Stage 1 -->
+    <div class="lightbox-backdrop" id="char-lightbox" onclick="closeLightboxOnBackdrop(event)">
+      <div class="lightbox-modal">
+        <div class="lightbox-top">
+          <div class="lightbox-role" id="lb-role">DAD</div>
+          <button class="lightbox-close" type="button" onclick="closeLightbox()">Close (ESC)</button>
         </div>
-
-        <div class="char-card">
-          <img src="images/helen.jpg" alt="Helen - Mum" />
-          <div class="char-body">
-            <div class="char-name">Helen</div>
-            <div class="char-role">mum</div>
-            <div class="char-model">"This is my mum." / "This is Violet's mum."</div>
-          </div>
+        <div class="lightbox-img-stage">
+          <img id="lb-img" src="" alt="Character full view" />
         </div>
-
-        <div class="char-card">
-          <img src="images/violet.jpg" alt="Violet - Big sister" />
-          <div class="char-body">
-            <div class="char-name">Violet</div>
-            <div class="char-role">sister / big sister</div>
-            <div class="char-model">"This is my big sister."</div>
-          </div>
-        </div>
-
-        <div class="char-card">
-          <img src="images/dash.jpg" alt="Dash - Brother" />
-          <div class="char-body">
-            <div class="char-name">Dash</div>
-            <div class="char-role">brother</div>
-            <div class="char-model">"This is my brother."</div>
-          </div>
-        </div>
-
-        <div class="char-card">
-          <img src="images/jack_jack.jpg" alt="Jack-Jack - Baby brother" />
-          <div class="char-body">
-            <div class="char-name">Jack-Jack</div>
-            <div class="char-role">baby brother</div>
-            <div class="char-model">"This is my baby brother."</div>
-          </div>
-        </div>
-
-        <div class="char-card">
-          <img src="images/gradnma.jpg" alt="Grandma reference" />
-          <div class="char-body">
-            <div class="char-name">Grandma</div>
-            <div class="char-role">grandma</div>
-            <div class="char-model">"This is my grandma."</div>
-          </div>
-        </div>
-
-        <div class="char-card">
-          <img src="images/grandad.jpg" alt="Granddad reference" />
-          <div class="char-body">
-            <div class="char-name">Granddad</div>
-            <div class="char-role">granddad</div>
-            <div class="char-model">"This is my granddad."</div>
-          </div>
+        <div class="lightbox-sentence" id="lb-sentence">This is Bob. He is Violet's dad.</div>
+        <div class="lightbox-nav">
+          <button class="action-btn" type="button" onclick="stepLightbox(-1)">Previous Card</button>
+          <button class="action-btn primary" type="button" onclick="stepLightbox(1)">Next Card</button>
         </div>
       </div>
-    </section>
+    </div>
 
     <!-- STAGE 2: VIDEO LEAD-IN -->
     <section id="video-stage" class="panel">
@@ -868,6 +943,103 @@
     function nextRev() { revIdx = (revIdx + 1) % revData.length; renderRev(); }
     function prevRev() { revIdx = (revIdx - 1 + revData.length) % revData.length; renderRev(); }
 
+    /* Stage 1: Pre-Watch Cards + Full-Size Lightbox Overlay */
+    const familyCards = [
+      {
+        img: "images/incredibles_family.jpg",
+        role: "FAMILY",
+        sentence: "This is the Parr family."
+      },
+      {
+        img: "images/bob.jpeg",
+        role: "DAD",
+        sentence: "This is Bob. He is Violet's dad."
+      },
+      {
+        img: "images/helen.jpg",
+        role: "MUM",
+        sentence: "This is Helen. She is Dash's mum."
+      },
+      {
+        img: "images/violet.jpg",
+        role: "SISTER / BIG SISTER",
+        sentence: "This is Violet. She is Dash's big sister."
+      },
+      {
+        img: "images/dash.jpg",
+        role: "BROTHER",
+        sentence: "This is Dash. He is Violet's brother."
+      },
+      {
+        img: "images/jack_jack.jpg",
+        role: "BABY BROTHER",
+        sentence: "This is Jack-Jack. He is Violet and Dash's baby brother."
+      },
+      {
+        img: "images/gradnma.jpg",
+        role: "GRANDMA",
+        sentence: "This is Grandma. She is Dash and Violet's grandma."
+      },
+      {
+        img: "images/grandad.jpg",
+        role: "GRANDDAD",
+        sentence: "This is Granddad. He is Dash and Violet's granddad."
+      }
+    ];
+    let currentLightboxIdx = 0;
+
+    function renderPreWatchCards() {
+      const grid = document.getElementById("pre-watch-grid");
+      grid.innerHTML = "";
+      familyCards.forEach((item, idx) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "char-card";
+        card.innerHTML = `
+          <div class="char-img-wrap">
+            <img src="${item.img}" alt="${item.role}" />
+            <span class="zoom-hint">Click to zoom</span>
+          </div>
+          <div class="char-body">
+            <div class="char-role">${item.role}</div>
+            <div class="char-model">${item.sentence}</div>
+          </div>
+        `;
+        card.onclick = () => openLightbox(idx);
+        grid.appendChild(card);
+      });
+    }
+
+    function openLightbox(idx) {
+      currentLightboxIdx = idx;
+      const item = familyCards[currentLightboxIdx];
+      document.getElementById("lb-role").textContent = item.role;
+      document.getElementById("lb-img").src = item.img;
+      document.getElementById("lb-sentence").textContent = item.sentence;
+      document.getElementById("char-lightbox").classList.add("open");
+    }
+
+    function closeLightbox() {
+      document.getElementById("char-lightbox").classList.remove("open");
+    }
+
+    function closeLightboxOnBackdrop(e) {
+      if (e.target.id === "char-lightbox") closeLightbox();
+    }
+
+    function stepLightbox(delta) {
+      currentLightboxIdx = (currentLightboxIdx + delta + familyCards.length) % familyCards.length;
+      openLightbox(currentLightboxIdx);
+    }
+
+    document.addEventListener("keydown", e => {
+      const lb = document.getElementById("char-lightbox");
+      if (!lb.classList.contains("open")) return;
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") stepLightbox(1);
+      if (e.key === "ArrowLeft") stepLightbox(-1);
+    });
+
     /* Game 1 Data */
     const g1Data = [
       {
@@ -1088,6 +1260,7 @@
 
     renderTimer();
     renderRev();
+    renderPreWatchCards();
     renderG1();
     renderG2();
     renderG3();
