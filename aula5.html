@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Unit 3 · Lesson 1: My Routine (I / You · do / don't · like)</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card: #162033;
+      --card-2: #1e293b;
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --accent: #f97316;
+      --accent-2: #38bdf8;
+      --ok: #22c55e;
+      --bad: #ef4444;
+      --gold: #facc15;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 70%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px 16px 64px;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    /* Top HUD */
+    .hud {
+      background: rgba(22, 32, 51, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 12px;
+      align-items: center;
+      position: sticky;
+      top: 8px;
+      z-index: 30;
+      backdrop-filter: blur(8px);
+    }
+
+    .hud h1 {
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+
+    .hud p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .stat-box {
+      background: var(--card-2);
+      border-radius: 12px;
+      padding: 8px 12px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .stat-val {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin-top: 2px;
+    }
+
+    /* Stage Navigation */
+    .stage-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #0b1120;
+      border-color: var(--accent);
+    }
+
+    .panel {
+      display: none;
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--accent-2);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .panel h2 {
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+
+    .panel-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+    }
+
+    .arena {
+      background: var(--card-2);
+      border-radius: 14px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Buttons & Choices */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .choice-btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: 0.15s ease;
+    }
+
+    .choice-btn:hover, .choice-btn:active {
+      border-color: var(--accent-2);
+    }
+
+    .btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 11px;
+      padding: 11px 16px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: var(--accent-2);
+      color: #0b1120;
+      border: none;
+    }
+
+    .btn.gold {
+      background: var(--gold);
+      color: #0b1120;
+      border: none;
+    }
+
+    .feedback {
+      min-height: 28px;
+      font-weight: 800;
+      margin-top: 12px;
+      font-size: 0.98rem;
+    }
+
+    .ok { color: var(--ok); }
+    .bad { color: var(--bad); }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Stage 1: Routine Cards Grid */
+    .routine-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+      gap: 14px;
+    }
+
+    .routine-card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .routine-icon {
+      font-size: 2.1rem;
+    }
+
+    .routine-phrase {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .neg-highlight {
+      color: #f87171;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .mini-tf {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mini-tf button {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: var(--card-2);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mini-tf button.selected-true {
+      background: rgba(34, 197, 94, 0.25);
+      border-color: var(--ok);
+      color: var(--ok);
+    }
+
+    .mini-tf button.selected-false {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: var(--bad);
+      color: #fca5a5;
+    }
+
+    /* Apple Pencil Canvas Pad */
+    .pencil-box {
+      background: #090e1a;
+      border: 2px solid rgba(56, 189, 248, 0.45);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .pencil-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pencil-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-2);
+    }
+
+    canvas.pencil-pad {
+      width: 100%;
+      height: 150px;
+      background: #f8fafc;
+      border-radius: 10px;
+      display: block;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    /* Drag & Drop Card Builder (Touch + Mouse Friendly) */
+    .drop-zone {
+      min-height: 68px;
+      background: var(--card);
+      border: 2px dashed rgba(250, 204, 21, 0.55);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .drop-zone.drag-over {
+      background: rgba(56, 189, 248, 0.14);
+      border-color: var(--accent-2);
+    }
+
+    .card-bank {
+      min-height: 68px;
+      background: rgba(15, 23, 42, 0.55);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .drag-card {
+      background: #334155;
+      color: #f8fafc;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      border-radius: 11px;
+      padding: 12px 16px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .drag-card.neg-card {
+      border-color: rgba(239, 68, 68, 0.65);
+      color: #fecaca;
+    }
+
+    .drag-card:active {
+      cursor: grabbing;
+      transform: scale(1.04);
+    }
+
+    /* Stage 4: Two-Column Sorting (I like vs I don't like) */
+    .sort-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .sort-col {
+      background: var(--card);
+      border: 2px dashed rgba(255, 255, 255, 0.24);
+      border-radius: 14px;
+      padding: 14px;
+      min-height: 170px;
+    }
+
+    .sort-col.like-col {
+      border-color: rgba(34, 197, 94, 0.55);
+    }
+
+    .sort-col.dislike-col {
+      border-color: rgba(239, 68, 68, 0.55);
+    }
+
+    .sort-col h4 {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    .sort-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 110px;
+      align-content: flex-start;
+    }
+
+    /* Stage 5: My Day vs Teacher Day */
+    .vs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .vs-box {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .vs-box h3 {
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .routine-toggle-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-2);
+      padding: 10px 12px;
+      border-radius: 10px;
+      gap: 8px;
+    }
+
+    .pill-switch {
+      display: flex;
+      gap: 6px;
+    }
+
+    .pill-switch button {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: var(--card);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .pill-switch button.active-yes {
+      background: var(--ok);
+      color: #0b1120;
+      border-color: var(--ok);
+    }
+
+    .pill-switch button.active-no {
+      background: var(--bad);
+      color: #fff;
+      border-color: var(--bad);
+    }
+
+    /* Discrete Teacher Trigger */
+    .stealth-trigger {
+      position: fixed;
+      right: 10px;
+      bottom: 8px;
+      background: transparent;
+      border: none;
+      color: rgba(203, 213, 225, 0.18);
+      font-size: 14px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      z-index: 90;
+      padding: 4px 6px;
+    }
+
+    .teacher-drawer {
+      display: none;
+      position: fixed;
+      right: 14px;
+      bottom: 38px;
+      width: 330px;
+      max-width: calc(100vw - 28px);
+      max-height: 70vh;
+      overflow-y: auto;
+      background: #0f172a;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 14px;
+      padding: 14px;
+      z-index: 95;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+      font-size: 0.82rem;
+    }
+
+    .teacher-drawer.open {
+      display: block;
+    }
+
+    .log-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .log-list li {
+      background: #1e293b;
+      padding: 6px 8px;
+      border-radius: 6px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 780px) {
+      .hud { grid-template-columns: 1fr; }
+      .sort-columns, .vs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top HUD -->
+    <header class="hud">
+      <div>
+        <h1>Unit 3 · Lesson 1: Daily Routines &amp; Likes</h1>
+        <p>Student: <strong>Thomaz</strong> (A1) · Focus: <em>I / You · go / don't go · like / don't like</em></p>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Score</div>
+        <div class="stat-val" id="score-val">0 pts</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Speaking Stars</div>
+        <div class="stat-val" id="stars-val">0 ★</div>
+      </div>
+    </header>
+
+    <!-- CELTA Stages Tabs -->
+    <nav class="stage-nav">
+      <button class="tab-btn active" onclick="openStage('stage-0', this)">0. Warm-up Review</button>
+      <button class="tab-btn" onclick="openStage('stage-1', this)">1. Teacher's Routine (Lead-in)</button>
+      <button class="tab-btn" onclick="openStage('stage-2', this)">2. Apple Pencil: Write "don't"</button>
+      <button class="tab-btn" onclick="openStage('stage-3', this)">3. Drag &amp; Drop Cards</button>
+      <button class="tab-btn" onclick="openStage('stage-4', this)">4. I Like / I Don't Like</button>
+      <button class="tab-btn" onclick="openStage('stage-5', this)">5. My Day vs. Your Day</button>
+    </nav>
+
+    <!-- STAGE 0: WARM-UP REVIEW -->
+    <section id="stage-0" class="panel active">
+      <span class="badge">Stage 0 · Warm-Up</span>
+      <h2>Quick Check: Family &amp; Have You Got...?</h2>
+      <p class="panel-desc">Tap the correct answer and say it out loud!</p>
+      <div class="arena">
+        <h3 id="s0-title" style="color: var(--gold); margin-bottom: 8px;">Question 1 of 4</h3>
+        <p id="s0-prompt" style="font-size: 1.1rem; font-weight: 700;"></p>
+        <div class="options-grid" id="s0-opts"></div>
+        <div class="feedback" id="s0-fb"></div>
+        <div class="controls-row">
+          <div style="display: flex; gap: 8px;">
+            <button class="btn" onclick="stepS0(-1)">Previous</button>
+            <button class="btn primary" onclick="stepS0(1)">Next</button>
+          </div>
+          <button class="btn gold" onclick="addStar('Warm-up speaking')">+1 ★ Said Out Loud</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 1: LEAD-IN (TEACHER'S ROUTINE GUESSING) -->
+    <section id="stage-1" class="panel">
+      <span class="badge">Stage 1 · Context &amp; Lead-In</span>
+      <h2>Guess Your Teacher's Routine!</h2>
+      <p class="panel-desc">Look at the 4 cards below. Tap <strong>True</strong> or <strong>False</strong> for your teacher, then check together!</p>
+      <div class="arena">
+        <div class="routine-grid" id="s1-grid"></div>
+        <div class="feedback" id="s1-fb"></div>
+        <div class="controls-row">
+          <button class="btn primary" onclick="revealTeacherRoutine()">Reveal Teacher's Answers</button>
+          <button class="btn gold" onclick="addStar('Lead-in discussion')">+1 ★ Speaking Bonus</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 2: LANGUAGE FOCUS (APPLE PENCIL HANDWRITING) -->
+    <section id="stage-2" class="panel">
+      <span class="badge">Stage 2 · Form &amp; Apple Pencil</span>
+      <h2>Write with Your Apple Pencil!</h2>
+      <p class="panel-desc">
+        Positive: <strong>I go</strong> / <strong>You go</strong> &nbsp;|&nbsp;
+        Negative: <strong>I <span class="neg-highlight">don't</span> go</strong> / <strong>You <span class="neg-highlight">don't</span> go</strong>
+      </p>
+      <div class="arena">
+        <h3 id="s2-title" style="color: var(--gold); margin-bottom: 6px;">Pad 1 of 4</h3>
+        <p id="s2-prompt" style="font-size: 1.12rem; font-weight: 800;"></p>
+
+        <div class="pencil-box">
+          <div class="pencil-toolbar">
+            <span class="pencil-label">Write the missing word(s) with Apple Pencil:</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn" type="button" onclick="clearCanvas('pad-s2')">Erase Pad</button>
+              <button class="btn primary" type="button" onclick="showS2Answer()">Show Answer</button>
+            </div>
+          </div>
+          <canvas id="pad-s2" class="pencil-pad" width="860" height="150"></canvas>
+        </div>
+
+        <div class="feedback" id="s2-fb"></div>
+        <div class="controls-row">
+          <div style="display: flex; gap: 8px;">
+            <button class="btn" onclick="stepS2(-1)">Previous Pad</button>
+            <button class="btn primary" onclick="stepS2(1)">Next Pad</button>
+          </div>
+          <button class="btn gold" onclick="awardPoints(15, 'Nice handwriting! +15 pts', 's2-fb')">Teacher Check: +15 pts</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 3: CONTROLLED PRACTICE 1 (DRAG & DROP SCRAMBLED CARDS) -->
+    <section id="stage-3" class="panel">
+      <span class="badge">Stage 3 · Drag &amp; Drop Cards</span>
+      <h2>Build the Sentence (Drag or Tap Cards)</h2>
+      <p class="panel-desc">Drag the shuffled cards into the yellow box in the right order (or tap a card to move it).</p>
+      <div class="arena">
+        <h3 id="s3-title" style="color: var(--gold); margin-bottom: 6px;">Card Set 1 of 5</h3>
+        <p id="s3-clue" style="margin-bottom: 12px; font-weight: 700;"></p>
+
+        <div class="drop-zone" id="s3-drop"></div>
+        <div class="card-bank" id="s3-bank"></div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn primary" onclick="checkS3()">Check Sentence</button>
+          <button class="btn" onclick="renderS3()">Shuffle / Reset</button>
+        </div>
+        <div class="feedback" id="s3-fb"></div>
+
+        <div class="controls-row">
+          <div style="display: flex; gap: 8px;">
+            <button class="btn" onclick="stepS3(-1)">Previous Set</button>
+            <button class="btn primary" onclick="stepS3(1)">Next Set</button>
+          </div>
+          <button class="btn gold" onclick="addStar('Read sentence aloud')">+1 ★ Read Aloud</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 4: CONTROLLED PRACTICE 2 (I LIKE / I DON'T LIKE SORTING + PENCIL) -->
+    <section id="stage-4" class="panel">
+      <span class="badge">Stage 4 · Sort &amp; Write</span>
+      <h2>Sort: "I like..." vs. "I don't like..."</h2>
+      <p class="panel-desc">Drag each card into <strong>I like</strong> or <strong>I don't like</strong> (or tap a card to switch columns), then write one sentence below with your Apple Pencil!</p>
+      <div class="arena">
+        <div class="card-bank" id="s4-bank"></div>
+
+        <div class="sort-columns">
+          <div class="sort-col like-col" id="col-like">
+            <h4 style="color: var(--ok);">I like...</h4>
+            <div class="sort-items" id="items-like"></div>
+          </div>
+          <div class="sort-col dislike-col" id="col-dislike">
+            <h4 style="color: #fca5a5;">I don't like...</h4>
+            <div class="sort-items" id="items-dislike"></div>
+          </div>
+        </div>
+
+        <div class="pencil-box">
+          <div class="pencil-toolbar">
+            <span class="pencil-label">Write one true sentence (e.g., "I like pizza." or "I don't like broccoli."):</span>
+            <button class="btn" type="button" onclick="clearCanvas('pad-s4')">Erase Pad</button>
+          </div>
+          <canvas id="pad-s4" class="pencil-pad" width="860" height="140"></canvas>
+        </div>
+
+        <div class="feedback" id="s4-fb"></div>
+        <div class="controls-row">
+          <button class="btn" onclick="resetS4()">Reset Cards</button>
+          <button class="btn gold" onclick="awardPoints(20, 'Great sorting & writing! +20 pts', 's4-fb')">Complete Stage: +20 pts</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 5: FREER PRACTICE (MY DAY VS YOUR DAY) -->
+    <section id="stage-5" class="panel">
+      <span class="badge">Stage 5 · Freer Production</span>
+      <h2>My Routine vs. Your Routine!</h2>
+      <p class="panel-desc">
+        1. Set your real routine on the left and say sentences with <strong>"I go / I don't go / I play / I don't play"</strong>.<br />
+        2. Guess your teacher's routine on the right using <strong>"You go..."</strong> or <strong>"You don't go..."</strong>!
+      </p>
+      <div class="arena">
+        <div class="vs-grid">
+          <div class="vs-box">
+            <h3>Thomaz (Say: "I..." / "I don't...")</h3>
+            <div class="routine-toggle-list" id="thomaz-list"></div>
+          </div>
+          <div class="vs-box">
+            <h3>Teacher (Say: "You..." / "You don't...")</h3>
+            <div class="routine-toggle-list" id="teacher-list"></div>
+          </div>
+        </div>
+
+        <div class="pencil-box">
+          <div class="pencil-toolbar">
+            <span class="pencil-label">Free Draw / Write: Write 1 sentence about you and 1 about your teacher!</span>
+            <button class="btn" type="button" onclick="clearCanvas('pad-s5')">Erase Pad</button>
+          </div>
+          <canvas id="pad-s5" class="pencil-pad" width="860" height="150"></canvas>
+        </div>
+
+        <div class="feedback" id="s5-fb"></div>
+        <div class="controls-row">
+          <button class="btn gold" onclick="awardPoints(25, 'Awesome conversation! Lesson complete +25 pts', 's5-fb')">Finish Lesson (+25 pts)</button>
+          <button class="btn primary" onclick="addStar('Freer speaking')">+1 ★ Speaking Star</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Discrete Teacher Trigger -->
+  <button class="stealth-trigger" type="button" onclick="toggleDrawer()" aria-label="Log">· · ·</button>
+  <aside class="teacher-drawer" id="teacher-drawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <strong style="color: var(--accent-2);">Session Log (Thomaz)</strong>
+      <button class="btn" style="padding: 2px 8px; font-size: 0.75rem;" onclick="toggleDrawer()">X</button>
+    </div>
+    <ul class="log-list" id="log-list"></ul>
+  </aside>
+
+  <script>
+    let score = 0;
+    let stars = 0;
+    const logs = [];
+
+    function logEvent(msg) {
+      const t = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      logs.push(`[${t}] ${msg}`);
+      const ul = document.getElementById("log-list");
+      ul.innerHTML = "";
+      logs.slice().reverse().forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+    }
+
+    function toggleDrawer() {
+      document.getElementById("teacher-drawer").classList.toggle("open");
+    }
+
+    function awardPoints(pts, msg, fbId) {
+      score += pts;
+      document.getElementById("score-val").textContent = `${score} pts`;
+      if (fbId && msg) {
+        const fb = document.getElementById(fbId);
+        fb.textContent = msg;
+        fb.className = "feedback ok";
+      }
+      logEvent(`+${pts} pts — ${msg || ""}`);
+    }
+
+    function addStar(label) {
+      stars += 1;
+      document.getElementById("stars-val").textContent = `${stars} ★`;
+      logEvent(`+1 Speaking Star (${label})`);
+    }
+
+    function openStage(id, btn) {
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      btn.classList.add("active");
+    }
+
+    /* Apple Pencil Canvas Setup */
+    function initCanvas(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+      let drawing = false;
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        return {
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY
+        };
+      }
+
+      canvas.addEventListener("pointerdown", e => {
+        drawing = true;
+        canvas.setPointerCapture(e.pointerId);
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      });
+
+      canvas.addEventListener("pointermove", e => {
+        if (!drawing) return;
+        const pos = getPos(e);
+        ctx.lineWidth = e.pressure ? Math.max(2.5, e.pressure * 5.5) : 3.5;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "#0f172a";
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      });
+
+      canvas.addEventListener("pointerup", () => { drawing = false; });
+      canvas.addEventListener("pointercancel", () => { drawing = false; });
+    }
+
+    function clearCanvas(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    /* STAGE 0: WARM-UP */
+    const s0Data = [
+      { prompt: 'Look at Helen Parr: "Her name is Helen. She is the ____."', opts: ["mum", "dad", "brother"], correct: 0 },
+      { prompt: 'Look at Bob Parr: "His name is Bob. He is the ____."', opts: ["sister", "grandma", "dad"], correct: 2 },
+      { prompt: 'Answer for you: "Have you got a sister?"', opts: ["Yes, I have. / No, I haven't.", "Yes, it is.", "His name is Bob."], correct: 0 },
+      { prompt: 'Answer for you: "Have you got a granddad?"', opts: ["No, it isn't.", "Yes, I have. / No, I haven't.", "She is the mum."], correct: 1 }
+    ];
+    let s0Idx = 0;
+    function renderS0() {
+      const item = s0Data[s0Idx];
+      document.getElementById("s0-title").textContent = `Question ${s0Idx + 1} of ${s0Data.length}`;
+      document.getElementById("s0-prompt").textContent = item.prompt;
+      document.getElementById("s0-fb").textContent = "";
+      const box = document.getElementById("s0-opts");
+      box.innerHTML = "";
+      item.opts.forEach((opt, i) => {
+        const b = document.createElement("button");
+        b.className = "choice-btn";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (i === item.correct) {
+            awardPoints(10, "Correct! +10 pts", "s0-fb");
+          } else {
+            const fb = document.getElementById("s0-fb");
+            fb.textContent = "Try again!";
+            fb.className = "feedback bad";
+          }
+        };
+        box.appendChild(b);
+      });
+    }
+    function stepS0(d) { s0Idx = (s0Idx + d + s0Data.length) % s0Data.length; renderS0(); }
+
+    /* STAGE 1: TEACHER'S ROUTINE */
+    const s1Cards = [
+      { icon: "🏫", text: 'Teacher: "I don\'t go to school as a student."', isTrue: true, guess: null },
+      { icon: "🎮", text: 'Teacher: "I play video games every morning."', isTrue: false, guess: null },
+      { icon: "📚", text: 'Teacher: "I teach English."', isTrue: true, guess: null },
+      { icon: "🛌", text: 'Teacher: "I go to bed at 6 PM."', isTrue: false, guess: null }
+    ];
+
+    function renderS1() {
+      const grid = document.getElementById("s1-grid");
+      grid.innerHTML = "";
+      s1Cards.forEach((c, idx) => {
+        const div = document.createElement("div");
+        div.className = "routine-card";
+        div.innerHTML = `
+          <div class="routine-icon">${c.icon}</div>
+          <div class="routine-phrase">${c.text}</div>
+          <div class="mini-tf">
+            <button type="button" class="${c.guess === true ? 'selected-true' : ''}" onclick="setS1Guess(${idx}, true)">True</button>
+            <button type="button" class="${c.guess === false ? 'selected-false' : ''}" onclick="setS1Guess(${idx}, false)">False</button>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    function setS1Guess(idx, val) {
+      s1Cards[idx].guess = val;
+      renderS1();
+    }
+
+    function revealTeacherRoutine() {
+      let hits = 0;
+      s1Cards.forEach(c => { if (c.guess === c.isTrue) hits++; });
+      awardPoints(15, `You guessed ${hits} of ${s1Cards.length}! Discuss with your teacher (+15 pts)`, "s1-fb");
+    }
+
+    /* STAGE 2: APPLE PENCIL PADS */
+    const s2Data = [
+      { prompt: '1. Negative: "I ________ go to school on Sunday."', answer: "don't" },
+      { prompt: '2. Positive: "I ________ to school on Monday."', answer: "go" },
+      { prompt: '3. Talking to your teacher: "You ________ go to school as a kid."', answer: "don't" },
+      { prompt: '4. Preference: "I ________ video games!"', answer: "like" }
+    ];
+    let s2Idx = 0;
+    function renderS2() {
+      const item = s2Data[s2Idx];
+      document.getElementById("s2-title").textContent = `Pad ${s2Idx + 1} of ${s2Data.length}`;
+      document.getElementById("s2-prompt").textContent = item.prompt;
+      document.getElementById("s2-fb").textContent = "";
+      clearCanvas("pad-s2");
+    }
+    function showS2Answer() {
+      const fb = document.getElementById("s2-fb");
+      fb.textContent = `Answer: "${s2Data[s2Idx].answer}"`;
+      fb.className = "feedback ok";
+    }
+    function stepS2(d) { s2Idx = (s2Idx + d + s2Data.length) % s2Data.length; renderS2(); }
+
+    /* STAGE 3: DRAG & DROP SCRAMBLED CARDS */
+    const s3Data = [
+      {
+        clue: "Build the negative sentence about school:",
+        shuffled: ["school.", "don't", "to", "I", "go"],
+        target: ["I", "don't", "go", "to", "school."]
+      },
+      {
+        clue: "Build the sentence talking to your teacher:",
+        shuffled: ["English.", "teach", "You"],
+        target: ["You", "teach", "English."]
+      },
+      {
+        clue: "Build the negative sentence with You:",
+        shuffled: ["go", "Sunday.", "You", "on", "don't"],
+        target: ["You", "don't", "go", "on", "Sunday."]
+      },
+      {
+        clue: "Build the sentence about video games:",
+        shuffled: ["video", "I", "games.", "like"],
+        target: ["I", "like", "video", "games."]
+      },
+      {
+        clue: "Build the negative preference sentence:",
+        shuffled: ["like", "don't", "I", "homework!"],
+        target: ["I", "don't", "like", "homework!"]
+      }
+    ];
+    let s3Idx = 0;
+    let s3DropCards = [];
+    let s3BankCards = [];
+
+    function renderS3() {
+      const item = s3Data[s3Idx];
+      document.getElementById("s3-title").textContent = `Card Set ${s3Idx + 1} of ${s3Data.length}`;
+      document.getElementById("s3-clue").textContent = item.clue;
+      document.getElementById("s3-fb").textContent = "";
+      s3DropCards = [];
+      s3BankCards = item.shuffled.map((word, idx) => ({ id: `c-${idx}`, word }));
+      drawS3Zones();
+    }
+
+    function createCardEl(cardObj, fromZone) {
+      const el = document.createElement("div");
+      el.className = "drag-card" + (cardObj.word === "don't" ? " neg-card" : "");
+      el.textContent = cardObj.word;
+      el.draggable = true;
+
+      el.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", JSON.stringify({ id: cardObj.id, from: fromZone }));
+      });
+
+      /* Tap fallback for fast iPad interaction */
+      el.addEventListener("click", () => {
+        if (fromZone === "bank") {
+          moveCardToDrop(cardObj.id);
+        } else {
+          moveCardToBank(cardObj.id);
+        }
+      });
+
+      return el;
+    }
+
+    function moveCardToDrop(cardId) {
+      const idx = s3BankCards.findIndex(c => c.id === cardId);
+      if (idx === -1) return;
+      const [card] = s3BankCards.splice(idx, 1);
+      s3DropCards.push(card);
+      drawS3Zones();
+    }
+
+    function moveCardToBank(cardId) {
+      const idx = s3DropCards.findIndex(c => c.id === cardId);
+      if (idx === -1) return;
+      const [card] = s3DropCards.splice(idx, 1);
+      s3BankCards.push(card);
+      drawS3Zones();
+    }
+
+    function drawS3Zones() {
+      const drop = document.getElementById("s3-drop");
+      const bank = document.getElementById("s3-bank");
+      drop.innerHTML = "";
+      bank.innerHTML = "";
+
+      s3DropCards.forEach(c => drop.appendChild(createCardEl(c, "drop")));
+      s3BankCards.forEach(c => bank.appendChild(createCardEl(c, "bank")));
+    }
+
+    function setupDropZone(zoneEl, onDropCard) {
+      zoneEl.addEventListener("dragover", e => {
+        e.preventDefault();
+        zoneEl.classList.add("drag-over");
+      });
+      zoneEl.addEventListener("dragleave", () => zoneEl.classList.remove("drag-over"));
+      zoneEl.addEventListener("drop", e => {
+        e.preventDefault();
+        zoneEl.classList.remove("drag-over");
+        try {
+          const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+          onDropCard(data);
+        } catch (_) {}
+      });
+    }
+
+    function checkS3() {
+      const attempt = s3DropCards.map(c => c.word).join(" ");
+      const target = s3Data[s3Idx].target.join(" ");
+      if (attempt === target) {
+        awardPoints(15, `Awesome: "${target}" (+15 pts)`, "s3-fb");
+      } else {
+        const fb = document.getElementById("s3-fb");
+        fb.textContent = `Current: "${attempt || "(empty)"}" — check the word order!`;
+        fb.className = "feedback bad";
+      }
+    }
+
+    function stepS3(d) { s3Idx = (s3Idx + d + s3Data.length) % s3Data.length; renderS3(); }
+
+    /* STAGE 4: I LIKE / I DON'T LIKE SORTING */
+    const s4Items = [
+      { id: "s4-0", label: "🎮 video games", zone: "bank" },
+      { id: "s4-1", label: "🍕 pizza", zone: "bank" },
+      { id: "s4-2", label: "🥦 broccoli", zone: "bank" },
+      { id: "s4-3", label: "⚽ football", zone: "bank" },
+      { id: "s4-4", label: "📺 cartoons", zone: "bank" },
+      { id: "s4-5", label: "⏰ waking up early", zone: "bank" }
+    ];
+
+    function renderS4() {
+      const bank = document.getElementById("s4-bank");
+      const likeBox = document.getElementById("items-like");
+      const dislikeBox = document.getElementById("items-dislike");
+      bank.innerHTML = "";
+      likeBox.innerHTML = "";
+      dislikeBox.innerHTML = "";
+
+      s4Items.forEach(item => {
+        const chip = document.createElement("div");
+        chip.className = "drag-card";
+        chip.textContent = item.label;
+        chip.draggable = true;
+
+        chip.addEventListener("dragstart", e => {
+          e.dataTransfer.setData("text/plain", item.id);
+        });
+
+        /* Tap cycles Bank -> Like -> Dislike -> Bank for easy iPad touch */
+        chip.addEventListener("click", () => {
+          if (item.zone === "bank") item.zone = "like";
+          else if (item.zone === "like") item.zone = "dislike";
+          else item.zone = "bank";
+          renderS4();
+        });
+
+        if (item.zone === "bank") bank.appendChild(chip);
+        else if (item.zone === "like") likeBox.appendChild(chip);
+        else dislikeBox.appendChild(chip);
+      });
+    }
+
+    function resetS4() {
+      s4Items.forEach(i => { i.zone = "bank"; });
+      renderS4();
+      clearCanvas("pad-s4");
+    }
+
+    /* STAGE 5: MY DAY VS YOUR DAY */
+    const routineActions = [
+      "wake up at 7 AM",
+      "go to school",
+      "play video games",
+      "watch TV",
+      "study English",
+      "go to bed at 10 PM"
+    ];
+
+    function renderVsLists() {
+      ["thomaz-list", "teacher-list"].forEach(listId => {
+        const box = document.getElementById(listId);
+        box.innerHTML = "";
+        routineActions.forEach(act => {
+          const row = document.createElement("div");
+          row.className = "toggle-row";
+          row.innerHTML = `
+            <span style="font-weight: 700; font-size: 0.92rem;">${act}</span>
+            <div class="pill-switch">
+              <button type="button" onclick="toggleChoice(this, 'yes')">Yes</button>
+              <button type="button" onclick="toggleChoice(this, 'no')">Don't</button>
+            </div>
+          `;
+          box.appendChild(row);
+        });
+      });
+    }
+
+    function toggleChoice(btn, type) {
+      const parent = btn.parentElement;
+      parent.querySelectorAll("button").forEach(b => b.classList.remove("active-yes", "active-no"));
+      btn.classList.add(type === "yes" ? "active-yes" : "active-no");
+    }
+
+    /* Init Drop Zones & Stages */
+    setupDropZone(document.getElementById("s3-drop"), data => {
+      if (data.from === "bank") moveCardToDrop(data.id);
+    });
+    setupDropZone(document.getElementById("s3-bank"), data => {
+      if (data.from === "drop") moveCardToBank(data.id);
+    });
+
+    setupDropZone(document.getElementById("col-like"), id => {
+      const found = s4Items.find(x => x.id === id);
+      if (found) { found.zone = "like"; renderS4(); }
+    });
+    setupDropZone(document.getElementById("col-dislike"), id => {
+      const found = s4Items.find(x => x.id === id);
+      if (found) { found.zone = "dislike"; renderS4(); }
+    });
+
+    initCanvas("pad-s2");
+    initCanvas("pad-s4");
+    initCanvas("pad-s5");
+    renderS0();
+    renderS1();
+    renderS2();
+    renderS3();
+    renderS4();
+    renderVsLists();
+  </script>
+</body>
+</html>
