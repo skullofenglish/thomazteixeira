@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thomaz Creative Homework Quest — Units 1 & 2 (Firebase Sync)</title>
+  <title>Homework 4: My Family Missions (Thomaz | A1)</title>
   <style>
     :root {
-      --bg: #090d16;
-      --card: #131b2e;
-      --card-2: #1c2742;
+      --bg: #0b1120;
+      --card: #162033;
+      --card-2: #1f2d47;
       --text: #f8fafc;
       --muted: #cbd5e1;
       --accent: #f97316;
@@ -16,7 +16,6 @@
       --ok: #22c55e;
       --bad: #ef4444;
       --gold: #facc15;
-      --purple: #a855f7;
     }
 
     * {
@@ -27,61 +26,54 @@
     }
 
     body {
-      background: radial-gradient(circle at top, #18233c 0%, var(--bg) 65%);
+      background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 70%);
       color: var(--text);
       min-height: 100vh;
-      padding: 20px;
-      position: relative;
+      padding: 18px 16px 64px;
     }
 
-    .wrap {
-      max-width: 1080px;
+    .container {
+      max-width: 960px;
       margin: 0 auto;
     }
 
-    .topbar {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr;
-      gap: 14px;
-      background: rgba(19, 27, 46, 0.95);
+    /* Top Bar */
+    .hud {
+      background: rgba(22, 32, 51, 0.95);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
       padding: 16px 20px;
       margin-bottom: 18px;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 12px;
       align-items: center;
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      backdrop-filter: blur(8px);
     }
 
-    .topbar h1 {
+    .hud h1 {
       font-size: 1.2rem;
-      color: var(--gold);
+      color: var(--accent);
     }
 
-    .topbar p {
+    .hud p {
       font-size: 0.88rem;
       color: var(--muted);
       margin-top: 2px;
     }
 
-    .sync-pill {
-      display: inline-block;
-      margin-top: 6px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(56, 189, 248, 0.12);
-      color: rgba(148, 163, 184, 0.65);
-    }
-
-    .box-stat {
+    .stat-pill {
       background: var(--card-2);
       border-radius: 12px;
-      padding: 10px 14px;
+      padding: 10px 12px;
       text-align: center;
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .stat-lbl {
+    .stat-label {
       font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -89,896 +81,1093 @@
     }
 
     .stat-val {
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: var(--gold);
       margin-top: 2px;
     }
 
-    .nav {
+    .progress-bar-wrap {
+      grid-column: 1 / -1;
+      background: #0f172a;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      transition: width 0.3s ease;
+    }
+
+    /* Mission Pills Navigation */
+    .mission-nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 18px;
     }
 
-    .nav-btn {
+    .m-tab {
       background: var(--card);
       color: var(--text);
       border: 1px solid rgba(255, 255, 255, 0.14);
-      padding: 10px 14px;
-      border-radius: 12px;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: 0.15s ease;
+      transition: 0.18s ease;
     }
 
-    .nav-btn:hover {
+    .m-tab:hover {
       border-color: var(--accent-2);
     }
 
-    .nav-btn.active {
+    .m-tab.active {
       background: var(--accent);
-      color: #090d16;
+      color: #0b1120;
       border-color: var(--accent);
     }
 
-    .panel {
-      display: none;
-      background: var(--card);
-      border-radius: 18px;
-      padding: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 20px;
+    .m-tab.done {
+      border-color: var(--ok);
+      box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.35);
     }
 
-    .panel.active {
+    /* Mission Cards */
+    .mission-panel {
+      display: none;
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .mission-panel.active {
       display: block;
     }
 
-    .mission-card {
-      background: var(--card-2);
-      border-radius: 14px;
-      padding: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .mission-header {
+      margin-bottom: 16px;
     }
 
-    .tag {
+    .mission-badge {
       display: inline-block;
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--accent-2);
       font-size: 0.75rem;
       font-weight: 800;
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(168, 85, 247, 0.24);
-      color: #e9d5ff;
-      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
     }
 
-    .clue-box {
-      background: rgba(56, 189, 248, 0.12);
-      border-left: 4px solid var(--accent-2);
-      padding: 12px 14px;
-      border-radius: 8px;
-      margin: 12px 0 16px;
-      font-size: 1rem;
-      line-height: 1.5;
-      color: #e0f2fe;
-    }
-
-    .img-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(190px, 1fr));
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-
-    .img-choice {
-      background: var(--card);
-      border: 2px solid rgba(255, 255, 255, 0.14);
-      border-radius: 12px;
-      padding: 12px;
-      cursor: pointer;
-      text-align: center;
+    .mission-header h2 {
+      font-size: 1.25rem;
       color: var(--text);
-      transition: 0.15s ease;
+    }
+
+    .mission-header p {
+      color: var(--muted);
+      font-size: 0.94rem;
+      margin-top: 4px;
+    }
+
+    /* Solved Example Box (Self-study Friendly) */
+    .example-box {
+      background: rgba(250, 204, 21, 0.1);
+      border-left: 4px solid var(--gold);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 18px;
+      font-size: 0.92rem;
+      color: #fef9c3;
+    }
+
+    .example-box strong {
+      color: var(--gold);
+    }
+
+    /* Shared Stage Box */
+    .stage-box {
+      background: var(--card-2);
+      border-radius: 14px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .visual-prompt {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 18px;
       align-items: center;
-      justify-content: space-between;
+      margin-bottom: 16px;
     }
 
-    .img-choice:hover {
-      border-color: var(--gold);
-      transform: translateY(-2px);
-    }
-
-    .img-choice img {
-      width: 100%;
-      height: 220px;
+    .visual-prompt img {
+      width: 210px;
+      height: 175px;
       object-fit: contain;
       object-position: center top;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      background: #0c1322;
-      padding: 4px;
+      background: #0a101d;
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .options {
+    .prompt-info {
+      flex: 1;
+      min-width: 230px;
+    }
+
+    .prompt-info h3 {
+      font-size: 1.08rem;
+      margin-bottom: 6px;
+      color: var(--gold);
+    }
+
+    .prompt-info p {
+      font-size: 1rem;
+      line-height: 1.45;
+      color: var(--text);
+    }
+
+    /* Options & Chips */
+    .options-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-bottom: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
     }
 
-    .opt-btn, .btn {
+    .choice-btn {
       background: var(--card);
       color: var(--text);
       border: 1px solid rgba(255, 255, 255, 0.18);
-      padding: 11px 14px;
-      border-radius: 10px;
+      border-radius: 11px;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: 600;
       text-align: left;
+      transition: 0.15s ease;
     }
 
-    .opt-btn:hover, .btn:hover {
+    .choice-btn:hover {
       border-color: var(--accent-2);
+      transform: translateY(-1px);
     }
 
-    .btn.primary {
-      background: var(--accent-2);
-      color: #090d16;
-      border: none;
+    .tf-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tf-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: var(--card);
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
       text-align: center;
     }
 
-    .btn.gold {
-      background: var(--gold);
-      color: #090d16;
-      border: none;
-      text-align: center;
+    .tf-btn:hover {
+      border-color: var(--gold);
     }
 
-    .glitch-sentence {
+    /* Word Builder */
+    .tray {
+      min-height: 52px;
+      background: var(--card);
+      border: 2px dashed rgba(250, 204, 21, 0.5);
+      border-radius: 12px;
+      padding: 10px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin: 14px 0;
+      align-items: center;
+      margin-bottom: 12px;
     }
 
-    .word-token {
-      background: #2b3a5e;
-      color: #fff;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
+    .bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .word-chip {
+      background: #334155;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 9px;
+      padding: 8px 13px;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.94rem;
+      cursor: pointer;
     }
 
-    .word-token:hover {
+    .word-chip:hover {
+      border-color: var(--gold);
+    }
+
+    .word-chip.used {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* Odd One Out Grid */
+    .odd-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .odd-card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      padding: 16px 12px;
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .odd-card:hover {
       border-color: var(--accent);
     }
 
-    .word-token.bug {
-      background: rgba(239, 68, 68, 0.25);
-      border-color: var(--bad);
-      color: #fecaca;
-    }
-
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    /* Final Mission: My Family Builder */
+    .my-family-rows {
+      display: flex;
+      flex-direction: column;
       gap: 14px;
-      margin: 14px 0;
     }
 
-    .profile-field {
+    .mf-row {
       background: var(--card);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 14px;
       border-radius: 12px;
-      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
     }
 
-    .profile-field label {
-      display: block;
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-bottom: 6px;
+    .mf-row select {
+      background: var(--card-2);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.95rem;
       font-weight: 700;
     }
 
-    .profile-field select, .profile-field input {
-      width: 100%;
-      background: #0f172a;
-      color: var(--text);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      padding: 9px 10px;
-      font-size: 0.95rem;
-    }
-
-    .preview-card {
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.35);
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 12px;
-      line-height: 1.6;
-      color: #dcfce7;
-    }
-
+    /* Controls & Feedback */
     .feedback {
       min-height: 26px;
       font-weight: 700;
-      margin-top: 8px;
+      margin-top: 12px;
+      font-size: 0.95rem;
     }
 
     .ok { color: var(--ok); }
     .bad { color: var(--bad); }
 
-    .footer-bar {
+    .nav-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
       gap: 10px;
-      margin-top: 14px;
+      margin-top: 16px;
+      flex-wrap: wrap;
     }
 
-    /* Discrete, tiny, nearly invisible teacher trigger & drawer in bottom-right corner */
-    .stealth-anchor {
+    .btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 10px 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      border-color: var(--accent-2);
+    }
+
+    .btn.primary {
+      background: var(--accent-2);
+      color: #0b1120;
+      border: none;
+    }
+
+    .btn.gold {
+      background: var(--gold);
+      color: #0b1120;
+      border: none;
+    }
+
+    /* Discrete Teacher Trigger & Drawer */
+    .stealth-trigger {
       position: fixed;
-      right: 8px;
-      bottom: 6px;
-      z-index: 40;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-
-    .stealth-dot-btn {
+      right: 10px;
+      bottom: 8px;
       background: transparent;
       border: none;
-      color: rgba(148, 163, 184, 0.14);
-      font-size: 10px;
-      line-height: 1;
-      padding: 2px 4px;
+      color: rgba(203, 213, 225, 0.18);
+      font-size: 14px;
+      letter-spacing: 2px;
       cursor: pointer;
-      letter-spacing: 0.04em;
-      user-select: none;
+      z-index: 90;
+      padding: 4px 6px;
     }
 
-    .stealth-dot-btn:hover {
-      color: rgba(148, 163, 184, 0.45);
+    .stealth-trigger:hover {
+      color: rgba(203, 213, 225, 0.55);
     }
 
-    .stealth-drawer {
+    .teacher-drawer {
       display: none;
+      position: fixed;
+      right: 14px;
+      bottom: 38px;
       width: 340px;
-      max-width: calc(100vw - 24px);
-      background: rgba(9, 13, 22, 0.97);
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 4px;
-      font-size: 0.72rem;
-      color: rgba(203, 213, 225, 0.78);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      max-width: calc(100vw - 28px);
+      max-height: 72vh;
+      overflow-y: auto;
+      background: #0f172a;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 14px;
+      padding: 14px;
+      z-index: 95;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+      font-size: 0.82rem;
     }
 
-    .stealth-drawer.open {
+    .teacher-drawer.open {
       display: block;
     }
 
-    .stealth-actions {
+    .teacher-drawer h4 {
+      color: var(--accent-2);
+      margin-bottom: 8px;
       display: flex;
-      gap: 6px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-
-    .stealth-mini-btn {
-      background: rgba(30, 41, 59, 0.85);
-      color: rgba(226, 232, 240, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 0.68rem;
-      cursor: pointer;
-    }
-
-    .stealth-profile {
-      margin-top: 8px;
-      padding: 6px 8px;
-      border-radius: 6px;
-      background: rgba(34, 197, 94, 0.08);
-      border: 1px solid rgba(34, 197, 94, 0.2);
-      font-size: 0.7rem;
-      line-height: 1.35;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .log-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       margin-top: 8px;
-      display: grid;
-      gap: 5px;
-      max-height: 150px;
-      overflow-y: auto;
     }
 
-    .log-item {
-      background: rgba(19, 27, 46, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+    .log-list li {
+      background: #1e293b;
+      padding: 6px 8px;
       border-radius: 6px;
-      padding: 5px 7px;
-      font-size: 0.68rem;
-      color: rgba(148, 163, 184, 0.8);
+      color: var(--muted);
+      line-height: 1.35;
     }
 
-    @media (max-width: 820px) {
-      .topbar { grid-template-columns: 1fr; }
-      .img-grid { grid-template-columns: 1fr; }
+    @media (max-width: 720px) {
+      .hud { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="topbar">
+  <div class="container">
+    <!-- Top HUD -->
+    <header class="hud">
       <div>
-        <h1>Thomaz Creative Homework Quest (Units 1 &amp; 2 · A1)</h1>
-        <p>Session ID: <strong id="session-label">loading...</strong></p>
-        <span class="sync-pill" id="sync-status">local cache</span>
+        <h1>Homework 4 · My Family Missions</h1>
+        <p>Student: <strong>Thomaz</strong> · Level A1 · Self-Study Mode</p>
       </div>
-      <div class="box-stat">
-        <div class="stat-lbl">Homework Gems</div>
-        <div class="stat-val" id="gems">0</div>
+      <div class="stat-pill">
+        <div class="stat-label">Points</div>
+        <div class="stat-val" id="score-display">0 pts</div>
       </div>
-      <div class="box-stat">
-        <div class="stat-lbl">Missions Solved</div>
-        <div class="stat-val" id="solved-count">0 / 12</div>
+      <div class="stat-pill">
+        <div class="stat-label">Completed</div>
+        <div class="stat-val" id="done-display">0 / 8</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-fill" id="progress-fill"></div>
       </div>
     </header>
 
-    <nav class="nav">
-      <button class="nav-btn active" onclick="showPanel('m1', this)">1. Backpack X-Ray Clues</button>
-      <button class="nav-btn" onclick="showPanel('m2', this)">2. Character &amp; Family Twists</button>
-      <button class="nav-btn" onclick="showPanel('m3', this)">3. Grammar Glitch Hunter</button>
-      <button class="nav-btn" onclick="showPanel('m4', this)">4. My Real Profile (Personal)</button>
+    <!-- 8 Varied Missions Navigation -->
+    <nav class="mission-nav" id="mission-nav">
+      <button class="m-tab active" data-m="0" onclick="showMission(0)">1. Who's Who?</button>
+      <button class="m-tab" data-m="1" onclick="showMission(1)">2. Build the Phrase</button>
+      <button class="m-tab" data-m="2" onclick="showMission(2)">3. True or False</button>
+      <button class="m-tab" data-m="3" onclick="showMission(3)">4. Fix the Glitch</button>
+      <button class="m-tab" data-m="4" onclick="showMission(4)">5. Fill the Gap</button>
+      <button class="m-tab" data-m="5" onclick="showMission(5)">6. Have You Got...?</button>
+      <button class="m-tab" data-m="6" onclick="showMission(6)">7. Odd One Out</button>
+      <button class="m-tab" data-m="7" onclick="showMission(7)">8. My Family!</button>
     </nav>
 
-    <!-- MISSION 1: BACKPACK X-RAY CLUES -->
-    <section id="m1" class="panel active">
-      <div class="mission-card">
-        <span class="tag">MISSION 1 · DEDUCTION CLUES</span>
-        <h2 id="m1-title">Clue 1 of 4</h2>
-        <div class="clue-box" id="m1-clue"></div>
-        <div class="img-grid" id="m1-grid"></div>
-        <div class="feedback" id="m1-feedback"></div>
-        <div class="footer-bar">
-          <button class="btn" onclick="stepM1(-1)">Previous Clue</button>
-          <button class="btn primary" onclick="stepM1(1)">Next Clue</button>
+    <!-- MISSION 1: WHO'S WHO? -->
+    <section class="mission-panel active" id="mission-0">
+      <div class="mission-header">
+        <span class="mission-badge">Mission 1 · Visual Match</span>
+        <h2>Who's Who? (This is my...)</h2>
+        <p>Olhe a imagem e escolha a frase certa para apresentar cada membro da família.</p>
+      </div>
+      <div class="example-box">
+        <strong>Exemplo pronto:</strong> Foto do Bob → <em>"This is my dad."</em>
+      </div>
+      <div class="stage-box">
+        <div class="visual-prompt">
+          <img id="m1-img" src="images/helen.jpg" alt="Character" />
+          <div class="prompt-info">
+            <h3 id="m1-step">Card 1 of 4</h3>
+            <p>Clique na frase que combina com a foto:</p>
+          </div>
+        </div>
+        <div class="options-grid" id="m1-opts"></div>
+        <div class="feedback" id="m1-fb"></div>
+        <div class="nav-footer">
+          <button class="btn" onclick="stepM1(-1)">Anterior</button>
+          <button class="btn primary" onclick="stepM1(1)">Próximo Card</button>
         </div>
       </div>
     </section>
 
-    <!-- MISSION 2: CHARACTER & FAMILY TWISTS -->
-    <section id="m2" class="panel">
-      <div class="mission-card">
-        <span class="tag">MISSION 2 · CROSSOVER TWISTS</span>
-        <h2 id="m2-title">Twist 1 of 4</h2>
-        <div class="clue-box" id="m2-clue"></div>
-        <div class="img-grid" id="m2-grid"></div>
-        <div class="feedback" id="m2-feedback"></div>
-        <div class="footer-bar">
-          <button class="btn" onclick="stepM2(-1)">Previous Twist</button>
-          <button class="btn primary" onclick="stepM2(1)">Next Twist</button>
+    <!-- MISSION 2: BUILD THE PHRASE -->
+    <section class="mission-panel" id="mission-1">
+      <div class="mission-header">
+        <span class="mission-badge">Mission 2 · Word Blocks</span>
+        <h2>Monte a Frase na Ordem Certa</h2>
+        <p>Clique nas palavras soltas para montar a frase. Se errar, clique na palavra montada para tirar.</p>
+      </div>
+      <div class="example-box">
+        <strong>Exemplo pronto:</strong> <code>[This]</code> + <code>[is]</code> + <code>[my]</code> + <code>[sister.]</code> → <em>"This is my sister."</em>
+      </div>
+      <div class="stage-box">
+        <div class="visual-prompt">
+          <img id="m2-img" src="images/dash.jpg" alt="Builder prompt" />
+          <div class="prompt-info">
+            <h3 id="m2-step">Phrase 1 of 4</h3>
+            <p id="m2-hint">Monte a frase sobre a imagem:</p>
+          </div>
+        </div>
+        <div class="tray" id="m2-tray"></div>
+        <div class="bank" id="m2-bank"></div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn primary" onclick="checkM2()">Conferir Frase</button>
+          <button class="btn" onclick="renderM2()">Limpar</button>
+        </div>
+        <div class="feedback" id="m2-fb"></div>
+        <div class="nav-footer">
+          <button class="btn" onclick="stepM2(-1)">Anterior</button>
+          <button class="btn primary" onclick="stepM2(1)">Próxima Frase</button>
         </div>
       </div>
     </section>
 
-    <!-- MISSION 3: GRAMMAR GLITCH HUNTER -->
-    <section id="m3" class="panel">
-      <div class="mission-card">
-        <span class="tag">MISSION 3 · GLITCH HUNTER</span>
-        <h2 id="m3-title">Glitch 1 of 3</h2>
-        <p style="color: var(--muted); margin-top: 6px;">
-          Step 1: Tap the <strong>broken word</strong> in the sentence below. Step 2: Pick the clean fix!
-        </p>
-        <div class="glitch-sentence" id="m3-tokens"></div>
-        <div class="options" id="m3-fixes" style="display: none;"></div>
-        <div class="feedback" id="m3-feedback"></div>
-        <div class="footer-bar">
-          <button class="btn" onclick="stepM3(-1)">Previous Glitch</button>
-          <button class="btn primary" onclick="stepM3(1)">Next Glitch</button>
+    <!-- MISSION 3: TRUE OR FALSE -->
+    <section class="mission-panel" id="mission-2">
+      <div class="mission-header">
+        <span class="mission-badge">Mission 3 · Fast Check</span>
+        <h2>True or False? (Verdadeiro ou Falso)</h2>
+        <p>Leia a frase e olhe a imagem. A frase combina com o que aparece?</p>
+      </div>
+      <div class="example-box">
+        <strong>Exemplo pronto:</strong> Foto do Jack-Jack + <em>"This is my baby brother."</em> → <strong>TRUE</strong>
+      </div>
+      <div class="stage-box">
+        <div class="visual-prompt">
+          <img id="m3-img" src="images/gradnma.jpg" alt="True or false" />
+          <div class="prompt-info">
+            <h3 id="m3-step">Round 1 of 4</h3>
+            <p id="m3-statement" style="font-size: 1.15rem; font-weight: 800;"></p>
+          </div>
+        </div>
+        <div class="tf-row">
+          <button class="tf-btn" onclick="answerM3(true)">TRUE (Verdadeiro)</button>
+          <button class="tf-btn" onclick="answerM3(false)">FALSE (Falso)</button>
+        </div>
+        <div class="feedback" id="m3-fb"></div>
+        <div class="nav-footer">
+          <button class="btn" onclick="stepM3(-1)">Anterior</button>
+          <button class="btn primary" onclick="stepM3(1)">Próximo</button>
         </div>
       </div>
     </section>
 
-    <!-- MISSION 4: THOMAZ'S REAL PROFILE -->
-    <section id="m4" class="panel">
-      <div class="mission-card">
-        <span class="tag">MISSION 4 · ABOUT THOMAZ</span>
-        <h2>Build Your Real English Card</h2>
-        <p style="color: var(--muted); margin-top: 6px;">
-          Choose true facts about your school bag and your family, then save your card for the next class!
-        </p>
+    <!-- MISSION 4: FIX THE GLITCH -->
+    <section class="mission-panel" id="mission-3">
+      <div class="mission-header">
+        <span class="mission-badge">Mission 4 · Bug Hunter</span>
+        <h2>Conserte o Erro na Frase</h2>
+        <p>Uma frase saiu com defeito! Escolha a versão correta em inglês.</p>
+      </div>
+      <div class="example-box">
+        <strong>Exemplo pronto:</strong> Bug: <em>"I got have a dad."</em> → Conserto: <em>"I've got a dad."</em>
+      </div>
+      <div class="stage-box">
+        <div class="prompt-info" style="margin-bottom: 14px;">
+          <h3 id="m4-step">Bug 1 of 4</h3>
+          <p id="m4-bug" style="background: rgba(239, 68, 68, 0.16); padding: 10px 14px; border-radius: 10px; border-left: 4px solid var(--bad); margin-top: 8px;"></p>
+        </div>
+        <div class="options-grid" id="m4-opts"></div>
+        <div class="feedback" id="m4-fb"></div>
+        <div class="nav-footer">
+          <button class="btn" onclick="stepM4(-1)">Anterior</button>
+          <button class="btn primary" onclick="stepM4(1)">Próximo Bug</button>
+        </div>
+      </div>
+    </section>
 
-        <div class="profile-grid">
-          <div class="profile-field">
-            <label for="pf-item">1. In my school bag, I've got...</label>
-            <select id="pf-item">
-              <option value="a red pencil and a blue eraser">a red pencil and a blue eraser</option>
-              <option value="a pencil case and a ruler">a pencil case and a ruler</option>
-              <option value="a book and a pen">a book and a pen</option>
+    <!-- MISSION 5: FILL THE GAP -->
+    <section class="mission-panel" id="mission-4">
+      <div class="mission-header">
+        <span class="mission-badge">Mission 5 · Smart Clues</span>
+        <h2>Complete a Lacuna (Com Dica!)</h2>
+        <p>Leia a dica entre parênteses e escolha a palavra que completa a frase.</p>
+      </div>
+      <div class="example-box">
+        <strong>Exemplo pronto:</strong> <em>"I ______ got a sister." (eu tenho)</em> → <strong>'ve</strong>
+      </div>
+      <div class="stage-box">
+        <div class="prompt-info" style="margin-bottom: 14px;">
+          <h3 id="m5-step">Gap 1 of 4</h3>
+          <p id="m5-sentence" style="font-size: 1.15rem; font-weight: 700; margin-top: 6px;"></p>
+        </div>
+        <div class="options-grid" id="m5-opts"></div>
+        <div class="feedback" id="m5-fb"></div>
+        <div class="nav-footer">
+          <button class="btn" onclick="stepM5(-1)">Anterior</button>
+          <button class="btn primary" onclick="stepM5(1)">Próxima Lacuna</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION 6: HAVE YOU GOT...? -->
+    <section class="mission-panel" id="mission-5">
+      <div class="mission-header">
+        <span class="mission-badge">Mission 6 · Q&amp;A Match</span>
+        <h2>Pergunta &amp; Resposta (Have you got...?)</h2>
+        <p>Escolha a pergunta ou a resposta que faz sentido no diálogo.</p>
+      </div>
+      <div class="example-box">
+        <strong>Exemplo pronto:</strong> Pergunta: <em>"Have you got a brother?"</em> → Resposta: <em>"Yes, I have."</em>
+      </div>
+      <div class="stage-box">
+        <div class="visual-prompt">
+          <img id="m6-img" src="images/violet.jpg" alt="Q&A" />
+          <div class="prompt-info">
+            <h3 id="m6-step">Dialogue 1 of 4</h3>
+            <p id="m6-prompt" style="font-size: 1.05rem; font-weight: 700;"></p>
+          </div>
+        </div>
+        <div class="options-grid" id="m6-opts"></div>
+        <div class="feedback" id="m6-fb"></div>
+        <div class="nav-footer">
+          <button class="btn" onclick="stepM6(-1)">Anterior</button>
+          <button class="btn primary" onclick="stepM6(1)">Próximo Diálogo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION 7: ODD ONE OUT -->
+    <section class="mission-panel" id="mission-6">
+      <div class="mission-header">
+        <span class="mission-badge">Mission 7 · Impostor Hunt</span>
+        <h2>Caça ao Intruso (Odd One Out)</h2>
+        <p>Três palavras são da mesma família/grupo e UMA é intrusa. Clique na intrusa!</p>
+      </div>
+      <div class="example-box">
+        <strong>Exemplo pronto:</strong> <code>mum</code> · <code>dad</code> · <code>pencil</code> · <code>sister</code> → Intruso: <strong>pencil</strong> (é material escolar, não família!)
+      </div>
+      <div class="stage-box">
+        <h3 id="m7-step" style="color: var(--gold); margin-bottom: 12px;">Round 1 of 4</h3>
+        <div class="odd-grid" id="m7-grid"></div>
+        <div class="feedback" id="m7-fb"></div>
+        <div class="nav-footer">
+          <button class="btn" onclick="stepM7(-1)">Anterior</button>
+          <button class="btn primary" onclick="stepM7(1)">Próximo Grupo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION 8: FINAL PRODUCTION - MY FAMILY -->
+    <section class="mission-panel" id="mission-7">
+      <div class="mission-header">
+        <span class="mission-badge">Mission 8 · Final Boss</span>
+        <h2>Sobre Você: Minha Família!</h2>
+        <p>Monte 3 frases verdadeiras sobre a sua família e finalize a missão!</p>
+      </div>
+      <div class="example-box">
+        <strong>Exemplo pronto:</strong> <em>"I've got a mum."</em> / <em>"I haven't got a baby brother."</em>
+      </div>
+      <div class="stage-box">
+        <div class="my-family-rows">
+          <div class="mf-row">
+            <span>1.</span>
+            <select id="mf-1-verb">
+              <option value="I've got">I've got (Eu tenho)</option>
+              <option value="I haven't got">I haven't got (Eu não tenho)</option>
+            </select>
+            <select id="mf-1-member">
+              <option value="a brother.">a brother.</option>
+              <option value="a sister.">a sister.</option>
+              <option value="a baby brother.">a baby brother.</option>
+              <option value="a big sister.">a big sister.</option>
             </select>
           </div>
 
-          <div class="profile-field">
-            <label for="pf-brother">2. Brother status:</label>
-            <select id="pf-brother">
-              <option value="I've got a brother.">I've got a brother.</option>
-              <option value="I've got a baby brother.">I've got a baby brother.</option>
-              <option value="I haven't got a brother.">I haven't got a brother.</option>
+          <div class="mf-row">
+            <span>2.</span>
+            <select id="mf-2-verb">
+              <option value="I've got">I've got (Eu tenho)</option>
+              <option value="I haven't got">I haven't got (Eu não tenho)</option>
+            </select>
+            <select id="mf-2-member">
+              <option value="a grandma.">a grandma.</option>
+              <option value="a granddad.">a granddad.</option>
+              <option value="a mum.">a mum.</option>
+              <option value="a dad.">a dad.</option>
             </select>
           </div>
 
-          <div class="profile-field">
-            <label for="pf-sister">3. Sister status:</label>
-            <select id="pf-sister">
-              <option value="I've got a sister.">I've got a sister.</option>
-              <option value="I've got a big sister.">I've got a big sister.</option>
-              <option value="I haven't got a sister.">I haven't got a sister.</option>
+          <div class="mf-row">
+            <span>3.</span>
+            <select id="mf-3-verb">
+              <option value="I've got">I've got (Eu tenho)</option>
+              <option value="I haven't got">I haven't got (Eu não tenho)</option>
             </select>
-          </div>
-
-          <div class="profile-field">
-            <label for="pf-hero">4. My favourite character (One Piece / Brawl Stars):</label>
-            <input id="pf-hero" type="text" placeholder="e.g. Luffy, Sabo, Leon, Spike..." />
+            <select id="mf-3-member">
+              <option value="a big family.">a big family.</option>
+              <option value="a sister.">a sister.</option>
+              <option value="a brother.">a brother.</option>
+              <option value="a granddad.">a granddad.</option>
+            </select>
           </div>
         </div>
 
-        <button class="btn gold" onclick="saveProfileCard()">Save My Profile Card (+30 Gems)</button>
-        <div class="preview-card" id="profile-preview">
-          Your saved English card will appear here.
+        <div style="margin-top: 16px;">
+          <button class="btn gold" onclick="completeFinalMission()">Concluir Homework &amp; Ganhar +30 pts!</button>
         </div>
-        <div class="feedback" id="m4-feedback"></div>
+        <div class="feedback" id="m8-fb"></div>
       </div>
     </section>
   </div>
 
-  <!-- Tiny nearly invisible corner trigger for teacher log -->
-  <div class="stealth-anchor" aria-label="sync diagnostics">
-    <div class="stealth-drawer" id="stealth-drawer">
-      <div><strong>sync log</strong> · <span id="stealth-updated">-</span></div>
-      <div class="stealth-actions">
-        <button class="stealth-mini-btn" onclick="refreshFromCloud()">pull</button>
-        <button class="stealth-mini-btn" onclick="resetProgress()">reset</button>
-      </div>
-      <div class="stealth-profile" id="teacher-profile-box">No profile saved.</div>
-      <div class="log-list" id="activity-log"></div>
-    </div>
-    <button class="stealth-dot-btn" type="button" onclick="toggleStealthDrawer()" title="sync">· · ·</button>
-  </div>
+  <!-- Discrete Teacher Trigger -->
+  <button class="stealth-trigger" type="button" onclick="toggleTeacherDrawer()" aria-label="Log">· · ·</button>
+  <aside class="teacher-drawer" id="teacher-drawer">
+    <h4>
+      <span>Activity Log (Thomaz)</span>
+      <button class="btn" style="padding: 2px 8px; font-size: 0.75rem;" onclick="toggleTeacherDrawer()">X</button>
+    </h4>
+    <div id="sync-status" style="color: #94a3b8; font-size: 0.76rem;">Local log active</div>
+    <ul class="log-list" id="log-list"></ul>
+  </aside>
 
-  <!-- Firebase Modular SDK (v10) -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getFirestore,
-      doc,
-      setDoc,
-      getDoc,
-      onSnapshot
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    /* Optional Firebase Firestore Sync (fails silently to localStorage if unconfigured) */
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get("session") || "thomaz-hw4-default";
+    let remotePushFn = null;
 
-    // Paste your Firebase Web App credentials here
-    const FIREBASE_CONFIG = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+    const firebaseConfig = window.__FIREBASE_CONFIG__ || null;
+    if (firebaseConfig) {
+      try {
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+        const { getFirestore, doc, setDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        remotePushFn = async (payload) => {
+          await setDoc(doc(db, "homework_sessions", sessionId), {
+            ...payload,
+            updatedAt: serverTimestamp()
+          }, { merge: true });
+        };
+        document.getElementById("sync-status").textContent = `Remote sync: ${sessionId}`;
+      } catch (err) {
+        document.getElementById("sync-status").textContent = "Local fallback active";
+      }
+    }
+
+    window.__pushRemoteLog = (payload) => {
+      if (remotePushFn) remotePushFn(payload).catch(() => {});
     };
+  </script>
 
-    const hasFirebaseConfig =
-      FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith("YOUR_");
-
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get("session") || "thomaz-creative-hw";
-    document.getElementById("session-label").textContent = sessionId;
-
-    const LOCAL_KEY = `creative_hw_${sessionId}`;
-    let db = null;
-    let docRef = null;
-
-    let state = {
-      gems: 0,
-      solved: [],
-      profileText: "",
+  <script>
+    const STORAGE_KEY = "thomaz_hw4_progress_v2";
+    const state = {
+      score: 0,
+      solvedItems: [],
+      completedMissions: [],
       logs: [],
-      updatedAt: new Date().toISOString()
+      finalSentences: []
     };
 
-    function loadLocal() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (saved) Object.assign(state, saved);
+    } catch (_) {}
+
+    function saveState() {
       try {
-        const raw = localStorage.getItem(LOCAL_KEY);
-        if (raw) state = JSON.parse(raw);
-      } catch (e) {}
-    }
-
-    function saveLocal() {
-      try {
-        localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
-      } catch (e) {}
-    }
-
-    async function persistState(logText = null) {
-      state.updatedAt = new Date().toISOString();
-      if (logText) {
-        state.logs.unshift(`${new Date().toLocaleTimeString()} — ${logText}`);
-        state.logs = state.logs.slice(0, 30);
-      }
-      saveLocal();
-      renderHUD();
-
-      if (docRef) {
-        try {
-          await setDoc(docRef, state, { merge: true });
-        } catch (err) {
-          document.getElementById("sync-status").textContent = "local fallback";
-        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (_) {}
+      if (window.__pushRemoteLog) {
+        window.__pushRemoteLog({
+          score: state.score,
+          completedMissions: state.completedMissions,
+          finalSentences: state.finalSentences,
+          lastEvents: state.logs.slice(-15)
+        });
       }
     }
 
-    function renderHUD() {
-      document.getElementById("gems").textContent = state.gems;
-      document.getElementById("solved-count").textContent = `${state.solved.length} / 12`;
-      document.getElementById("stealth-updated").textContent =
-        new Date(state.updatedAt).toLocaleTimeString();
-
-      if (state.profileText) {
-        document.getElementById("profile-preview").textContent = state.profileText;
-        document.getElementById("teacher-profile-box").textContent = state.profileText;
-      } else {
-        document.getElementById("teacher-profile-box").textContent = "No profile saved.";
-      }
-
-      const logEl = document.getElementById("activity-log");
-      logEl.innerHTML = state.logs.length
-        ? state.logs.map(entry => `<div class="log-item">${entry}</div>`).join("")
-        : `<div class="log-item">No events.</div>`;
+    function logEvent(text) {
+      const stamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      state.logs.push(`[${stamp}] ${text}`);
+      renderLogs();
+      saveState();
     }
 
-    window.toggleStealthDrawer = function() {
-      document.getElementById("stealth-drawer").classList.toggle("open");
-    };
+    function renderLogs() {
+      const ul = document.getElementById("log-list");
+      ul.innerHTML = "";
+      state.logs.slice().reverse().forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = entry;
+        ul.appendChild(li);
+      });
+    }
 
-    window.showPanel = function(id, btn) {
-      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      btn.classList.add("active");
-    };
+    function toggleTeacherDrawer() {
+      document.getElementById("teacher-drawer").classList.toggle("open");
+    }
 
-    window.refreshFromCloud = async function() {
-      if (!docRef) {
-        renderHUD();
-        return;
+    function awardItem(itemId, pts, missionIdx, totalInMission, fbId, msg) {
+      const fb = document.getElementById(fbId);
+      if (!state.solvedItems.includes(itemId)) {
+        state.solvedItems.push(itemId);
+        state.score += pts;
+        logEvent(`+${pts} pts (${itemId})`);
       }
-      const snap = await getDoc(docRef);
-      if (snap.exists()) {
-        state = { ...state, ...snap.data() };
-        saveLocal();
-        renderHUD();
+      fb.textContent = msg;
+      fb.className = "feedback ok";
+
+      const missionPrefix = `m${missionIdx + 1}-`;
+      const solvedCount = state.solvedItems.filter(id => id.startsWith(missionPrefix)).length;
+      if (solvedCount >= totalInMission && !state.completedMissions.includes(missionIdx)) {
+        state.completedMissions.push(missionIdx);
+        logEvent(`Mission ${missionIdx + 1} completed!`);
       }
-    };
+      updateHud();
+      saveState();
+    }
 
-    window.resetProgress = async function() {
-      state = {
-        gems: 0,
-        solved: [],
-        profileText: "",
-        logs: [`${new Date().toLocaleTimeString()} — reset`],
-        updatedAt: new Date().toISOString()
-      };
-      await persistState();
-    };
+    function updateHud() {
+      document.getElementById("score-display").textContent = `${state.score} pts`;
+      document.getElementById("done-display").textContent = `${state.completedMissions.length} / 8`;
+      const pct = Math.round((state.completedMissions.length / 8) * 100);
+      document.getElementById("progress-fill").style.width = `${pct}%`;
 
-    /* MISSION 1: BACKPACK X-RAY CLUES */
+      document.querySelectorAll(".m-tab").forEach(tab => {
+        const idx = Number(tab.dataset.m);
+        tab.classList.toggle("done", state.completedMissions.includes(idx));
+      });
+    }
+
+    function showMission(idx) {
+      document.querySelectorAll(".mission-panel").forEach((p, i) => p.classList.toggle("active", i === idx));
+      document.querySelectorAll(".m-tab").forEach((t, i) => t.classList.toggle("active", i === idx));
+    }
+
+    /* MISSION 1: WHO'S WHO? */
     const m1Data = [
-      {
-        id: "m1-0",
-        clue: 'Clue: "It is NOT a pen. It is NOT a book. You use it to clean pencil mistakes, and it is blue!"',
-        choices: [
-          { label: "Option A", img: "images/blue_eraser.jpg", correct: true },
-          { label: "Option B", img: "images/red_pencil.jpg", correct: false },
-          { label: "Option C", img: "images/ruler.jpg", correct: false }
-        ]
-      },
-      {
-        id: "m1-1",
-        clue: 'Clue: "Shelly says: No, it isn\'t a pencil case! You write and draw with it, and it is red."',
-        choices: [
-          { label: "Option A", img: "images/pencilcase.jpg", correct: false },
-          { label: "Option B", img: "images/red_pencil.jpg", correct: true },
-          { label: "Option C", img: "images/book.jpg", correct: false }
-        ]
-      },
-      {
-        id: "m1-2",
-        clue: 'Clue: "All your pens, pencils, and erasers live inside this small zip bag."',
-        choices: [
-          { label: "Option A", img: "images/pencilcase.jpg", correct: true },
-          { label: "Option B", img: "images/eraser.jpg", correct: false },
-          { label: "Option C", img: "images/pen.jpg", correct: false }
-        ]
-      },
-      {
-        id: "m1-3",
-        clue: 'Clue: "You open it to read stories in English class."',
-        choices: [
-          { label: "Option A", img: "images/ruler.jpg", correct: false },
-          { label: "Option B", img: "images/schoolbag.jpg", correct: false },
-          { label: "Option C", img: "images/book.jpg", correct: true }
-        ]
-      }
+      { id: "m1-0", img: "images/helen.jpg", opts: ["This is my mum.", "This is my brother.", "This is my granddad."], correct: 0 },
+      { id: "m1-1", img: "images/dash.jpg", opts: ["This is my sister.", "This is my brother.", "This is my grandma."], correct: 1 },
+      { id: "m1-2", img: "images/violet.jpg", opts: ["This is my dad.", "This is my baby brother.", "This is my big sister."], correct: 2 },
+      { id: "m1-3", img: "images/grandad.jpg", opts: ["This is my granddad.", "This is my mum.", "This is my sister."], correct: 0 }
     ];
     let m1Idx = 0;
-
     function renderM1() {
       const item = m1Data[m1Idx];
-      document.getElementById("m1-title").textContent = `Clue ${m1Idx + 1} of ${m1Data.length}`;
-      document.getElementById("m1-clue").textContent = item.clue;
-      document.getElementById("m1-feedback").textContent = "";
-      const grid = document.getElementById("m1-grid");
-      grid.innerHTML = "";
-
-      item.choices.forEach(ch => {
-        const card = document.createElement("button");
-        card.className = "img-choice";
-        card.innerHTML = `<img src="${ch.img}" alt="${ch.label}" /><strong>${ch.label}</strong>`;
-        card.onclick = async () => {
-          const fb = document.getElementById("m1-feedback");
-          if (ch.correct) {
-            const first = !state.solved.includes(item.id);
-            if (first) {
-              state.solved.push(item.id);
-              state.gems += 15;
-              await persistState(`M1 (${item.id}) solved (+15 gems)`);
-            }
-            fb.textContent = first ? "X-Ray match! +15 gems" : "Correct!";
-            fb.className = "feedback ok";
+      document.getElementById("m1-img").src = item.img;
+      document.getElementById("m1-step").textContent = `Card ${m1Idx + 1} of ${m1Data.length}`;
+      document.getElementById("m1-fb").textContent = "";
+      const box = document.getElementById("m1-opts");
+      box.innerHTML = "";
+      item.opts.forEach((opt, i) => {
+        const b = document.createElement("button");
+        b.className = "choice-btn";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (i === item.correct) {
+            awardItem(item.id, 10, 0, m1Data.length, "m1-fb", "Muito bem! +10 pts");
           } else {
-            fb.textContent = "Not that one — read the clue again!";
+            const fb = document.getElementById("m1-fb");
+            fb.textContent = "Ops! Olhe bem a foto e tente de novo.";
             fb.className = "feedback bad";
           }
         };
-        grid.appendChild(card);
+        box.appendChild(b);
       });
     }
+    function stepM1(d) { m1Idx = (m1Idx + d + m1Data.length) % m1Data.length; renderM1(); }
 
-    window.stepM1 = function(d) {
-      m1Idx = (m1Idx + d + m1Data.length) % m1Data.length;
-      renderM1();
-    };
-
-    /* MISSION 2: CHARACTER & FAMILY TWISTS */
+    /* MISSION 2: WORD BUILDER */
     const m2Data = [
-      {
-        id: "m2-0",
-        clue: 'Twist: "Violet points to this picture and says: This is my baby brother!" — Who is it?',
-        choices: [
-          { label: "Dash", img: "images/dash.jpg", correct: false },
-          { label: "Jack-Jack", img: "images/jack_jack.jpg", correct: true },
-          { label: "Bob", img: "images/bob.jpeg", correct: false }
-        ]
-      },
-      {
-        id: "m2-1",
-        clue: 'Odd One Out: "Two characters are from the Parr family, and ONE is from One Piece. Tap the One Piece character!"',
-        choices: [
-          { label: "Helen", img: "images/helen.jpg", correct: false },
-          { label: "Sabo", img: "images/sabo.png", correct: true },
-          { label: "Violet", img: "images/violet.jpg", correct: false }
-        ]
-      },
-      {
-        id: "m2-2",
-        clue: 'Family Connection: "Dash says: This is my big sister!" — Tap the right card.',
-        choices: [
-          { label: "Violet", img: "images/violet.jpg", correct: true },
-          { label: "Grandma", img: "images/gradnma.jpg", correct: false },
-          { label: "Shelly", img: "images/shelly.png", correct: false }
-        ]
-      },
-      {
-        id: "m2-3",
-        clue: 'Odd One Out: "Two characters are Brawlers, and ONE is Dash and Violet\'s granddad. Tap Granddad!"',
-        choices: [
-          { label: "Colt", img: "images/colt.png", correct: false },
-          { label: "Leon", img: "images/leon.png", correct: false },
-          { label: "Granddad", img: "images/grandad.jpg", correct: true }
-        ]
-      }
+      { id: "m2-0", img: "images/dash.jpg", hint: "Apresente o irmão:", pieces: ["This", "is", "my", "brother.", "mum."], target: ["This", "is", "my", "brother."] },
+      { id: "m2-1", img: "images/violet.jpg", hint: "Diga que você tem uma irmã:", pieces: ["I've", "got", "a", "sister.", "dad."], target: ["I've", "got", "a", "sister."] },
+      { id: "m2-2", img: "images/jack_jack.jpg", hint: "Diga que você NÃO tem um irmãozinho bebê:", pieces: ["I", "haven't", "got", "a", "baby", "brother."], target: ["I", "haven't", "got", "a", "baby", "brother."] },
+      { id: "m2-3", img: "images/gradnma.jpg", hint: "Pergunte sobre uma avó:", pieces: ["Have", "you", "got", "a", "grandma?"], target: ["Have", "you", "got", "a", "grandma?"] }
     ];
     let m2Idx = 0;
-
+    let m2Built = [];
     function renderM2() {
       const item = m2Data[m2Idx];
-      document.getElementById("m2-title").textContent = `Twist ${m2Idx + 1} of ${m2Data.length}`;
-      document.getElementById("m2-clue").textContent = item.clue;
-      document.getElementById("m2-feedback").textContent = "";
-      const grid = document.getElementById("m2-grid");
-      grid.innerHTML = "";
+      m2Built = [];
+      document.getElementById("m2-img").src = item.img;
+      document.getElementById("m2-step").textContent = `Phrase ${m2Idx + 1} of ${m2Data.length}`;
+      document.getElementById("m2-hint").textContent = item.hint;
+      document.getElementById("m2-fb").textContent = "";
+      drawM2Chips(item);
+    }
+    function drawM2Chips(item) {
+      const tray = document.getElementById("m2-tray");
+      const bank = document.getElementById("m2-bank");
+      tray.innerHTML = "";
+      bank.innerHTML = "";
+      m2Built.forEach((entry, idx) => {
+        const c = document.createElement("button");
+        c.className = "word-chip";
+        c.textContent = entry.word;
+        c.onclick = () => { m2Built.splice(idx, 1); drawM2Chips(item); };
+        tray.appendChild(c);
+      });
+      const used = new Set(m2Built.map(x => x.bIdx));
+      item.pieces.forEach((word, bIdx) => {
+        const c = document.createElement("button");
+        c.className = "word-chip" + (used.has(bIdx) ? " used" : "");
+        c.textContent = word;
+        c.onclick = () => { m2Built.push({ word, bIdx }); drawM2Chips(item); };
+        bank.appendChild(c);
+      });
+    }
+    function checkM2() {
+      const item = m2Data[m2Idx];
+      const attempt = m2Built.map(x => x.word).join(" ");
+      const expected = item.target.join(" ");
+      if (attempt === expected) {
+        awardItem(item.id, 15, 1, m2Data.length, "m2-fb", `Perfeito: "${expected}" (+15 pts)`);
+      } else {
+        const fb = document.getElementById("m2-fb");
+        fb.textContent = `Quase! Você montou: "${attempt || "(vazio)"}". Confira a ordem.`;
+        fb.className = "feedback bad";
+      }
+    }
+    function stepM2(d) { m2Idx = (m2Idx + d + m2Data.length) % m2Data.length; renderM2(); }
 
-      item.choices.forEach(ch => {
-        const card = document.createElement("button");
-        card.className = "img-choice";
-        card.innerHTML = `<img src="${ch.img}" alt="${ch.label}" /><strong>${ch.label}</strong>`;
-        card.onclick = async () => {
-          const fb = document.getElementById("m2-feedback");
-          if (ch.correct) {
-            const first = !state.solved.includes(item.id);
-            if (first) {
-              state.solved.push(item.id);
-              state.gems += 15;
-              await persistState(`M2 (${item.id}) solved (+15 gems)`);
-            }
-            fb.textContent = first ? "Nice catch! +15 gems" : "Correct!";
-            fb.className = "feedback ok";
+    /* MISSION 3: TRUE OR FALSE */
+    const m3Data = [
+      { id: "m3-0", img: "images/gradnma.jpg", statement: '"This is my grandma."', answer: true },
+      { id: "m3-1", img: "images/bob.jpeg", statement: '"This is my sister."', answer: false },
+      { id: "m3-2", img: "images/jack_jack.jpg", statement: '"This is my baby brother."', answer: true },
+      { id: "m3-3", img: "images/helen.jpg", statement: '"This is my granddad."', answer: false }
+    ];
+    let m3Idx = 0;
+    function renderM3() {
+      const item = m3Data[m3Idx];
+      document.getElementById("m3-img").src = item.img;
+      document.getElementById("m3-step").textContent = `Round ${m3Idx + 1} of ${m3Data.length}`;
+      document.getElementById("m3-statement").textContent = item.statement;
+      document.getElementById("m3-fb").textContent = "";
+    }
+    function answerM3(choice) {
+      const item = m3Data[m3Idx];
+      if (choice === item.answer) {
+        awardItem(item.id, 10, 2, m3Data.length, "m3-fb", "Acertou! +10 pts");
+      } else {
+        const fb = document.getElementById("m3-fb");
+        fb.textContent = "Não bate com a foto! Tente o outro botão.";
+        fb.className = "feedback bad";
+      }
+    }
+    function stepM3(d) { m3Idx = (m3Idx + d + m3Data.length) % m3Data.length; renderM3(); }
+
+    /* MISSION 4: FIX THE GLITCH */
+    const m4Data = [
+      { id: "m4-0", bug: 'Bug: "This my brother is."', opts: ["This is my brother.", "Brother is this my.", "My this is brother."], correct: 0 },
+      { id: "m4-1", bug: 'Bug: "I not have got a sister."', opts: ["I haven't got a sister.", "I got haven't a sister.", "Haven't I a sister got."], correct: 0 },
+      { id: "m4-2", bug: 'Bug: "You have got a granddad?" (pergunta)', opts: ["Have you got a granddad?", "Got have you a granddad?", "This is got a granddad?"], correct: 0 },
+      { id: "m4-3", bug: 'Bug: "I\'ve got a dad" (faltando ponto e artigo: eu tenho uma mãe)', opts: ["I've got a mum.", "I've mum got.", "Mum I've got a."], correct: 0 }
+    ];
+    let m4Idx = 0;
+    function renderM4() {
+      const item = m4Data[m4Idx];
+      document.getElementById("m4-step").textContent = `Bug ${m4Idx + 1} of ${m4Data.length}`;
+      document.getElementById("m4-bug").textContent = item.bug;
+      document.getElementById("m4-fb").textContent = "";
+      const box = document.getElementById("m4-opts");
+      box.innerHTML = "";
+      item.opts.forEach((opt, i) => {
+        const b = document.createElement("button");
+        b.className = "choice-btn";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (i === item.correct) {
+            awardItem(item.id, 10, 3, m4Data.length, "m4-fb", "Bug consertado! +10 pts");
           } else {
-            fb.textContent = "Try another character!";
+            const fb = document.getElementById("m4-fb");
+            fb.textContent = "Ainda está fora de ordem. Tente outra!";
+            fb.className = "feedback bad";
+          }
+        };
+        box.appendChild(b);
+      });
+    }
+    function stepM4(d) { m4Idx = (m4Idx + d + m4Data.length) % m4Data.length; renderM4(); }
+
+    /* MISSION 5: FILL THE GAP */
+    const m5Data = [
+      { id: "m5-0", sentence: '"I ______ got a brother." (eu NÃO tenho)', opts: ["haven't", "'ve", "is"], correct: 0 },
+      { id: "m5-1", sentence: '"______ is my dad." (este é)', opts: ["Have", "This", "Got"], correct: 1 },
+      { id: "m5-2", sentence: '"______ you got a grandma?" (pergunta)', opts: ["This", "Haven't", "Have"], correct: 2 },
+      { id: "m5-3", sentence: '"I\'ve ______ a big sister." (tenho)', opts: ["got", "is", "my"], correct: 0 }
+    ];
+    let m5Idx = 0;
+    function renderM5() {
+      const item = m5Data[m5Idx];
+      document.getElementById("m5-step").textContent = `Gap ${m5Idx + 1} of ${m5Data.length}`;
+      document.getElementById("m5-sentence").textContent = item.sentence;
+      document.getElementById("m5-fb").textContent = "";
+      const box = document.getElementById("m5-opts");
+      box.innerHTML = "";
+      item.opts.forEach((opt, i) => {
+        const b = document.createElement("button");
+        b.className = "choice-btn";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (i === item.correct) {
+            awardItem(item.id, 10, 4, m5Data.length, "m5-fb", "Lacuna completa! +10 pts");
+          } else {
+            const fb = document.getElementById("m5-fb");
+            fb.textContent = "Leia a dica entre parênteses e tente de novo.";
+            fb.className = "feedback bad";
+          }
+        };
+        box.appendChild(b);
+      });
+    }
+    function stepM5(d) { m5Idx = (m5Idx + d + m5Data.length) % m5Data.length; renderM5(); }
+
+    /* MISSION 6: HAVE YOU GOT...? Q&A */
+    const m6Data = [
+      { id: "m6-0", img: "images/violet.jpg", prompt: 'Você quer perguntar se o amigo tem uma irmã:', opts: ["Have you got a sister?", "This is my sister.", "I haven't got a dad."], correct: 0 },
+      { id: "m6-1", img: "images/dash.jpg", prompt: 'Alguém pergunta: "Have you got a brother?" (Resposta positiva):', opts: ["No, it isn't.", "Yes, I have.", "This is my mum."], correct: 1 },
+      { id: "m6-2", img: "images/gradnma.jpg", prompt: 'Alguém pergunta: "Have you got a grandma?" (Resposta negativa):', opts: ["Yes, it is.", "This is my grandma.", "No, I haven't."], correct: 2 },
+      { id: "m6-3", img: "images/grandad.jpg", prompt: 'Você quer perguntar se o amigo tem um avô:', opts: ["Have you got a granddad?", "I've got a granddad?", "My granddad is this?"], correct: 0 }
+    ];
+    let m6Idx = 0;
+    function renderM6() {
+      const item = m6Data[m6Idx];
+      document.getElementById("m6-img").src = item.img;
+      document.getElementById("m6-step").textContent = `Dialogue ${m6Idx + 1} of ${m6Data.length}`;
+      document.getElementById("m6-prompt").textContent = item.prompt;
+      document.getElementById("m6-fb").textContent = "";
+      const box = document.getElementById("m6-opts");
+      box.innerHTML = "";
+      item.opts.forEach((opt, i) => {
+        const b = document.createElement("button");
+        b.className = "choice-btn";
+        b.textContent = opt;
+        b.onclick = () => {
+          if (i === item.correct) {
+            awardItem(item.id, 10, 5, m6Data.length, "m6-fb", "Diálogo perfeito! +10 pts");
+          } else {
+            const fb = document.getElementById("m6-fb");
+            fb.textContent = "Tente outra opção para combinar com o diálogo!";
+            fb.className = "feedback bad";
+          }
+        };
+        box.appendChild(b);
+      });
+    }
+    function stepM6(d) { m6Idx = (m6Idx + d + m6Data.length) % m6Data.length; renderM6(); }
+
+    /* MISSION 7: ODD ONE OUT */
+    const m7Data = [
+      { id: "m7-0", words: ["mum", "dad", "eraser", "sister"], odd: 2, reason: '"eraser" é borracha (material escolar)!' },
+      { id: "m7-1", words: ["brother", "grandma", "granddad", "book"], odd: 3, reason: '"book" é livro, não é família!' },
+      { id: "m7-2", words: ["baby brother", "big sister", "ruler", "mum"], odd: 2, reason: '"ruler" é régua!' },
+      { id: "m7-3", words: ["I've got", "I haven't got", "Have you got", "pencil case"], odd: 3, reason: '"pencil case" é estojo!' }
+    ];
+    let m7Idx = 0;
+    function renderM7() {
+      const item = m7Data[m7Idx];
+      document.getElementById("m7-step").textContent = `Round ${m7Idx + 1} of ${m7Data.length}`;
+      document.getElementById("m7-fb").textContent = "";
+      const grid = document.getElementById("m7-grid");
+      grid.innerHTML = "";
+      item.words.forEach((w, i) => {
+        const card = document.createElement("button");
+        card.className = "odd-card";
+        card.textContent = w;
+        card.onclick = () => {
+          if (i === item.odd) {
+            awardItem(item.id, 10, 6, m7Data.length, "m7-fb", `Achou o intruso! ${item.reason} (+10 pts)`);
+          } else {
+            const fb = document.getElementById("m7-fb");
+            fb.textContent = "Essa faz parte do grupo! Procure a palavra intrusa.";
             fb.className = "feedback bad";
           }
         };
         grid.appendChild(card);
       });
     }
+    function stepM7(d) { m7Idx = (m7Idx + d + m7Data.length) % m7Data.length; renderM7(); }
 
-    window.stepM2 = function(d) {
-      m2Idx = (m2Idx + d + m2Data.length) % m2Data.length;
-      renderM2();
-    };
-
-    /* MISSION 3: GRAMMAR GLITCH HUNTER */
-    const m3Data = [
-      {
-        id: "m3-0",
-        tokens: ["This", "are", "my", "dad."],
-        bugIndex: 1,
-        fixes: ["is", "got", "haven't"],
-        correctFix: 0,
-        cleanSentence: "This is my dad."
-      },
-      {
-        id: "m3-1",
-        tokens: ["Have", "got", "you", "a", "sister?"],
-        bugIndex: 1,
-        fixes: ["you got", "my got", "is got"],
-        correctFix: 0,
-        cleanSentence: "Have you got a sister?"
-      },
-      {
-        id: "m3-2",
-        tokens: ["I", "haven't", "get", "a", "baby", "brother."],
-        bugIndex: 2,
-        fixes: ["got", "is", "this"],
-        correctFix: 0,
-        cleanSentence: "I haven't got a baby brother."
-      }
-    ];
-    let m3Idx = 0;
-
-    function renderM3() {
-      const item = m3Data[m3Idx];
-      document.getElementById("m3-title").textContent = `Glitch ${m3Idx + 1} of ${m3Data.length}`;
-      document.getElementById("m3-feedback").textContent = "";
-      const tokenBox = document.getElementById("m3-tokens");
-      const fixBox = document.getElementById("m3-fixes");
-      tokenBox.innerHTML = "";
-      fixBox.innerHTML = "";
-      fixBox.style.display = "none";
-
-      item.tokens.forEach((word, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "word-token";
-        btn.textContent = word;
-        btn.onclick = () => {
-          const fb = document.getElementById("m3-feedback");
-          if (idx === item.bugIndex) {
-            btn.classList.add("bug");
-            fb.textContent = "Bug found! Now choose the clean replacement:";
-            fb.className = "feedback ok";
-            fixBox.style.display = "grid";
-            fixBox.innerHTML = "";
-            item.fixes.forEach((fx, fIdx) => {
-              const fBtn = document.createElement("button");
-              fBtn.className = "opt-btn";
-              fBtn.textContent = `Replace with: "${fx}"`;
-              fBtn.onclick = async () => {
-                if (fIdx === item.correctFix) {
-                  const first = !state.solved.includes(item.id);
-                  if (first) {
-                    state.solved.push(item.id);
-                    state.gems += 20;
-                    await persistState(`M3 (${item.id}): fixed -> "${item.cleanSentence}" (+20 gems)`);
-                  }
-                  fb.textContent = first
-                    ? `Glitch fixed: "${item.cleanSentence}" (+20 gems)`
-                    : `Glitch fixed: "${item.cleanSentence}"`;
-                  fb.className = "feedback ok";
-                } else {
-                  fb.textContent = "Not quite — try another fix!";
-                  fb.className = "feedback bad";
-                }
-              };
-              fixBox.appendChild(fBtn);
-            });
-          } else {
-            fb.textContent = `"${word}" is okay — look for the broken word!`;
-            fb.className = "feedback bad";
-          }
-        };
-        tokenBox.appendChild(btn);
-      });
+    /* MISSION 8: FINAL PRODUCTION */
+    function completeFinalMission() {
+      const s1 = `${document.getElementById("mf-1-verb").value} ${document.getElementById("mf-1-member").value}`;
+      const s2 = `${document.getElementById("mf-2-verb").value} ${document.getElementById("mf-2-member").value}`;
+      const s3 = `${document.getElementById("mf-3-verb").value} ${document.getElementById("mf-3-member").value}`;
+      state.finalSentences = [s1, s2, s3];
+      logEvent(`Final sentences: ${s1} | ${s2} | ${s3}`);
+      awardItem("m8-0", 30, 7, 1, "m8-fb", `Missão concluída! Suas frases: "${s1}" "${s2}" "${s3}" (+30 pts)`);
     }
 
-    window.stepM3 = function(d) {
-      m3Idx = (m3Idx + d + m3Data.length) % m3Data.length;
-      renderM3();
-    };
-
-    /* MISSION 4: PERSONAL PROFILE CARD */
-    window.saveProfileCard = async function() {
-      const item = document.getElementById("pf-item").value;
-      const bro = document.getElementById("pf-brother").value;
-      const sis = document.getElementById("pf-sister").value;
-      const hero = document.getElementById("pf-hero").value.trim() || "Luffy";
-
-      const cardText = `Hi! I'm Thomaz. In my school bag, I've got ${item}. ${bro} ${sis} My favourite character is ${hero}!`;
-      state.profileText = cardText;
-
-      const first = !state.solved.includes("m4-profile");
-      if (first) {
-        state.solved.push("m4-profile");
-        state.gems += 30;
-      }
-
-      await persistState(`M4 Profile saved: "${cardText}"`);
-      const fb = document.getElementById("m4-feedback");
-      fb.textContent = first
-        ? "Profile saved and synced! +30 gems"
-        : "Profile updated and synced!";
-      fb.className = "feedback ok";
-    };
-
-    loadLocal();
-    renderHUD();
     renderM1();
     renderM2();
     renderM3();
-
-    if (hasFirebaseConfig) {
-      try {
-        const app = initializeApp(FIREBASE_CONFIG);
-        db = getFirestore(app);
-        docRef = doc(db, "thomaz_homework", sessionId);
-        document.getElementById("sync-status").textContent = "cloud active";
-
-        onSnapshot(docRef, snap => {
-          if (snap.exists()) {
-            state = { ...state, ...snap.data() };
-            saveLocal();
-            renderHUD();
-          }
-        });
-      } catch (err) {
-        document.getElementById("sync-status").textContent = "local fallback";
-      }
-    }
+    renderM4();
+    renderM5();
+    renderM6();
+    renderM7();
+    renderLogs();
+    updateHud();
   </script>
 </body>
 </html>
