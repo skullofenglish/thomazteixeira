@@ -179,7 +179,7 @@
       margin-top: 4px;
     }
 
-    /* Solved Example Box (Self-study Friendly) */
+    /* Solved Example Box */
     .example-box {
       background: rgba(250, 204, 21, 0.1);
       border-left: 4px solid var(--gold);
@@ -241,7 +241,7 @@
     /* Options & Chips */
     .options-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 10px;
     }
 
@@ -289,7 +289,7 @@
 
     /* Word Builder */
     .tray {
-      min-height: 52px;
+      min-height: 54px;
       background: var(--card);
       border: 2px dashed rgba(250, 204, 21, 0.5);
       border-radius: 12px;
@@ -299,6 +299,12 @@
       gap: 8px;
       align-items: center;
       margin-bottom: 12px;
+    }
+
+    .tray-placeholder {
+      color: rgba(203, 213, 225, 0.45);
+      font-size: 0.88rem;
+      font-style: italic;
     }
 
     .bank {
@@ -313,9 +319,9 @@
       color: var(--text);
       border: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 9px;
-      padding: 8px 13px;
+      padding: 9px 14px;
       font-weight: 700;
-      font-size: 0.94rem;
+      font-size: 0.95rem;
       cursor: pointer;
     }
 
@@ -324,7 +330,7 @@
     }
 
     .word-chip.used {
-      opacity: 0.35;
+      opacity: 0.32;
       pointer-events: none;
     }
 
@@ -500,7 +506,7 @@
     <!-- Top HUD -->
     <header class="hud">
       <div>
-        <h1>Homework 4 · My Family Missions</h1>
+        <h1>Homework 4 · The Parr Family Missions</h1>
         <p>Student: <strong>Thomaz</strong> · Level A1 · Self-Study Mode</p>
       </div>
       <div class="stat-pill">
@@ -519,31 +525,31 @@
     <!-- 8 Varied Missions Navigation -->
     <nav class="mission-nav" id="mission-nav">
       <button class="m-tab active" data-m="0" onclick="showMission(0)">1. Who's Who?</button>
-      <button class="m-tab" data-m="1" onclick="showMission(1)">2. Build the Phrase</button>
+      <button class="m-tab" data-m="1" onclick="showMission(1)">2. Unscramble</button>
       <button class="m-tab" data-m="2" onclick="showMission(2)">3. True or False</button>
       <button class="m-tab" data-m="3" onclick="showMission(3)">4. Fix the Glitch</button>
       <button class="m-tab" data-m="4" onclick="showMission(4)">5. Fill the Gap</button>
       <button class="m-tab" data-m="5" onclick="showMission(5)">6. Have You Got...?</button>
       <button class="m-tab" data-m="6" onclick="showMission(6)">7. Odd One Out</button>
-      <button class="m-tab" data-m="7" onclick="showMission(7)">8. My Family!</button>
+      <button class="m-tab" data-m="7" onclick="showMission(7)">8. About You!</button>
     </nav>
 
-    <!-- MISSION 1: WHO'S WHO? -->
+    <!-- MISSION 1: WHO'S WHO? (His/Her name is... He/She is the...) -->
     <section class="mission-panel active" id="mission-0">
       <div class="mission-header">
-        <span class="mission-badge">Mission 1 · Visual Match</span>
-        <h2>Who's Who? (This is my...)</h2>
-        <p>Olhe a imagem e escolha a frase certa para apresentar cada membro da família.</p>
+        <span class="mission-badge">Mission 1 · Character Match</span>
+        <h2>Who's Who? (His name is... / Her name is...)</h2>
+        <p>Olhe a foto do personagem e escolha a frase certa sobre quem ele(a) é na família.</p>
       </div>
       <div class="example-box">
-        <strong>Exemplo pronto:</strong> Foto do Bob → <em>"This is my dad."</em>
+        <strong>Exemplo pronto:</strong> Foto do Bob → <em>"His name is Bob. He is the dad."</em>
       </div>
       <div class="stage-box">
         <div class="visual-prompt">
           <img id="m1-img" src="images/helen.jpg" alt="Character" />
           <div class="prompt-info">
-            <h3 id="m1-step">Card 1 of 4</h3>
-            <p>Clique na frase que combina com a foto:</p>
+            <h3 id="m1-step">Card 1 of 5</h3>
+            <p>Escolha a apresentação correta:</p>
           </div>
         </div>
         <div class="options-grid" id="m1-opts"></div>
@@ -555,22 +561,22 @@
       </div>
     </section>
 
-    <!-- MISSION 2: BUILD THE PHRASE -->
+    <!-- MISSION 2: UNSCRAMBLE / BUILD THE PHRASE -->
     <section class="mission-panel" id="mission-1">
       <div class="mission-header">
-        <span class="mission-badge">Mission 2 · Word Blocks</span>
-        <h2>Monte a Frase na Ordem Certa</h2>
-        <p>Clique nas palavras soltas para montar a frase. Se errar, clique na palavra montada para tirar.</p>
+        <span class="mission-badge">Mission 2 · Word Scramble</span>
+        <h2>Desembaralhe e Monte a Frase</h2>
+        <p>As palavras estão todas misturadas! Clique nelas na ordem certa. Para tirar uma palavra, clique nela na caixa de cima.</p>
       </div>
       <div class="example-box">
-        <strong>Exemplo pronto:</strong> <code>[This]</code> + <code>[is]</code> + <code>[my]</code> + <code>[sister.]</code> → <em>"This is my sister."</em>
+        <strong>Exemplo pronto:</strong> <code>[the]</code> <code>[Bob.]</code> <code>[dad.]</code> <code>[His]</code> <code>[is]</code> <code>[He]</code> <code>[name]</code> <code>[is]</code> → <em>"His name is Bob. He is the dad."</em>
       </div>
       <div class="stage-box">
         <div class="visual-prompt">
           <img id="m2-img" src="images/dash.jpg" alt="Builder prompt" />
           <div class="prompt-info">
-            <h3 id="m2-step">Phrase 1 of 4</h3>
-            <p id="m2-hint">Monte a frase sobre a imagem:</p>
+            <h3 id="m2-step">Challenge 1 of 5</h3>
+            <p id="m2-hint">Monte a frase:</p>
           </div>
         </div>
         <div class="tray" id="m2-tray"></div>
@@ -592,17 +598,17 @@
       <div class="mission-header">
         <span class="mission-badge">Mission 3 · Fast Check</span>
         <h2>True or False? (Verdadeiro ou Falso)</h2>
-        <p>Leia a frase e olhe a imagem. A frase combina com o que aparece?</p>
+        <p>Olhe a foto e leia a frase. Está certa ou errada?</p>
       </div>
       <div class="example-box">
-        <strong>Exemplo pronto:</strong> Foto do Jack-Jack + <em>"This is my baby brother."</em> → <strong>TRUE</strong>
+        <strong>Exemplo pronto:</strong> Foto do Jack-Jack + <em>"His name is Jack-Jack. He is the baby brother."</em> → <strong>TRUE</strong>
       </div>
       <div class="stage-box">
         <div class="visual-prompt">
           <img id="m3-img" src="images/gradnma.jpg" alt="True or false" />
           <div class="prompt-info">
             <h3 id="m3-step">Round 1 of 4</h3>
-            <p id="m3-statement" style="font-size: 1.15rem; font-weight: 800;"></p>
+            <p id="m3-statement" style="font-size: 1.12rem; font-weight: 800;"></p>
           </div>
         </div>
         <div class="tf-row">
@@ -622,10 +628,10 @@
       <div class="mission-header">
         <span class="mission-badge">Mission 4 · Bug Hunter</span>
         <h2>Conserte o Erro na Frase</h2>
-        <p>Uma frase saiu com defeito! Escolha a versão correta em inglês.</p>
+        <p>Uma palavra foi trocada (His/Her, He/She, I've/Have). Escolha a frase consertada!</p>
       </div>
       <div class="example-box">
-        <strong>Exemplo pronto:</strong> Bug: <em>"I got have a dad."</em> → Conserto: <em>"I've got a dad."</em>
+        <strong>Exemplo pronto:</strong> Bug: <em>"Her name is Bob. She is the dad."</em> → Conserto: <em>"His name is Bob. He is the dad."</em>
       </div>
       <div class="stage-box">
         <div class="prompt-info" style="margin-bottom: 14px;">
@@ -646,14 +652,14 @@
       <div class="mission-header">
         <span class="mission-badge">Mission 5 · Smart Clues</span>
         <h2>Complete a Lacuna (Com Dica!)</h2>
-        <p>Leia a dica entre parênteses e escolha a palavra que completa a frase.</p>
+        <p>Leia a dica entre parênteses e escolha a palavra certa para completar.</p>
       </div>
       <div class="example-box">
-        <strong>Exemplo pronto:</strong> <em>"I ______ got a sister." (eu tenho)</em> → <strong>'ve</strong>
+        <strong>Exemplo pronto:</strong> <em>"______ name is Helen. She is the mum." (dela)</em> → <strong>Her</strong>
       </div>
       <div class="stage-box">
         <div class="prompt-info" style="margin-bottom: 14px;">
-          <h3 id="m5-step">Gap 1 of 4</h3>
+          <h3 id="m5-step">Gap 1 of 5</h3>
           <p id="m5-sentence" style="font-size: 1.15rem; font-weight: 700; margin-top: 6px;"></p>
         </div>
         <div class="options-grid" id="m5-opts"></div>
@@ -670,10 +676,10 @@
       <div class="mission-header">
         <span class="mission-badge">Mission 6 · Q&amp;A Match</span>
         <h2>Pergunta &amp; Resposta (Have you got...?)</h2>
-        <p>Escolha a pergunta ou a resposta que faz sentido no diálogo.</p>
+        <p>Escolha a pergunta ou resposta curta certa para cada situação.</p>
       </div>
       <div class="example-box">
-        <strong>Exemplo pronto:</strong> Pergunta: <em>"Have you got a brother?"</em> → Resposta: <em>"Yes, I have."</em>
+        <strong>Exemplo pronto:</strong> Pergunta: <em>"Have you got a brother?"</em> → Sim: <em>"Yes, I have."</em> / Não: <em>"No, I haven't."</em>
       </div>
       <div class="stage-box">
         <div class="visual-prompt">
@@ -697,10 +703,10 @@
       <div class="mission-header">
         <span class="mission-badge">Mission 7 · Impostor Hunt</span>
         <h2>Caça ao Intruso (Odd One Out)</h2>
-        <p>Três palavras são da mesma família/grupo e UMA é intrusa. Clique na intrusa!</p>
+        <p>Três palavras são da família e UMA é intrusa (da aula anterior!). Clique na intrusa.</p>
       </div>
       <div class="example-box">
-        <strong>Exemplo pronto:</strong> <code>mum</code> · <code>dad</code> · <code>pencil</code> · <code>sister</code> → Intruso: <strong>pencil</strong> (é material escolar, não família!)
+        <strong>Exemplo pronto:</strong> <code>mum</code> · <code>dad</code> · <code>red pencil</code> · <code>sister</code> → Intruso: <strong>red pencil</strong>
       </div>
       <div class="stage-box">
         <h3 id="m7-step" style="color: var(--gold); margin-bottom: 12px;">Round 1 of 4</h3>
@@ -713,57 +719,42 @@
       </div>
     </section>
 
-    <!-- MISSION 8: FINAL PRODUCTION - MY FAMILY -->
+    <!-- MISSION 8: FINAL PRODUCTION - ABOUT YOU -->
     <section class="mission-panel" id="mission-7">
       <div class="mission-header">
         <span class="mission-badge">Mission 8 · Final Boss</span>
-        <h2>Sobre Você: Minha Família!</h2>
-        <p>Monte 3 frases verdadeiras sobre a sua família e finalize a missão!</p>
+        <h2>Sobre Você: Complete e Responda!</h2>
+        <p>Complete uma frase verdadeira com <em>I've got</em> e responda duas perguntas sobre a sua família.</p>
       </div>
       <div class="example-box">
-        <strong>Exemplo pronto:</strong> <em>"I've got a mum."</em> / <em>"I haven't got a baby brother."</em>
+        <strong>Exemplo pronto:</strong> <em>"I've got a mum."</em> · <em>"Have you got a sister?" → "No, I haven't."</em>
       </div>
       <div class="stage-box">
         <div class="my-family-rows">
           <div class="mf-row">
-            <span>1.</span>
-            <select id="mf-1-verb">
-              <option value="I've got">I've got (Eu tenho)</option>
-              <option value="I haven't got">I haven't got (Eu não tenho)</option>
-            </select>
-            <select id="mf-1-member">
-              <option value="a brother.">a brother.</option>
-              <option value="a sister.">a sister.</option>
-              <option value="a baby brother.">a baby brother.</option>
-              <option value="a big sister.">a big sister.</option>
+            <span>1. Diga algo que você tem: <strong>I've got</strong></span>
+            <select id="mf-1">
+              <option value="I've got a mum.">a mum.</option>
+              <option value="I've got a dad.">a dad.</option>
+              <option value="I've got a brother.">a brother.</option>
+              <option value="I've got a sister.">a sister.</option>
+              <option value="I've got a grandma.">a grandma.</option>
             </select>
           </div>
 
           <div class="mf-row">
-            <span>2.</span>
-            <select id="mf-2-verb">
-              <option value="I've got">I've got (Eu tenho)</option>
-              <option value="I haven't got">I haven't got (Eu não tenho)</option>
-            </select>
-            <select id="mf-2-member">
-              <option value="a grandma.">a grandma.</option>
-              <option value="a granddad.">a granddad.</option>
-              <option value="a mum.">a mum.</option>
-              <option value="a dad.">a dad.</option>
+            <span>2. Pergunta: <strong>"Have you got a sister?"</strong> →</span>
+            <select id="mf-2">
+              <option value="Have you got a sister? Yes, I have.">Yes, I have.</option>
+              <option value="Have you got a sister? No, I haven't.">No, I haven't.</option>
             </select>
           </div>
 
           <div class="mf-row">
-            <span>3.</span>
-            <select id="mf-3-verb">
-              <option value="I've got">I've got (Eu tenho)</option>
-              <option value="I haven't got">I haven't got (Eu não tenho)</option>
-            </select>
-            <select id="mf-3-member">
-              <option value="a big family.">a big family.</option>
-              <option value="a sister.">a sister.</option>
-              <option value="a brother.">a brother.</option>
-              <option value="a granddad.">a granddad.</option>
+            <span>3. Pergunta: <strong>"Have you got a baby brother?"</strong> →</span>
+            <select id="mf-3">
+              <option value="Have you got a baby brother? Yes, I have.">Yes, I have.</option>
+              <option value="Have you got a baby brother? No, I haven't.">No, I haven't.</option>
             </select>
           </div>
         </div>
@@ -788,7 +779,6 @@
   </aside>
 
   <script type="module">
-    /* Optional Firebase Firestore Sync (fails silently to localStorage if unconfigured) */
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get("session") || "thomaz-hw4-default";
     let remotePushFn = null;
@@ -818,7 +808,7 @@
   </script>
 
   <script>
-    const STORAGE_KEY = "thomaz_hw4_progress_v2";
+    const STORAGE_KEY = "thomaz_hw4_progress_v3";
     const state = {
       score: 0,
       solvedItems: [],
@@ -904,12 +894,58 @@
       document.querySelectorAll(".m-tab").forEach((t, i) => t.classList.toggle("active", i === idx));
     }
 
-    /* MISSION 1: WHO'S WHO? */
+    /* MISSION 1: WHO'S WHO? (His/Her name is... He/She is the...) */
     const m1Data = [
-      { id: "m1-0", img: "images/helen.jpg", opts: ["This is my mum.", "This is my brother.", "This is my granddad."], correct: 0 },
-      { id: "m1-1", img: "images/dash.jpg", opts: ["This is my sister.", "This is my brother.", "This is my grandma."], correct: 1 },
-      { id: "m1-2", img: "images/violet.jpg", opts: ["This is my dad.", "This is my baby brother.", "This is my big sister."], correct: 2 },
-      { id: "m1-3", img: "images/grandad.jpg", opts: ["This is my granddad.", "This is my mum.", "This is my sister."], correct: 0 }
+      {
+        id: "m1-0",
+        img: "images/helen.jpg",
+        opts: [
+          "Her name is Helen. She is the mum.",
+          "His name is Helen. He is the dad.",
+          "Her name is Violet. She is the grandma."
+        ],
+        correct: 0
+      },
+      {
+        id: "m1-1",
+        img: "images/dash.jpg",
+        opts: [
+          "Her name is Dash. She is the sister.",
+          "His name is Dash. He is the brother.",
+          "His name is Bob. He is the granddad."
+        ],
+        correct: 1
+      },
+      {
+        id: "m1-2",
+        img: "images/violet.jpg",
+        opts: [
+          "His name is Violet. He is the brother.",
+          "Her name is Helen. She is the mum.",
+          "Her name is Violet. She is the big sister."
+        ],
+        correct: 2
+      },
+      {
+        id: "m1-3",
+        img: "images/grandad.jpg",
+        opts: [
+          "His name is Granddad. He is the granddad.",
+          "Her name is Grandma. She is the grandma.",
+          "His name is Jack-Jack. He is the baby brother."
+        ],
+        correct: 0
+      },
+      {
+        id: "m1-4",
+        img: "images/jack_jack.jpg",
+        opts: [
+          "His name is Bob. He is the dad.",
+          "His name is Jack-Jack. He is the baby brother.",
+          "Her name is Violet. She is the sister."
+        ],
+        correct: 1
+      }
     ];
     let m1Idx = 0;
     function renderM1() {
@@ -928,7 +964,7 @@
             awardItem(item.id, 10, 0, m1Data.length, "m1-fb", "Muito bem! +10 pts");
           } else {
             const fb = document.getElementById("m1-fb");
-            fb.textContent = "Ops! Olhe bem a foto e tente de novo.";
+            fb.textContent = "Ops! Olhe o nome e se é He (ele) ou She (ela).";
             fb.className = "feedback bad";
           }
         };
@@ -937,12 +973,43 @@
     }
     function stepM1(d) { m1Idx = (m1Idx + d + m1Data.length) % m1Data.length; renderM1(); }
 
-    /* MISSION 2: WORD BUILDER */
+    /* MISSION 2: SCRAMBLED WORD BUILDER (genuinely shuffled pieces!) */
     const m2Data = [
-      { id: "m2-0", img: "images/dash.jpg", hint: "Apresente o irmão:", pieces: ["This", "is", "my", "brother.", "mum."], target: ["This", "is", "my", "brother."] },
-      { id: "m2-1", img: "images/violet.jpg", hint: "Diga que você tem uma irmã:", pieces: ["I've", "got", "a", "sister.", "dad."], target: ["I've", "got", "a", "sister."] },
-      { id: "m2-2", img: "images/jack_jack.jpg", hint: "Diga que você NÃO tem um irmãozinho bebê:", pieces: ["I", "haven't", "got", "a", "baby", "brother."], target: ["I", "haven't", "got", "a", "baby", "brother."] },
-      { id: "m2-3", img: "images/gradnma.jpg", hint: "Pergunte sobre uma avó:", pieces: ["Have", "you", "got", "a", "grandma?"], target: ["Have", "you", "got", "a", "grandma?"] }
+      {
+        id: "m2-0",
+        img: "images/bob.jpeg",
+        hint: "Apresente o Bob (ele é o pai):",
+        pieces: ["the", "Bob.", "dad.", "His", "is", "He", "name", "is"],
+        target: ["His", "name", "is", "Bob.", "He", "is", "the", "dad."]
+      },
+      {
+        id: "m2-1",
+        img: "images/helen.jpg",
+        hint: "Apresente a Helen (ela é a mãe):",
+        pieces: ["mum.", "Her", "She", "Helen.", "is", "the", "name", "is"],
+        target: ["Her", "name", "is", "Helen.", "She", "is", "the", "mum."]
+      },
+      {
+        id: "m2-2",
+        img: "images/violet.jpg",
+        hint: "Diga que você tem uma irmã:",
+        pieces: ["a", "sister.", "got", "I've"],
+        target: ["I've", "got", "a", "sister."]
+      },
+      {
+        id: "m2-3",
+        img: "images/dash.jpg",
+        hint: "Pergunte se o amigo tem um irmão:",
+        pieces: ["brother?", "Have", "a", "you", "got"],
+        target: ["Have", "you", "got", "a", "brother?"]
+      },
+      {
+        id: "m2-4",
+        img: "images/blue_eraser.jpg",
+        hint: "Responda negativo sobre um item escolar (Não, não é. É uma borracha azul):",
+        pieces: ["a", "isn't.", "It's", "No,", "eraser.", "it", "blue"],
+        target: ["No,", "it", "isn't.", "It's", "a", "blue", "eraser."]
+      }
     ];
     let m2Idx = 0;
     let m2Built = [];
@@ -950,7 +1017,7 @@
       const item = m2Data[m2Idx];
       m2Built = [];
       document.getElementById("m2-img").src = item.img;
-      document.getElementById("m2-step").textContent = `Phrase ${m2Idx + 1} of ${m2Data.length}`;
+      document.getElementById("m2-step").textContent = `Challenge ${m2Idx + 1} of ${m2Data.length}`;
       document.getElementById("m2-hint").textContent = item.hint;
       document.getElementById("m2-fb").textContent = "";
       drawM2Chips(item);
@@ -960,13 +1027,22 @@
       const bank = document.getElementById("m2-bank");
       tray.innerHTML = "";
       bank.innerHTML = "";
-      m2Built.forEach((entry, idx) => {
-        const c = document.createElement("button");
-        c.className = "word-chip";
-        c.textContent = entry.word;
-        c.onclick = () => { m2Built.splice(idx, 1); drawM2Chips(item); };
-        tray.appendChild(c);
-      });
+
+      if (m2Built.length === 0) {
+        const ph = document.createElement("span");
+        ph.className = "tray-placeholder";
+        ph.textContent = "Clique nas palavras abaixo para montar a frase aqui...";
+        tray.appendChild(ph);
+      } else {
+        m2Built.forEach((entry, idx) => {
+          const c = document.createElement("button");
+          c.className = "word-chip";
+          c.textContent = entry.word;
+          c.onclick = () => { m2Built.splice(idx, 1); drawM2Chips(item); };
+          tray.appendChild(c);
+        });
+      }
+
       const used = new Set(m2Built.map(x => x.bIdx));
       item.pieces.forEach((word, bIdx) => {
         const c = document.createElement("button");
@@ -984,7 +1060,7 @@
         awardItem(item.id, 15, 1, m2Data.length, "m2-fb", `Perfeito: "${expected}" (+15 pts)`);
       } else {
         const fb = document.getElementById("m2-fb");
-        fb.textContent = `Quase! Você montou: "${attempt || "(vazio)"}". Confira a ordem.`;
+        fb.textContent = `Quase! Você montou: "${attempt || "(vazio)"}". Veja se a ordem faz sentido.`;
         fb.className = "feedback bad";
       }
     }
@@ -992,10 +1068,10 @@
 
     /* MISSION 3: TRUE OR FALSE */
     const m3Data = [
-      { id: "m3-0", img: "images/gradnma.jpg", statement: '"This is my grandma."', answer: true },
-      { id: "m3-1", img: "images/bob.jpeg", statement: '"This is my sister."', answer: false },
-      { id: "m3-2", img: "images/jack_jack.jpg", statement: '"This is my baby brother."', answer: true },
-      { id: "m3-3", img: "images/helen.jpg", statement: '"This is my granddad."', answer: false }
+      { id: "m3-0", img: "images/gradnma.jpg", statement: '"Her name is Grandma. She is the grandma."', answer: true },
+      { id: "m3-1", img: "images/bob.jpeg", statement: '"Her name is Bob. She is the sister."', answer: false },
+      { id: "m3-2", img: "images/dash.jpg", statement: '"His name is Dash. He is Violet\'s brother."', answer: true },
+      { id: "m3-3", img: "images/helen.jpg", statement: '"His name is Helen. He is the granddad."', answer: false }
     ];
     let m3Idx = 0;
     function renderM3() {
@@ -1011,7 +1087,7 @@
         awardItem(item.id, 10, 2, m3Data.length, "m3-fb", "Acertou! +10 pts");
       } else {
         const fb = document.getElementById("m3-fb");
-        fb.textContent = "Não bate com a foto! Tente o outro botão.";
+        fb.textContent = "Ops! Confira o nome e se é He/She.";
         fb.className = "feedback bad";
       }
     }
@@ -1019,10 +1095,46 @@
 
     /* MISSION 4: FIX THE GLITCH */
     const m4Data = [
-      { id: "m4-0", bug: 'Bug: "This my brother is."', opts: ["This is my brother.", "Brother is this my.", "My this is brother."], correct: 0 },
-      { id: "m4-1", bug: 'Bug: "I not have got a sister."', opts: ["I haven't got a sister.", "I got haven't a sister.", "Haven't I a sister got."], correct: 0 },
-      { id: "m4-2", bug: 'Bug: "You have got a granddad?" (pergunta)', opts: ["Have you got a granddad?", "Got have you a granddad?", "This is got a granddad?"], correct: 0 },
-      { id: "m4-3", bug: 'Bug: "I\'ve got a dad" (faltando ponto e artigo: eu tenho uma mãe)', opts: ["I've got a mum.", "I've mum got.", "Mum I've got a."], correct: 0 }
+      {
+        id: "m4-0",
+        bug: 'Bug: "His name is Helen. He is the mum."',
+        opts: [
+          "Her name is Helen. She is the mum.",
+          "His name is Helen. She is the dad.",
+          "Her name is Bob. He is the mum."
+        ],
+        correct: 0
+      },
+      {
+        id: "m4-1",
+        bug: 'Bug: "Her name is Dash. She is the brother."',
+        opts: [
+          "His name is Dash. He is the brother.",
+          "Her name is Dash. He is the sister.",
+          "His name is Violet. She is the brother."
+        ],
+        correct: 0
+      },
+      {
+        id: "m4-2",
+        bug: 'Bug: "You have got a granddad?" (ordem da pergunta)',
+        opts: [
+          "Have you got a granddad?",
+          "Got you have a granddad?",
+          "Is it got a granddad?"
+        ],
+        correct: 0
+      },
+      {
+        id: "m4-3",
+        bug: 'Bug: "I got\'ve a big sister."',
+        opts: [
+          "I've got a big sister.",
+          "I've a got big sister.",
+          "Got I've a big sister."
+        ],
+        correct: 0
+      }
     ];
     let m4Idx = 0;
     function renderM4() {
@@ -1041,7 +1153,7 @@
             awardItem(item.id, 10, 3, m4Data.length, "m4-fb", "Bug consertado! +10 pts");
           } else {
             const fb = document.getElementById("m4-fb");
-            fb.textContent = "Ainda está fora de ordem. Tente outra!";
+            fb.textContent = "Ainda tem um detalhe errado. Tente outra!";
             fb.className = "feedback bad";
           }
         };
@@ -1052,10 +1164,11 @@
 
     /* MISSION 5: FILL THE GAP */
     const m5Data = [
-      { id: "m5-0", sentence: '"I ______ got a brother." (eu NÃO tenho)', opts: ["haven't", "'ve", "is"], correct: 0 },
-      { id: "m5-1", sentence: '"______ is my dad." (este é)', opts: ["Have", "This", "Got"], correct: 1 },
-      { id: "m5-2", sentence: '"______ you got a grandma?" (pergunta)', opts: ["This", "Haven't", "Have"], correct: 2 },
-      { id: "m5-3", sentence: '"I\'ve ______ a big sister." (tenho)', opts: ["got", "is", "my"], correct: 0 }
+      { id: "m5-0", sentence: '"______ name is Bob. He is the dad." (dele)', opts: ["His", "Her", "Have"], correct: 0 },
+      { id: "m5-1", sentence: '"Her name is Violet. ______ is the big sister." (ela)', opts: ["He", "She", "It"], correct: 1 },
+      { id: "m5-2", sentence: '"______ you got a grandma?" (pergunta)', opts: ["His", "I've", "Have"], correct: 2 },
+      { id: "m5-3", sentence: '"I\'ve ______ a brother." (tenho)', opts: ["got", "name", "is"], correct: 0 },
+      { id: "m5-4", sentence: '"No, I ______." (resposta curta negativa)', opts: ["haven't", "isn't", "have"], correct: 0 }
     ];
     let m5Idx = 0;
     function renderM5() {
@@ -1085,10 +1198,10 @@
 
     /* MISSION 6: HAVE YOU GOT...? Q&A */
     const m6Data = [
-      { id: "m6-0", img: "images/violet.jpg", prompt: 'Você quer perguntar se o amigo tem uma irmã:', opts: ["Have you got a sister?", "This is my sister.", "I haven't got a dad."], correct: 0 },
-      { id: "m6-1", img: "images/dash.jpg", prompt: 'Alguém pergunta: "Have you got a brother?" (Resposta positiva):', opts: ["No, it isn't.", "Yes, I have.", "This is my mum."], correct: 1 },
-      { id: "m6-2", img: "images/gradnma.jpg", prompt: 'Alguém pergunta: "Have you got a grandma?" (Resposta negativa):', opts: ["Yes, it is.", "This is my grandma.", "No, I haven't."], correct: 2 },
-      { id: "m6-3", img: "images/grandad.jpg", prompt: 'Você quer perguntar se o amigo tem um avô:', opts: ["Have you got a granddad?", "I've got a granddad?", "My granddad is this?"], correct: 0 }
+      { id: "m6-0", img: "images/violet.jpg", prompt: 'Você quer perguntar se o amigo tem uma irmã:', opts: ["Have you got a sister?", "Her name is sister.", "Yes, it is."], correct: 0 },
+      { id: "m6-1", img: "images/dash.jpg", prompt: 'Pergunta: "Have you got a brother?" (Resposta SIM):', opts: ["No, it isn't.", "Yes, I have.", "His name is Bob."], correct: 1 },
+      { id: "m6-2", img: "images/gradnma.jpg", prompt: 'Pergunta: "Have you got a grandma?" (Resposta NÃO):', opts: ["Yes, it is.", "No, it isn't.", "No, I haven't."], correct: 2 },
+      { id: "m6-3", img: "images/grandad.jpg", prompt: 'Você quer perguntar se o amigo tem um avô:', opts: ["Have you got a granddad?", "I've got a granddad?", "He is the granddad?"], correct: 0 }
     ];
     let m6Idx = 0;
     function renderM6() {
@@ -1108,7 +1221,7 @@
             awardItem(item.id, 10, 5, m6Data.length, "m6-fb", "Diálogo perfeito! +10 pts");
           } else {
             const fb = document.getElementById("m6-fb");
-            fb.textContent = "Tente outra opção para combinar com o diálogo!";
+            fb.textContent = "Atenção: perguntas com 'Have you got...?' usam 'Yes, I have' / 'No, I haven't'.";
             fb.className = "feedback bad";
           }
         };
@@ -1119,10 +1232,10 @@
 
     /* MISSION 7: ODD ONE OUT */
     const m7Data = [
-      { id: "m7-0", words: ["mum", "dad", "eraser", "sister"], odd: 2, reason: '"eraser" é borracha (material escolar)!' },
+      { id: "m7-0", words: ["mum", "dad", "blue eraser", "sister"], odd: 2, reason: '"blue eraser" é borracha azul (material escolar)!' },
       { id: "m7-1", words: ["brother", "grandma", "granddad", "book"], odd: 3, reason: '"book" é livro, não é família!' },
       { id: "m7-2", words: ["baby brother", "big sister", "ruler", "mum"], odd: 2, reason: '"ruler" é régua!' },
-      { id: "m7-3", words: ["I've got", "I haven't got", "Have you got", "pencil case"], odd: 3, reason: '"pencil case" é estojo!' }
+      { id: "m7-3", words: ["His name is...", "Her name is...", "I've got...", "pencil case"], odd: 3, reason: '"pencil case" é estojo!' }
     ];
     let m7Idx = 0;
     function renderM7() {
@@ -1140,7 +1253,7 @@
             awardItem(item.id, 10, 6, m7Data.length, "m7-fb", `Achou o intruso! ${item.reason} (+10 pts)`);
           } else {
             const fb = document.getElementById("m7-fb");
-            fb.textContent = "Essa faz parte do grupo! Procure a palavra intrusa.";
+            fb.textContent = "Essa faz parte do tema da aula! Procure a palavra intrusa.";
             fb.className = "feedback bad";
           }
         };
@@ -1149,14 +1262,14 @@
     }
     function stepM7(d) { m7Idx = (m7Idx + d + m7Data.length) % m7Data.length; renderM7(); }
 
-    /* MISSION 8: FINAL PRODUCTION */
+    /* MISSION 8: FINAL PRODUCTION (only taught structures: I've got + Yes, I have / No, I haven't) */
     function completeFinalMission() {
-      const s1 = `${document.getElementById("mf-1-verb").value} ${document.getElementById("mf-1-member").value}`;
-      const s2 = `${document.getElementById("mf-2-verb").value} ${document.getElementById("mf-2-member").value}`;
-      const s3 = `${document.getElementById("mf-3-verb").value} ${document.getElementById("mf-3-member").value}`;
+      const s1 = document.getElementById("mf-1").value;
+      const s2 = document.getElementById("mf-2").value;
+      const s3 = document.getElementById("mf-3").value;
       state.finalSentences = [s1, s2, s3];
-      logEvent(`Final sentences: ${s1} | ${s2} | ${s3}`);
-      awardItem("m8-0", 30, 7, 1, "m8-fb", `Missão concluída! Suas frases: "${s1}" "${s2}" "${s3}" (+30 pts)`);
+      logEvent(`Final answers: ${s1} | ${s2} | ${s3}`);
+      awardItem("m8-0", 30, 7, 1, "m8-fb", `Missão concluída! "${s1}" · "${s2}" · "${s3}" (+30 pts)`);
     }
 
     renderM1();
